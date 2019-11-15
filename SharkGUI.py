@@ -9,7 +9,6 @@ class SharkGUI:
     def __init__(self):
         self.x, self.y = 1300, 800
         self.win = GraphWin("Shark Game", self.x, self.y)
-
         self.win.setBackground(color_rgb(52, 152, 219))
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
@@ -17,24 +16,21 @@ class SharkGUI:
         r.setOutline(color_rgb(41, 128, 185))
 
         self.quitButton = Button(1245, 25, 100, 40, 10, color_rgb(231, 76, 60), 'Quit', 'white', 20, self.win)
-        self.quitButton.toggleActivation()
 
         self.start = Button(1035, 325, 200, 50, 10, color_rgb(46, 204, 113), 'Start', 'white', 25, self.win)
         self.sharkButton = Button(1035, 650, 400, 50, 10, color_rgb(142, 68, 173), 'Move Shark', 'white', 25, self.win)
         self.fishButton = Button(1035, 725, 400, 50, 10, color_rgb(243, 156, 18), 'Move Fish', 'white', 25, self.win)
 
-        self.entry1 = Entry(Point(1145, 150), 10).draw(self.win)
-        self.entry2 = Entry(Point(1145, 200), 10).draw(self.win)
-        self.entry3 = Entry(Point(1145, 250), 10).draw(self.win)
+        self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200), 10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
 
         self.instructionsText = Text(Point(1035, 480), "Instructions: Enter the coordinates\nof the three fish above.").draw(self.win)
 
         self.formatGUI()
 
-        self.fish1 = Point(0, 0).draw(self.win)
-        self.fish2 = Point(0, 0).draw(self.win)
-        self.fish3 = Point(0, 0).draw(self.win)
-        self.shark = Point(0, 0).draw(self.win)
+        self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
+
+        self.quitButton.toggleActivation()
+
 
     def createWindow(self):
         self.start.toggleActivation()
@@ -74,10 +70,13 @@ class SharkGUI:
     def isClicked(self):
         p = self.win.getMouse()
         while True:
-            if self.quitButton.isClicked(p): return 'quit'
+            if self.quitButton.isClicked(p): break
             elif self.start.isClicked(p): return 'start'
             elif self.fishButton.isClicked(p): return 'fish'
             elif self.sharkButton.isClicked(p): return 'shark'
+        self.win.close()
+        return 'quit'
+
 
     def updateFish(self, fishList):
         # Moves the fish and sharks to the specified locations
@@ -168,11 +167,11 @@ class SharkGUI:
 def main():
     gui = SharkGUI()
     fish = gui.createWindow()
-
-    if gui.isClicked() == 'fish':
+    p = gui.isClicked()
+    if p == 'fish':
         # Move fish
         gui.updateFish()
-    elif gui.isClicked() == 'shark':
+    elif p == 'shark':
         # Move shark
         gui.updateShark()
     gui.endgame()
