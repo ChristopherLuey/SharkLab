@@ -4,7 +4,7 @@
 # Manages all GUI events for SharkRunner.py
 
 from Button import *
-from graphics import *
+
 class SharkGUI:
     def __init__(self):
         self.x, self.y = 1300, 800
