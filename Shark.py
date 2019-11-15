@@ -6,7 +6,7 @@
 class Shark:
 
     def __init__(self):
-        self.sharkPosition = [7,2,'w']
+        self.sharkPosition = [7,2,'w',0]
 
     def sharkTurn(self, fishList):
 
