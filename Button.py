@@ -67,7 +67,6 @@ class Button:
         Parameters:
             win (GraphWin): The window to draw the Button on.
         """
-
         if self.radiusInd:
             # Create circles in 4 corners of Button
             self.p1 = Point((self.centerX - self.width / 2) + self.radius, (self.centerY - self.height / 2) + self.radius)
