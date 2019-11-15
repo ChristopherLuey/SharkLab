@@ -84,14 +84,15 @@ class SharkGUI:
                 p = self.win.getMouse()
 
 
-    def isClicked(self, button):
+    def isClicked(self):
         p = self.win.getMouse()
-        if button == 'fish': return self.fish.isClicked(p)
-        elif button == 'shark': return self.shark.isClicked(p)
-        elif button == 'quit': return self.quitButton.isClicked(p)
-        elif button == 'start': return self.start.isClicked(p)
+        while True:
+            if self.quitButton.isClicked(p): return 'quit'
+            elif self.start.isClicked(p): return 'start'
+            elif self.fishButton.isClicked(p): return 'fish'
+            elif self.sharkButton.isClicked(p): return 'shark'
 
-    def update(self, fishList, sharkList):
+    def updateFish(self, fishList):
         # Moves the fish and sharks to the specified locations
         self.sharkButton.toggleActivation()
         self.fishButton.toggleActivation()
@@ -100,7 +101,7 @@ class SharkGUI:
             self.fish1, self.fish2, self.fish3 = self.fish2, self.fish3, self.fish1
             self.fish1.undraw()
 
-            fishx, fishy, fishD, fishf = fishList[i*4], fishList[i*4+1], fishList[i*4+2], fishList[i*4+3]
+            fishx, fishy, fishD, fishf, fishAlive = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3], fishList[i*5+4]
 
             # https://giphy.com/kittusz
             # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
@@ -112,10 +113,13 @@ class SharkGUI:
             elif fishD == 'e': image = 'fishEast'+flee+'.gif'
             elif fishD == 's': image = 'fishSouth'+flee+'.gif'
 
-            self.fish1 = Image(Point(75 * fishx + 57, fishy*75 + 57), image).draw(self.win)
+            if fishAlive:
+                self.fish1 = Image(Point(75 * fishx + 57, fishy*75 + 57), image).draw(self.win)
+
+    def updateShark(self, sharkList):
+        self.shark.undraw()
 
         # https://www.animatedimages.org/cat-sharks-516.htm
-        self.shark.undraw()
         image = 'sharkEast.gif'
         if sharkList[2] == 'n': image = 'sharkNorth.gif'
         elif sharkList[2] == 'e': image = 'sharkEast.gif'
@@ -158,7 +162,7 @@ def main():
     gui = SharkGUI()
     fish = gui.createWindow()
 
-    while not gui.isClicked('quit'):
+    gui.isClicked()
         if gui.isClicked('fish'):
             # Move fish
             gui.update()
