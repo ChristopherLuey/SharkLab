@@ -32,6 +32,10 @@ class SharkGUI:
         p = self.win.getMouse()
         while not self.quitButton.isClicked(p):
             if self.start.isClicked(p):
+                self.entry1.setFill(color_rgb(26, 188, 156))
+                self.entry2.setFill(color_rgb(26, 188, 156))
+                self.entry3.setFill(color_rgb(26, 188, 156))
+
                 fishList, entry1, entry2, entry3 = [], self.entry1.getText(), self.entry2.getText(), self.entry3.getText()
 
                 for i in range(3):
@@ -44,19 +48,25 @@ class SharkGUI:
                         self.instructionsText.setText("Instruction: Your inputted points are invalid.\nPlease try again.")
 
                 if len(fishList) == 15:
+                    invalid = False
+                    f1x, f2x, f3x = fishList[0], fishList[5], fishList[10]
+                    f1y, f2y, f3y = fishList[1], fishList[6], fishList[11]
                     for i in range(3):
-                        if fishList[0] == fishList[5] and fishList[1] == fishList[6]:
+                        if (f1x == f2x and f1y == f2y) or (f1x == 7 and f1y == 2):
                             self.entry1.setFill(color_rgb(192, 57, 43))
-                            self.instructionsText.setText("Instruction: Your inputted fish points overlap with other fish.\nPlease try again.")
-                        fishList[0], fishList[5], fishList[10] = fishList[5], fishList[10], fishList[0]
-                        fishList[1], fishList[6], fishList[11] = fishList[6], fishList[11], fishList[1]
-                        
-                    self.sharkButton.toggleActivation()
-                    self.updateFish(fishList)
-                    self.updateShark([7,2,'e', 0])
-                    self.start.toggleActivation()
-                    # When user inputs 3 things, then it exits the function and returns the initial fish positions and their states
-                    return fishList
+                            self.instructionsText.setText("Instruction: Your inputted fish points overlap\nwith other fish or the shark.\nPlease try again.")
+                            invalid = True
+                        self.entry1, self.entry2, self.entry3 = self.entry2, self.entry3, self.entry1
+                        f1x, f2x, f3x = f2x, f3x, f1x
+                        f1y, f2y, f3y = f2y, f3y, f1y
+
+                    if not invalid:
+                        self.sharkButton.toggleActivation()
+                        self.updateFish(fishList)
+                        self.updateShark([7,2,'e', 0])
+                        self.start.toggleActivation()
+                        # When user inputs 3 things, then it exits the function and returns the initial fish positions and their states
+                        return fishList
 
             if not self.win.isClosed():
                 p = self.win.getMouse()
@@ -96,7 +106,9 @@ class SharkGUI:
             if fishD == 'n': image = 'fishNorth'+flee+'.gif'
             elif fishD == 'e': image = 'fishEast'+flee+'.gif'
             elif fishD == 's': image = 'fishSouth'+flee+'.gif'
+
             self.fish1 = Image(Point(75 * fishx + 57, fishy*75 + 57), image)
+
             if fishAlive: self.fish1.draw(self.win)
 
 
