@@ -151,7 +151,7 @@ class SharkGUI:
         self.win.close()
 
 
-    def win(self, winner):
+    def winner(self, winner):
         if self.fishButton.isActive():
             self.fishButton.toggleActivation()
         if self.sharkButton.isActive():
@@ -201,7 +201,7 @@ class SharkGUI:
 # This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
 def main():
     gui = SharkGUI()
-    fish = gui.createWindow()
+    fish = gui.gatherUserInput()
     shark = Shark()
     sharkL = shark.getSharkList()
     p = gui.isClicked()
@@ -211,14 +211,12 @@ def main():
             gui.updateFish(fish)
             gui.updateShark(sharkL)
             # Detect Fish win
-            gui.win('fish')
         elif p == 'shark':
             # Move shark
-            sharkL, fish = shark.sharkTurn(fish)
+            fish = shark.sharkTurn(fish)
             gui.updateFish(fish)
-            gui.updateShark(sharkL)
+            gui.updateShark(shark.getSharkList())
             # Detect Shark win
-            gui.win('shark')
         p = gui.isClicked()
     gui.endgame()
 
