@@ -8,24 +8,31 @@ from Shark import *
 
 class SharkGUI:
     def __init__(self):
-        self.x, self.y = 1300, 800
-        self.win = GraphWin("Shark Game", self.x, self.y)
+        # Create the window
+        self.win = GraphWin("Shark Game", 1300, 800)
         self.win.setBackground(color_rgb(52, 152, 219))
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
         r.setFill(color_rgb(41, 128, 185))
         r.setOutline(color_rgb(41, 128, 185))
 
+        # Create the buttons
         self.quitButton = Button(1245, 25, 100, 40, 10, color_rgb(231, 76, 60), 'Quit', 'white', 20, self.win)
         self.start = Button(1035, 325, 200, 50, 10, color_rgb(46, 204, 113), 'Start', 'white', 25, self.win)
         self.sharkButton = Button(1035, 650, 400, 50, 10, color_rgb(142, 68, 173), 'Move Shark', 'white', 25, self.win)
         self.fishButton = Button(1035, 725, 400, 50, 10, color_rgb(243, 156, 18), 'Move Fish', 'white', 25, self.win)
 
+        # Create the fish coord entries
         self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200), 10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
         self.instructionsText = Text(Point(1035, 480), "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
+
         self.formatGUI()
+
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
+        # Draw the shark on the board
         self.updateShark([7,2,'e',0])
+
+        # Finally activate quit button
         self.quitButton.toggleActivation()
 
 
@@ -34,53 +41,74 @@ class SharkGUI:
         p = self.win.getMouse()
         while not self.quitButton.isClicked(p):
             if self.start.isClicked(p):
+
                 self.entry1.setFill(color_rgb(26, 188, 156))
                 self.entry2.setFill(color_rgb(26, 188, 156))
                 self.entry3.setFill(color_rgb(26, 188, 156))
 
+                # Gather user entries
                 fishList, entry1, entry2, entry3 = [], self.entry1.getText(), self.entry2.getText(), self.entry3.getText()
 
+                # For each entry
                 for i in range(3):
+                    # Check if it is properly formatted with m,n
+                    # This means entry must be 3 chars long, must include a comma at the second char, and the first and third chars must be from 0-9
                     if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57:
+                        # Add this to the fish attributes list which will be passed into updateFish()
                         fishList.extend([int(entry1[0]), int(entry1[2]), 'e', False, False])
+                        # Set the entry to green
                         self.entry1.setFill(color_rgb(26, 188, 156))
                     else:
+                        # Set the entry to red
                         self.entry1.setFill(color_rgb(192, 57, 43))
+                        # Inform user of incorrect formatting of coords
                         self.instructionsText.setText("Your inputted points are formatted\nincorrectly. Please try again.")
+
+                    # Swap values so every entry is checked
                     entry1, entry2, entry3, self.entry1, self.entry2, self.entry3 = entry2, entry3, entry1, self.entry2, self.entry3, self.entry1
 
+                # If the list has 15 items, every fish coord must have been valid
                 if len(fishList) == 15:
+                    # Check for any overlapping coords
                     invalid = False
+                    # Store all 3 fishes x,y
                     f1x, f2x, f3x = fishList[0], fishList[5], fishList[10]
                     f1y, f2y, f3y = fishList[1], fishList[6], fishList[11]
                     for i in range(3):
+                        # Compare all fish coords to each other and shark
                         if (f1x == f2x and f1y == f2y) or (f1x == 7 and f1y == 2):
                             self.entry1.setFill(color_rgb(192, 57, 43))
                             self.entry2.setFill(color_rgb(192, 57, 43))
                             self.entry3.setFill(color_rgb(192, 57, 43))
                             self.instructionsText.setText("Your inputted fish points overlap\nwith other fish or the shark.\nPlease try again.")
                             invalid = True
+                        # Swap values so everything is checked
                         f1x, f2x, f3x = f2x, f3x, f1x
                         f1y, f2y, f3y = f2y, f3y, f1y
 
                     if not invalid:
+                        # Display fish and shark on the board
                         self.sharkButton.toggleActivation()
                         self.updateFish(fishList)
                         self.updateShark([7,2,'e', 0])
+                        # Turn off start button
                         self.start.toggleActivation()
-                        # When user inputs 3 things, then it exits the function and returns the initial fish positions and their states
+                        # Return the entered fish locations
                         return fishList
 
             if not self.win.isClosed():
                 p = self.win.getMouse()
 
+        # User quits so close window and return empty list
         self.win.close()
         return []
 
 
     def isClicked(self):
+        # Wait for user input
         p = self.win.getMouse()
         while True:
+            # Check which button, if any is clicked
             if self.quitButton.isClicked(p): break
             elif self.start.isClicked(p): return 'start'
             elif self.fishButton.isClicked(p): return 'fish'
@@ -136,13 +164,13 @@ class SharkGUI:
         elif sharkList[2] == 'w':
             image = 'sharkWest.gif'
         elif sharkList[2] == 'ne':
-            image = 'sharkNorthEast.gif'
+            image = 'sharkNE.gif'
         elif sharkList[2] == 'se':
-            image = 'sharkSouthEast.gif'
+            image = 'sharkSE.gif'
         elif sharkList[2] == 'sw':
-            image = 'sharkSouthWest.gif'
+            image = 'sharkSW.gif'
         elif sharkList[2] == 'nw':
-            image = 'sharkNorthWest.gif'
+            image = 'sharkNW.gif'
 
         self.shark = Image((Point(75 * sharkList[0] + 57, sharkList[1] * 75 + 57)), image).draw(self.win)
 
@@ -162,6 +190,7 @@ class SharkGUI:
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
 
+    # Helper function: should not be called outside of this class
     def formatGUI(self):
         enterFish1 = Text(Point(960, 150), "Daddy Coordinate(x,y): ").draw(self.win)
         enterFish2 = Text(Point(955, 200), "Mommy Coordinate(x,y): ").draw(self.win)
@@ -209,7 +238,7 @@ def main():
         if p == 'fish':
             # Move fish
             gui.updateFish(fish)
-            gui.updateShark(sharkL)
+            gui.updateShark(shark.getSharkList())
             # Detect Fish win
         elif p == 'shark':
             # Move shark

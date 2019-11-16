@@ -3,7 +3,7 @@
 # Written By: Christopher Luey
 # Shark class for SharkRunner.py
 
-import random
+from random import randrange
 
 class Shark:
 
@@ -29,7 +29,7 @@ class Shark:
             if fishx == self.x and fishy == self.y:
                 # Set the fish to dead
                 fishList[(self.chasing-1)*5+4] = True
-                # Shark cannot move, so break out
+                # Shark cannot move anymore after eating, so break out
                 break
 
         # Return the fish list because some fish may have been killed
@@ -50,7 +50,7 @@ class Shark:
 
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
     def calculateFishChasing(self, fishList):
-        # Save the lowest fish distance, closest fish index, and how many fish need to be
+        # Save the lowest fish distance, closest fish index, and how many fish need to be randomly chosen to pursue
         lowestFishDist, closeFishIndex, randomFishChooser = 1000.0, self.chasing, []
         for i in range(3):
             fishx, fishy, dead = fishList[i*5], fishList[i*5+1], fishList[i*5+4]
@@ -64,7 +64,7 @@ class Shark:
 
         if bool(randomFishChooser):
             randomFishChooser.append(closeFishIndex)
-            closeFishIndex = randomFishChooser[random.randrange(0,len(randomFishChooser))]
+            closeFishIndex = randomFishChooser[randrange(0,len(randomFishChooser))]
 
         self.chasing = closeFishIndex
 
@@ -110,3 +110,4 @@ class Shark:
         elif dir == 'nw':
             self.y -= 1
             self.x -= 1
+        self.dir = dir
