@@ -229,26 +229,26 @@ class SharkGUI:
 
 
 
-# This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
-def main():
-    gui = SharkGUI()
-    fish = gui.gatherUserInput()
-    shark = Shark()
-    sharkL = shark.getSharkList()
-    p = gui.isClicked()
-    while not p == 'quit':
-        if p == 'fish':
-            # Move fish
-            gui.updateFish(fish)
-            gui.updateShark(shark.getSharkList())
-            # Detect Fish win
-        elif p == 'shark':
-            # Move shark
-            fish = shark.sharkTurn(fish)
-            gui.updateFish(fish)
-            gui.updateShark(shark.getSharkList())
-            # Detect Shark win
-        p = gui.isClicked()
-    gui.endgame()
-
-main()
+# # This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
+# def main():
+#     gui = SharkGUI()
+#     fish = gui.gatherUserInput()
+#     shark = Shark()
+#     sharkL = shark.getSharkList()
+#     p = gui.isClicked()
+#     while not p == 'quit':
+#         if p == 'fish':
+#             # Move fish
+#             gui.updateFish(fish)
+#             gui.updateShark(shark.getSharkList())
+#             # Detect Fish win
+#         elif p == 'shark':
+#             # Move shark
+#             fish = shark.sharkTurn(fish)
+#             gui.updateFish(fish)
+#             gui.updateShark(shark.getSharkList())
+#             # Detect Shark win
+#         p = gui.isClicked()
+#     gui.endgame()
+#
+# main()
