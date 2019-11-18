@@ -204,6 +204,8 @@ class SharkGUI:
         title.setSize(25)
         title.setTextColor('white')
         title.setStyle('bold')
+        for i in range(7):
+            Image(Point(120*i, 725), 'reef.gif').draw(self.win)
 
         for i in range(11):
             l = Line(Point(75*i + 25,25), Point(75*i + 25, 775)).draw(self.win)
