@@ -37,10 +37,6 @@ def main():
             fish2.move(sharkX,sharkY,1)
             fish3.move(sharkX,sharkY,1)
 
-            print(fish1.getCoords)
-            print(fish2.getCoords)
-            print(fish3.getCoords)
-
             #wall situation
 
             if ((fish1.getX() < 0 or fish1.getX() > 9) or (fish1.getY() < 0 or fish1.getY() > 9)) and fish1.getFlee() == False:
@@ -62,8 +58,6 @@ def main():
                 fish3.reversePos()
               
             fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
-
-            print(fishList)
             
             GUI.updateFish(fishList)
 
