@@ -19,7 +19,7 @@ def main():
 
     while True:
 
-        fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
+        buttonClicked = GUI.isClicked()
 
         if buttonClicked == "start":
 
