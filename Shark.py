@@ -28,7 +28,7 @@ class Shark:
             # Check if shark has eaten the fish it's pursuing
             if fishx == self.x and fishy == self.y:
                 # Set the fish to dead
-                fishList[(self.chasing-1)*5+4] = True
+                fishList[(self.chasing-1)*5+4] = False
                 # Shark cannot move anymore after eating, so break out
                 break
 
@@ -53,13 +53,13 @@ class Shark:
         # Save the lowest fish distance, closest fish index, and how many fish need to be randomly chosen to pursue
         lowestFishDist, closeFishIndex, randomFishChooser = 1000.0, self.chasing, []
         for i in range(3):
-            fishx, fishy, dead = fishList[i*5], fishList[i*5+1], fishList[i*5+4]
+            fishx, fishy, alive = fishList[i*5], fishList[i*5+1], fishList[i*5+4]
             fishDist = ((self.x - fishx) ** 2 + (self.y - fishy) ** 2) ** 1 / 2
 
-            if fishDist < lowestFishDist and not dead:
+            if fishDist < lowestFishDist and alive:
                 lowestFishDist, closeFishIndex = fishDist, i+1
 
-            elif fishDist == lowestFishDist and not dead and not(self.chasing == i+1) and not(self.chasing == closeFishIndex):
+            elif fishDist == lowestFishDist and alive and not(self.chasing == i+1) and not(self.chasing == closeFishIndex):
                 randomFishChooser.append(i+1)
 
         if bool(randomFishChooser):

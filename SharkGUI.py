@@ -58,7 +58,7 @@ class SharkGUI:
                     # This means entry must be 3 chars long, must include a comma at the second char, and the first and third chars must be from 0-9
                     if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57:
                         # Add this to the fish attributes list which will be passed into updateFish()
-                        fishList.extend([int(entry1[0]), int(entry1[2]), 'e', False, True])
+                        fishList.extend([int(entry1[0]), int(entry1[2]), 'east', False, True])
                         # Set the entry to green
                         self.entry1.setFill(color_rgb(26, 188, 156))
                     else:
@@ -143,16 +143,16 @@ class SharkGUI:
             if fishf: flee = 'Flee'
 
             image = 'fishWest' + flee +'.gif'
-            if fishD == 'n':
+            if fishD == 'north':
                 image = 'fishNorth'+flee+'.gif'
-            elif fishD == 'e':
+            elif fishD == 'east':
                 image = 'fishEast'+flee+'.gif'
-            elif fishD == 's':
+            elif fishD == 'south':
                 image = 'fishSouth'+flee+'.gif'
 
             self.fish1 = Image(Point(75 * fishx + 57, fishy*75 + 57), image)
 
-            if not isDead:
+            if isAlive:
                 self.fish1.draw(self.win)
             else:
                 if not isAlive == self.storedFish[i*5+4]:
