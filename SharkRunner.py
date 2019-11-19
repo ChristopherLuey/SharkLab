@@ -76,7 +76,7 @@ def main():
             print(fishList)
             
             GUI.updateFish(fishList)
-
+            GUI.nextTurn()
 
         elif buttonClicked == "shark":
 
@@ -92,6 +92,7 @@ def main():
             GUI.updateFish(fishList)
 
             #set if fish are alive or dead
+            GUI.nextTurn()
 
         elif buttonClicked == "quit":
 
