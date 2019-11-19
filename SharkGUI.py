@@ -140,7 +140,7 @@ class SharkGUI:
             # https://giphy.com/kittusz
             # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
             flee = ''
-            #if fishf: flee = 'Flee'
+            if fishf: flee = 'Flee'
 
             image = 'fishWest' + flee +'.gif'
             if fishD == 'north':
@@ -197,7 +197,7 @@ class SharkGUI:
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
             for i in range(2):
                 for j in range(3):
-                    Image(Point())
+                    Image(Point(i*))
         elif winner == 'shark':
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
