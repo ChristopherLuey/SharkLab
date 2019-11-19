@@ -135,7 +135,7 @@ class SharkGUI:
             self.fish1, self.fish2, self.fish3 = self.fish2, self.fish3, self.fish1
             self.fish1.undraw()
 
-            fishx, fishy, fishD, fishf, isDead = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3],  fishList[i*5+4]
+            fishx, fishy, fishD, fishf, isAlive = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3],  fishList[i*5+4]
 
             # https://giphy.com/kittusz
             # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
@@ -155,7 +155,7 @@ class SharkGUI:
             if not isDead:
                 self.fish1.draw(self.win)
             else:
-                if isDead == self.storedFish[i*5+4]:
+                if not isAlive == self.storedFish[i*5+4]:
                     self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
         self.storedFish = fishList
 
