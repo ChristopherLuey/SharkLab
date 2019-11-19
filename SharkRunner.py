@@ -56,7 +56,7 @@ def main():
 
         elif buttonClicked == "shark":
 
-            fihsList = shark.sharkTurn(fishList)
+            fishList = shark.sharkTurn(fishList)
             sharkList = shark.getSharkList()
 
             GUI.updateShark(sharkList)
