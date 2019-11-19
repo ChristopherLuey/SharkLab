@@ -25,6 +25,8 @@ class SharkGUI:
         # Create the fish coord entries
         self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200), 10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
         self.instructionsText = Text(Point(1035, 480), "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
+        self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
+
 
         self.formatGUI()
 
@@ -94,6 +96,7 @@ class SharkGUI:
                         # Turn off start button
                         self.start.toggleActivation()
                         # Return the entered fish locations
+                        self.storedFish = fishList
                         return fishList
 
             if not self.win.isClosed():
@@ -130,7 +133,7 @@ class SharkGUI:
             self.fish1, self.fish2, self.fish3 = self.fish2, self.fish3, self.fish1
             self.fish1.undraw()
 
-            fishx, fishy, fishD, fishf, isDead = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3], fishList[i*5+4]
+            fishx, fishy, fishD, fishf, isDead = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3], not fishList[i*5+4]
 
             # https://giphy.com/kittusz
             # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
@@ -149,6 +152,10 @@ class SharkGUI:
 
             if not isDead:
                 self.fish1.draw(self.win)
+            else:
+                if isDead != self.storedFish[i*5+4]:
+                    self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
+        self.storedFish = fishList
 
 
     def updateShark(self, sharkList):
@@ -229,26 +236,26 @@ class SharkGUI:
 
 
 
-# # This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
-# def main():
-#     gui = SharkGUI()
-#     fish = gui.gatherUserInput()
-#     shark = Shark()
-#     sharkL = shark.getSharkList()
-#     p = gui.isClicked()
-#     while not p == 'quit':
-#         if p == 'fish':
-#             # Move fish
-#             gui.updateFish(fish)
-#             gui.updateShark(shark.getSharkList())
-#             # Detect Fish win
-#         elif p == 'shark':
-#             # Move shark
-#             fish = shark.sharkTurn(fish)
-#             gui.updateFish(fish)
-#             gui.updateShark(shark.getSharkList())
-#             # Detect Shark win
-#         p = gui.isClicked()
-#     gui.endgame()
-#
-# main()
+# This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
+def main():
+    gui = SharkGUI()
+    fish = gui.gatherUserInput()
+    shark = Shark()
+    sharkL = shark.getSharkList()
+    p = gui.isClicked()
+    while not p == 'quit':
+        if p == 'fish':
+            # Move fish
+            gui.updateFish(fish)
+            gui.updateShark(shark.getSharkList())
+            # Detect Fish win
+        elif p == 'shark':
+            # Move shark
+            fish = shark.sharkTurn(fish)
+            gui.updateFish(fish)
+            gui.updateShark(shark.getSharkList())
+            # Detect Shark win
+        p = gui.isClicked()
+    gui.endgame()
+
+main()
