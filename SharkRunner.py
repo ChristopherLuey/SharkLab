@@ -33,6 +33,10 @@ def main():
             fish2.move(sharkX,sharkY,1)
             fish3.move(sharkX,sharkY,1)
 
+            print(fish1.getCoords)
+            print(fish2.getCoords)
+            print(fish3.getCoords)
+
             #wall situation
 
             if (fish1.getX() < 0 or fish1.getX() > 9) or (fish1.getY() < 0 or fish1.getY() > 9):
