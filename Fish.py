@@ -5,7 +5,7 @@ from random import randrange
 
 class Fish:
 
-    def __init__(self,x,y,direction,flee,alive,wallHitting,win):
+    def __init__(self,x,y,direction,flee,alive,wallHitting):
 
         #convert to self. form
 
@@ -15,14 +15,17 @@ class Fish:
         self.fishFleeStatus = flee
         self.fishAliveStatus = alive
         self.fishWallHittingStatus = wallHitting
-        self.window = win
-
-        self.anchorPoint = Point(self.fishXCoord,self.fishYCoord)
 
     #accessors
 
     def getCoords(self):
-        return Point(self.fishXCoord,self.fishYCoord)
+        return self.fishXCoord,self.fishYCoord
+
+    def getX(self):
+        return self.fishXCoord
+
+    def getY(self):
+        return self.fishYCoord
 
     def getDirection(self):
         return self.fishDirection
