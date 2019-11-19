@@ -33,6 +33,7 @@ class SharkGUI:
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
         # Draw the shark on the board
         self.updateShark([7,2,'e',0])
+        self.storedFish = []
 
         # Finally activate quit button
         self.quitButton.toggleActivation()
@@ -91,12 +92,13 @@ class SharkGUI:
                     if not invalid:
                         # Display fish and shark on the board
                         self.sharkButton.toggleActivation()
+                        self.storedFish = fishList
+
                         self.updateFish(fishList)
                         self.updateShark([7,2,'e', 0])
                         # Turn off start button
                         self.start.toggleActivation()
                         # Return the entered fish locations
-                        self.storedFish = fishList
                         return fishList
 
             if not self.win.isClosed():
