@@ -88,119 +88,124 @@ class Fish:
         self.sharkYCoord = sharkY
         self.moveDistance = distance
 
-        if self.fishFleeStatus == True:
+        if self.fishXCoord == self.sharkXCoord and self.fishYCoord == self.sharkYCoord:
+            self.fishAliveStatus = False
 
-            if self.fishYCoord == self.sharkYCoord:
-                                        
-                if self.fishXCoord > self.sharkXCoord:
-                    self.fishDirection = "east"
+        if self.fishAliveStatus == True:
 
-                elif self.fishXCoord < self.sharkXCoord:
-                    self.fishDirection = "west"
+            if self.fishFleeStatus == True:
 
-            elif self.fishXCoord == self.sharkXCoord:
-                                        
-                if self.fishYCoord > self.sharkYCoord:
-                    self.fishDirection = "north"
-
-                elif self.fishYCoord < self.sharkYCoord:
-                    self.fishDirection = "south"
-
-            else:
-
-                self.fishDirectionInt = randrange(1,3)
-
-                self.XDistance = abs(self.sharkXCoord - self.fishXCoord)
-                self.YDistance = abs(self.sharkYCoord - self.fishYCoord)
-
-                if (fishYCoordinate > sharkYCoordinate) and (fishXCoordinate > sharkXCoordinate):
-                    #1st quadrant relative to shark, must move north or east
-
-                    if self.XDistance < self.YDistance:
-                        self.fishDirection = "north"
-                    elif self.XDistance > self.YDistance:
+                if self.fishYCoord == self.sharkYCoord:
+                                            
+                    if self.fishXCoord > self.sharkXCoord:
                         self.fishDirection = "east"
-                    else:                   
-                        if self.fishDirectionInt == 1:
-                            self.fishDirection = "north"
-                        elif self.fishDirectionInt == 2:
-                            self.fishDirection = "east"
 
-                elif (fishYCoordinate > sharkYCoordinate) and (fishXCoordinate < sharkXCoordinate):
-                    #2nd quadrant relative to shark, must move north or west
+                    elif self.fishXCoord < self.sharkXCoord:
+                        self.fishDirection = "west"
 
-                    if self.XDistance < self.YDistance:
+                elif self.fishXCoord == self.sharkXCoord:
+                                            
+                    if self.fishYCoord > self.sharkYCoord:
                         self.fishDirection = "north"
-                    elif self.XDistance > self.YDistance:
-                        self.fishDirection = "west"
-                    else:
-                        if self.fishDirectionInt == 1:
+
+                    elif self.fishYCoord < self.sharkYCoord:
+                        self.fishDirection = "south"
+
+                else:
+
+                    self.fishDirectionInt = randrange(1,3)
+
+                    self.XDistance = abs(self.sharkXCoord - self.fishXCoord)
+                    self.YDistance = abs(self.sharkYCoord - self.fishYCoord)
+
+                    if (fishYCoordinate > sharkYCoordinate) and (fishXCoordinate > sharkXCoordinate):
+                        #1st quadrant relative to shark, must move north or east
+
+                        if self.XDistance < self.YDistance:
                             self.fishDirection = "north"
-                        elif self.fishDirectionInt == 2:
-                            self.fishDirection = "west"
-
-                elif (fishYCoordinate < sharkYCoordinate) and (fishXCoordinate < sharkXCoordinate):
-                    #3rd quadrant relative to shark, must move south or west
-
-                    if self.XDistance < self.YDistance:
-                        self.fishDirection = "south"
-                    elif self.XDistance > self.YDistance:
-                        self.fishDirection = "west"
-                    else:
-                        if self.fishDirectionInt == 1:
-                            self.fishDirection = "south"
-                        elif self.fishDirectionInt == 2:
-                            self.fishDirection = "west"
-
-                elif (fishYCoordinate < sharkYCoordinate) and (fishXCoordinate > sharkXCoordinate):
-                    #4th quadrant relative to shark, must move south or east
-
-                    if self.XDistance < self.YDistance:
-                        self.fishDirection = "south"
-                    elif self.XDistance > self.YDistance:
-                        self.fishDirection = "east"
-                    else:
-                        if self.fishDirectionInt == 1:
-                            self.fishDirection = "south"
-                        elif self.fishDirectionInt == 2:
+                        elif self.XDistance > self.YDistance:
                             self.fishDirection = "east"
+                        else:                   
+                            if self.fishDirectionInt == 1:
+                                self.fishDirection = "north"
+                            elif self.fishDirectionInt == 2:
+                                self.fishDirection = "east"
 
-        #translate direction into coordinate movement.
+                    elif (self.fishYCoordinate > self.sharkYCoordinate) and (self.fishXCoordinate < self.sharkXCoordinate):
+                        #2nd quadrant relative to shark, must move north or west
 
-        if self.fishDirection == "east":
-            self.fishXCoord += self.moveDistance
-            self.fishYCoord += 0
-            
-        elif self.fishDirection == "north":
-            self.fishXCoord += 0
-            self.fishYCoord += self.moveDistance
-            
-        elif self.fishDirection == "west":
-            self.fishXCoord += -self.moveDistance
-            self.fishYCoord += 0
+                        if self.XDistance < self.YDistance:
+                            self.fishDirection = "north"
+                        elif self.XDistance > self.YDistance:
+                            self.fishDirection = "west"
+                        else:
+                            if self.fishDirectionInt == 1:
+                                self.fishDirection = "north"
+                            elif self.fishDirectionInt == 2:
+                                self.fishDirection = "west"
 
-        elif self.fishDirection == "south":
-            self.fishXCoord += 0
-            self.fishYCoord += -self.moveDistance
+                    elif (self.fishYCoordinate < self.sharkYCoordinate) and (self.fishXCoordinate < self.sharkXCoordinate):
+                        #3rd quadrant relative to shark, must move south or west
 
-    def reversePos(self):
+                        if self.XDistance < self.YDistance:
+                            self.fishDirection = "south"
+                        elif self.XDistance > self.YDistance:
+                            self.fishDirection = "west"
+                        else:
+                            if self.fishDirectionInt == 1:
+                                self.fishDirection = "south"
+                            elif self.fishDirectionInt == 2:
+                                self.fishDirection = "west"
 
-        """if the fish is in flee mode and hits a barrier, reversePos
-        flips the fish across the grid"""
+                    elif (self.fishYCoordinate < self.sharkYCoordinate) and (self.fishXCoordinate > self.sharkXCoordinate):
+                        #4th quadrant relative to shark, must move south or east
 
-        if self.fishFleeStatus == True:
+                        if self.XDistance < self.YDistance:
+                            self.fishDirection = "south"
+                        elif self.XDistance > self.YDistance:
+                            self.fishDirection = "east"
+                        else:
+                            if self.fishDirectionInt == 1:
+                                self.fishDirection = "south"
+                            elif self.fishDirectionInt == 2:
+                                self.fishDirection = "east"
 
-            if self.fishXCoord < 0:
-                self.fishXCoord = 9
+            #translate direction into coordinate movement.
 
-            elif self.fishXCoord < 9:
-                self.fishXCoord = 0
+            if self.fishDirection == "east":
+                self.fishXCoord += self.moveDistance
+                self.fishYCoord += 0
+                
+            elif self.fishDirection == "north":
+                self.fishXCoord += 0
+                self.fishYCoord += self.moveDistance
+                
+            elif self.fishDirection == "west":
+                self.fishXCoord += -self.moveDistance
+                self.fishYCoord += 0
 
-            if self.fishYCoord < 0:
-                self.fishYCoord = 9
+            elif self.fishDirection == "south":
+                self.fishXCoord += 0
+                self.fishYCoord += -self.moveDistance
 
-            elif self.fishYCoord < 9:
-                self.fishYCoord = 0
+        def reversePos(self):
+
+            """if the fish is in flee mode and hits a barrier, reversePos
+            flips the fish across the grid"""
+
+            if self.fishFleeStatus == True:
+
+                if self.fishXCoord < 0:
+                    self.fishXCoord = 9
+
+                elif self.fishXCoord < 9:
+                    self.fishXCoord = 0
+
+                if self.fishYCoord < 0:
+                    self.fishYCoord = 9
+
+                elif self.fishYCoord < 9:
+                    self.fishYCoord = 0
 
             
 
