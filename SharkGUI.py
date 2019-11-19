@@ -197,7 +197,8 @@ class SharkGUI:
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
             for i in range(2):
                 for j in range(3):
-                    Image(Point(i*))
+                    print()
+                    #Image(Point(i*))
         elif winner == 'shark':
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
