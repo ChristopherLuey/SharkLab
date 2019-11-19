@@ -58,7 +58,7 @@ class SharkGUI:
                     # This means entry must be 3 chars long, must include a comma at the second char, and the first and third chars must be from 0-9
                     if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57:
                         # Add this to the fish attributes list which will be passed into updateFish()
-                        fishList.extend([int(entry1[0]), int(entry1[2]), 'e', False, False])
+                        fishList.extend([int(entry1[0]), int(entry1[2]), 'e', False, True])
                         # Set the entry to green
                         self.entry1.setFill(color_rgb(26, 188, 156))
                     else:
@@ -237,27 +237,27 @@ class SharkGUI:
             enterFish1.setTextColor('white')
 
 
-
-# This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
-def main():
-    gui = SharkGUI()
-    fish = gui.gatherUserInput()
-    shark = Shark()
-    sharkL = shark.getSharkList()
-    p = gui.isClicked()
-    while not p == 'quit':
-        if p == 'fish':
-            # Move fish
-            gui.updateFish(fish)
-            gui.updateShark(shark.getSharkList())
-            # Detect Fish win
-        elif p == 'shark':
-            # Move shark
-            fish = shark.sharkTurn(fish)
-            gui.updateFish(fish)
-            gui.updateShark(shark.getSharkList())
-            # Detect Shark win
-        p = gui.isClicked()
-    gui.endgame()
-
-main()
+#
+# # This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
+# def main():
+#     gui = SharkGUI()
+#     fish = gui.gatherUserInput()
+#     shark = Shark()
+#     sharkL = shark.getSharkList()
+#     p = gui.isClicked()
+#     while not p == 'quit':
+#         if p == 'fish':
+#             # Move fish
+#             gui.updateFish(fish)
+#             gui.updateShark(shark.getSharkList())
+#             # Detect Fish win
+#         elif p == 'shark':
+#             # Move shark
+#             fish = shark.sharkTurn(fish)
+#             gui.updateFish(fish)
+#             gui.updateShark(shark.getSharkList())
+#             # Detect Shark win
+#         p = gui.isClicked()
+#     gui.endgame()
+#
+# main()
