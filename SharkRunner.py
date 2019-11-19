@@ -29,6 +29,10 @@ def main():
 
             sharkX,sharkY = shark.getPosition()
 
+            fish1.setFlee(sharkX,sharkY)
+            fish2.setFlee(sharkX,sharkY)
+            fish3.setFlee(sharkX,sharkY)
+
             fish1.move(sharkX,sharkY,1)
             fish2.move(sharkX,sharkY,1)
             fish3.move(sharkX,sharkY,1)
@@ -39,17 +43,23 @@ def main():
 
             #wall situation
 
-            if (fish1.getX() < 0 or fish1.getX() > 9) or (fish1.getY() < 0 or fish1.getY() > 9):
+            if ((fish1.getX() < 0 or fish1.getX() > 9) or (fish1.getY() < 0 or fish1.getY() > 9)) and fish1.getFlee() == False:
                 fish1.directionReverse()
                 fish1.move(sharkX,sharkY,2)
+            elif ((fish1.getX() < 0 or fish1.getX() > 9) or (fish1.getY() < 0 or fish1.getY() > 9)) and fish1.getFlee() == True:
+                fish1.reversePos()
 
-            if (fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9):
+            if (fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9) and fish2.getFlee == False:
                 fish2.directionReverse()
                 fish2.move(sharkX,sharkY,2)
+            elif (fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9) and fish2.getFlee == True:
+                fish2.reversePos()
 
-            if (fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9):
+            if (fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9) and fish3.getFlee == False:
                 fish3.directionReverse()
                 fish3.move(sharkX,sharkY,2)
+            elif (fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9) and fish3.getFlee == True:
+                fish3.reversePos()
               
             fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
 
@@ -68,6 +78,8 @@ def main():
             #update fish after this, check if killed
 
             GUI.updateFish(fishList)
+
+            #set if fish are alive or dead
 
         
 
