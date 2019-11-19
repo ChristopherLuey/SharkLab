@@ -9,7 +9,7 @@ from Shark import *
 class SharkGUI:
     def __init__(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800)
+        self.win = GraphWin("Shark Game", 1300, 800, False)
         self.win.setBackground(color_rgb(52, 152, 219))
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
@@ -91,7 +91,7 @@ class SharkGUI:
 
                     if not invalid:
                         # Display fish and shark on the board
-                        self.sharkButton.toggleActivation()
+                        self.fishButton.toggleActivation()
                         self.storedFish = fishList
 
                         self.updateFish(fishList)
@@ -124,13 +124,6 @@ class SharkGUI:
 
     def updateFish(self, fishList):
         # Draws the fish at the specified locations
-        self.sharkButton.toggleActivation()
-        self.fishButton.toggleActivation()
-        if self.fishButton.isActive():
-            self.instructionsText.setText("Click on the fish button to move\nthe fish")
-        else:
-            self.instructionsText.setText("Click on the shark button to move\nthe shark")
-
         for i in range(3):
             self.fish1, self.fish2, self.fish3 = self.fish2, self.fish3, self.fish1
             self.fish1.undraw()
@@ -182,6 +175,15 @@ class SharkGUI:
             image = 'sharkNW.gif'
 
         self.shark = Image((Point(75 * sharkList[0] + 57, sharkList[1] * 75 + 57)), image).draw(self.win)
+
+
+    def nextTurn(self):
+        self.sharkButton.toggleActivation()
+        self.fishButton.toggleActivation()
+        if self.fishButton.isActive():
+            self.instructionsText.setText("Click on the fish button to move\nthe fish")
+        else:
+            self.instructionsText.setText("Click on the shark button to move\nthe shark")
 
 
     def endgame(self):
