@@ -118,7 +118,7 @@ class Fish:
                     self.XDistance = abs(self.sharkXCoord - self.fishXCoord)
                     self.YDistance = abs(self.sharkYCoord - self.fishYCoord)
 
-                    if (fishYCoordinate > sharkYCoordinate) and (fishXCoordinate > sharkXCoordinate):
+                    if (self.fishYCoord > self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
                         #1st quadrant relative to shark, must move north or east
 
                         if self.XDistance < self.YDistance:
@@ -131,7 +131,7 @@ class Fish:
                             elif self.fishDirectionInt == 2:
                                 self.fishDirection = "east"
 
-                    elif (self.fishYCoordinate > self.sharkYCoordinate) and (self.fishXCoordinate < self.sharkXCoordinate):
+                    elif (self.fishYCoord > self.sharkYCoord) and (self.fishXCoord < self.sharkXCoord):
                         #2nd quadrant relative to shark, must move north or west
 
                         if self.XDistance < self.YDistance:
@@ -144,7 +144,7 @@ class Fish:
                             elif self.fishDirectionInt == 2:
                                 self.fishDirection = "west"
 
-                    elif (self.fishYCoordinate < self.sharkYCoordinate) and (self.fishXCoordinate < self.sharkXCoordinate):
+                    elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord < self.sharkXCoord):
                         #3rd quadrant relative to shark, must move south or west
 
                         if self.XDistance < self.YDistance:
@@ -157,7 +157,7 @@ class Fish:
                             elif self.fishDirectionInt == 2:
                                 self.fishDirection = "west"
 
-                    elif (self.fishYCoordinate < self.sharkYCoordinate) and (self.fishXCoordinate > self.sharkXCoordinate):
+                    elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
                         #4th quadrant relative to shark, must move south or east
 
                         if self.XDistance < self.YDistance:
