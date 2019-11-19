@@ -41,16 +41,35 @@ class Fish:
 
     #mutators
 
+    def reversePos(self):
+
+        """if the fish is in flee mode and hits a barrier, reversePos
+        flips the fish across the grid"""
+
+        if self.fishFleeStatus == True:
+
+            if self.fishXCoord < 0:
+                self.fishXCoord = 9
+
+            elif self.fishXCoord > 9:
+                self.fishXCoord = 0
+
+            if self.fishYCoord < 0:
+                self.fishYCoord = 9
+
+            elif self.fishYCoord > 9:
+                self.fishYCoord = 0
+
     def setFlee(self,sharkX,sharkY):
         
         self.sharkXCoord = sharkX
         self.sharkYCoord = sharkY
 
-        if (0 < abs(self.sharkXCoord - self.fishXCoord) <= 3) and (0 < abs(self.sharkYCoord - self.fishYCoord) <= 3):
+        if (0 <= abs(self.sharkXCoord - self.fishXCoord) <= 3) and (0 <= abs(self.sharkYCoord - self.fishYCoord) <= 3):
             self.fishFleeStatus = True
 
         else:
-            self.fishFleeStatus = True
+            self.fishFleeStatus = False
             
     def setCoords(self,x,y):
         self.fishXCoord = x
@@ -188,44 +207,8 @@ class Fish:
                 self.fishXCoord += 0
                 self.fishYCoord += -self.moveDistance
 
-        def reversePos(self):
-
-            """if the fish is in flee mode and hits a barrier, reversePos
-            flips the fish across the grid"""
-
-            if self.fishFleeStatus == True:
-
-                if self.fishXCoord < 0:
-                    self.fishXCoord = 9
-
-                elif self.fishXCoord < 9:
-                    self.fishXCoord = 0
-
-                if self.fishYCoord < 0:
-                    self.fishYCoord = 9
-
-                elif self.fishYCoord < 9:
-                    self.fishYCoord = 0
 
             
-
-                
-
-                
-                    
-
-            
-
-            
-            
-
-        
-
-    
-
-
-
-
 
 
         

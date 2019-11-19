@@ -17,6 +17,17 @@ def main():
 
     shark = Shark()
 
+    sharkX,sharkY = shark.getPosition()
+
+    fish1.setFlee(sharkX,sharkY)
+    fish2.setFlee(sharkX,sharkY)
+    fish3.setFlee(sharkX,sharkY)
+
+    fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
+    
+    GUI.updateFish(fishList)
+    GUI.updateFish(fishList)
+
     while True:
 
         buttonClicked = GUI.isClicked()
@@ -58,11 +69,15 @@ def main():
                 fish3.reversePos()
               
             fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
+
+            print(fishList)
             
             GUI.updateFish(fishList)
 
 
         elif buttonClicked == "shark":
+
+            fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
 
             fishList = shark.sharkTurn(fishList)
             sharkList = shark.getSharkList()
@@ -75,7 +90,7 @@ def main():
 
             #set if fish are alive or dead
 
-        
+            
 
         
         
