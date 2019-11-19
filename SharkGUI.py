@@ -197,8 +197,7 @@ class SharkGUI:
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
             for i in range(2):
                 for j in range(3):
-                    print()
-                    #Image(Point(i*))
+                    Image(Point(i*700, j*500), 'confetti.gif').draw(self.win)
         elif winner == 'shark':
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
@@ -241,7 +240,7 @@ class SharkGUI:
             enterFish1.setTextColor('white')
 
 
-#
+
 # # This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
 # def main():
 #     gui = SharkGUI()
@@ -249,6 +248,7 @@ class SharkGUI:
 #     shark = Shark()
 #     sharkL = shark.getSharkList()
 #     p = gui.isClicked()
+#     gui.winner('fish')
 #     while not p == 'quit':
 #         if p == 'fish':
 #             # Move fish
