@@ -5,6 +5,19 @@ from Fish import *
 from Shark import *
 import math
 
+def setFlee(fish1,fish2,fish3,sharkX,sharkY):
+
+    fish1.setFlee(sharkX,sharkY)
+    fish2.setFlee(sharkX,sharkY)
+    fish3.setFlee(sharkX,sharkY)
+
+def move(fish1,fish2,fish3,sharkX,sharkY):
+
+    fish1.move(sharkX,sharkY,1)
+    fish2.move(sharkX,sharkY,1)
+    fish3.move(sharkX,sharkY,1)
+    
+
 def main():
 
     GUI = SharkGUI()
@@ -43,7 +56,7 @@ def main():
             fish1.setFlee(sharkX,sharkY)
             fish2.setFlee(sharkX,sharkY)
             fish3.setFlee(sharkX,sharkY)
-
+    
             fish1.move(sharkX,sharkY,1)
             fish2.move(sharkX,sharkY,1)
             fish3.move(sharkX,sharkY,1)
@@ -70,6 +83,7 @@ def main():
             elif (fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9) and fish3.getFlee == True:
                 fish3.reversePos()
                 fish3.setFlee(sharkX,sharkY)
+
               
             fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
 
@@ -97,13 +111,14 @@ def main():
                 fish3.eat()
 
             GUI.updateShark(sharkList)
-
-            #update fish after this, check if killed
-
             GUI.updateFish(fishList)
-
-            #set if fish are alive or dead
             GUI.nextTurn()
+
+            print("shark",sharkList)
+
+            if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
+
+                pass #display game over message
 
         elif buttonClicked == "quit":
 
