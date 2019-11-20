@@ -5,19 +5,6 @@ from Fish import *
 from Shark import *
 import math
 
-def setFlee(fish1,fish2,fish3,sharkX,sharkY):
-
-    fish1.setFlee(sharkX,sharkY)
-    fish2.setFlee(sharkX,sharkY)
-    fish3.setFlee(sharkX,sharkY)
-
-def move(fish1,fish2,fish3,sharkX,sharkY):
-
-    fish1.move(sharkX,sharkY,1)
-    fish2.move(sharkX,sharkY,1)
-    fish3.move(sharkX,sharkY,1)
-    
-
 def main():
 
     GUI = SharkGUI()
@@ -70,10 +57,10 @@ def main():
                 fish1.reversePos()
                 fish1.setFlee(sharkX,sharkY)
 
-            if (fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9) and fish2.getFlee == False:
+            if ((fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9)) and fish2.getFlee() == False:
                 fish2.directionReverse()
                 fish2.move(sharkX,sharkY,1)
-            elif (fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9) and fish2.getFlee == True:
+            elif ((fish2.getX() < 0 or fish2.getX() > 9) or (fish2.getY() < 0 or fish2.getY() > 9)) and fish2.getFlee() == True:
                 fish2.reversePos()
                 fish2.setFlee(sharkX,sharkY)
 
