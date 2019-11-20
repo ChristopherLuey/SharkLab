@@ -37,6 +37,12 @@ class Fish:
         return self.fishAliveStatus
 
     def getWallHitting(self):
+
+        if (self.fishXCoord < 0 and self.fishXCoord > 9) or (self.fishYCoord < 0 and self.fishYCoord > 9):
+            self.fishWallHittingStatus = True
+        else:
+            self.fishWallHittingStatus = False
+            
         return self.fishWallHittingStatus
 
     #mutators
@@ -85,7 +91,7 @@ class Fish:
 
     def setWallHitting(self):
         
-        if (self.fishXCoord < 0 and self.fishXCoord > 9) or (self.fishYCoord < 0 and self.fishYCoord > 9):
+        if (self.fishXCoord < 0 or self.fishXCoord > 9) or (self.fishYCoord < 0 or self.fishYCoord > 9):
             self.fishWallHittingStatus = True
         else:
             self.fishWallHittingStatus = False
