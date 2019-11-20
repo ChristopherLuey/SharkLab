@@ -64,10 +64,10 @@ def main():
                 fish2.reversePos()
                 fish2.setFlee(sharkX,sharkY)
 
-            if (fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9) and fish3.getFlee == False:
+            if ((fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9)) and fish3.getFlee() == False:
                 fish3.directionReverse()
                 fish3.move(sharkX,sharkY,1)
-            elif (fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9) and fish3.getFlee == True:
+            elif ((fish3.getX() < 0 or fish3.getX() > 9) or (fish3.getY() < 0 or fish3.getY() > 9)) and fish3.getFlee() == True:
                 fish3.reversePos()
                 fish3.setFlee(sharkX,sharkY)
 
