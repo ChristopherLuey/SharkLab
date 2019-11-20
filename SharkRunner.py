@@ -82,8 +82,19 @@ def main():
 
             fishList = [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
 
-            fishList = shark.sharkTurn(fishList)
+            placeHolderList = shark.sharkTurn(fishList)
             sharkList = shark.getSharkList()
+
+            sharkX,sharkY = shark.getPosition()
+
+            if sharkX == fish1.getX() and sharkY == fish1.getY():
+                fish1.eat()
+
+            elif sharkX == fish2.getX() and sharkY == fish2.getY():
+                fish2.eat()
+
+            elif sharkX == fish3.getX() and sharkY == fish3.getY():
+                fish3.eat()
 
             GUI.updateShark(sharkList)
 

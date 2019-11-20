@@ -41,6 +41,9 @@ class Fish:
 
     #mutators
 
+    def eat(self):
+        self.fishAliveStatus == False
+
     def reversePos(self):
 
         """if the fish is in flee mode and hits a barrier, reversePos
