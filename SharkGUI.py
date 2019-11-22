@@ -9,7 +9,7 @@ from Shark import *
 class SharkGUI:
     def __init__(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, False)
+        self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(color_rgb(52, 152, 219))
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
@@ -186,7 +186,7 @@ class SharkGUI:
             self.instructionsText.setText("Click on the shark button to move\nthe shark")
 
 
-    def endgame(self):
+    def endGame(self):
         self.win.close()
 
 
