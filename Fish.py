@@ -5,7 +5,7 @@ from random import randrange
 
 class Fish:
 
-    def __init__(self,x,y,direction,flee,alive,wallHitting):
+    def __init__(self,x,y,direction,flee,alive,wallHitting,altDirection):
 
         #convert to self. form
 
@@ -15,6 +15,7 @@ class Fish:
         self.fishFleeStatus = flee
         self.fishAliveStatus = alive
         self.fishWallHittingStatus = wallHitting
+        self.fishAltDirection = altDirection
 
     #accessors
 
@@ -38,17 +39,19 @@ class Fish:
 
     def getWallHitting(self):
 
-        if (self.fishXCoord < 0 and self.fishXCoord > 9) or (self.fishYCoord < 0 and self.fishYCoord > 9):
+        if ((self.fishXCoord < 0 or self.fishXCoord > 9) or (self.fishXCoord < 0 or self.fishXCoord > 9)):
             self.fishWallHittingStatus = True
         else:
             self.fishWallHittingStatus = False
-            
+
         return self.fishWallHittingStatus
 
     #mutators
 
     def eat(self):
         self.fishAliveStatus == False
+        self.fishXCoord = 10
+        self.fishYCoord = 10
 
     def reversePos(self):
 
@@ -110,11 +113,10 @@ class Fish:
         elif self.fishDirection == "south":
             self.fishDirection = "north"
 
-    def move(self,sharkX,sharkY,distance):
+    def setDirection(self,sharkX,sharkY):
 
         self.sharkXCoord = sharkX
         self.sharkYCoord = sharkY
-        self.moveDistance = distance
 
         if self.fishXCoord == self.sharkXCoord and self.fishYCoord == self.sharkYCoord:
             self.fishAliveStatus = False
@@ -198,26 +200,30 @@ class Fish:
                             elif self.fishDirectionInt == 2:
                                 self.fishDirection = "east"
 
-            #translate direction into coordinate movement.
+        def move(self,distance):
 
-            if self.fishDirection == "east":
-                self.fishXCoord += self.moveDistance
-                self.fishYCoord += 0
-                
-            elif self.fishDirection == "north":
-                self.fishXCoord += 0
-                self.fishYCoord += self.moveDistance
-                
-            elif self.fishDirection == "west":
-                self.fishXCoord += -self.moveDistance
-                self.fishYCoord += 0
+            self.moveDistance = distance
 
-            elif self.fishDirection == "south":
-                self.fishXCoord += 0
-                self.fishYCoord += -self.moveDistance
+            if self.fishAliveStatus == True:
 
+                #translate direction into coordinate movement.
 
-            
+                if self.fishDirection == "east":
+                    self.fishXCoord += self.moveDistance
+                    self.fishYCoord += 0
+                    
+                elif self.fishDirection == "north":
+                    self.fishXCoord += 0
+                    self.fishYCoord += self.moveDistance
+                    
+                elif self.fishDirection == "west":
+                    self.fishXCoord += -self.moveDistance
+                    self.fishYCoord += 0
 
+                elif self.fishDirection == "south":
+                    self.fishXCoord += 0
+                    self.fishYCoord += -self.moveDistance
 
-        
+        def collideMoveFlee(self,distance):
+
+            pass
