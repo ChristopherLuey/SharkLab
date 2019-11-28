@@ -204,6 +204,9 @@ class SharkGUI:
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
 
+
+
+
     # Helper function: should not be called outside of this class
     def formatGUI(self):
         enterFish1 = Text(Point(960, 150), "Daddy Coordinate(x,y): ").draw(self.win)
