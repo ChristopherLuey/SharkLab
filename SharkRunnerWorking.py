@@ -60,7 +60,7 @@ def main():
             for fishObject in fishListObjects:
 
                 if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-                    fishObject.directionReverse()
+                    fishObject.directionReverse() #this should be done next round
                     fishObject.move(1)
                 elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
                     fishObject.reversePos()
