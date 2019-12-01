@@ -52,56 +52,37 @@ def wallHitting(distance,fish1,fish2,fish3,sharkX,sharkY):
         fish3.reversePos()
         fish3.setFlee(sharkX,sharkY)
 
+def collideMove(fish):
+    fish.directionReverse()
+    fish.move(1)
+    fish.collideSetDirection()
+    fish.move(1)
+    
+
 def collisions(fish1,fish2,fish3):
 
     if fish1.getX() == fish2.getX() and fish1.getY() == fish2.getY():
-
         if fish1.getFlee() == True and fish1.getAltDirection() == True:
-            fish1.directionReverse()
-            fish1.move(1)
-            fish1.collideSetDirection()
-            fish1.move(1)
-
+            collideMove(fish1)
         elif fish2.getFlee() == True and fish2.getAltDirection() == True:
-            fish2.directionReverse()
-            fish2.move(1)
-            fish2.collideSetDirection()
-            fish2.move(1)
-
+            collideMove(fish2)
         if fish1.getAltDirection() == False and fish2.getAltDirection() == False: #CHECK THIS AGAINST SPECS
             fish1.move(1)
 
     if fish1.getX() == fish3.getX() and fish1.getY() == fish3.getY():
-
         if fish1.getFlee() == True and fish1.getAltDirection() == True:
-            fish1.directionReverse()
-            fish1.move(1)
-            fish1.collideSetDirection()
-            fish1.move(1)
-
+            collideMove(fish1)
         elif fish3.getFlee() == True and fish3.getAltDirection() == True:
-            fish3.directionReverse()
-            fish3.move(1)
-            fish3.collideSetDirection()
-            fish3.move(1)
-
+            collideMove(fish2)
         if fish1.getAltDirection() == False and fish2.getAltDirection() == False: #CHECK THIS AGAINST SPECS
             fish1.move(1)
 
     if fish3.getX() == fish2.getX() and fish3.getY() == fish2.getY():
 
         if fish3.getFlee() == True and fish3.getAltDirection() == True:
-            fish3.directionReverse()
-            fish3.move(1)
-            fish3.collideSetDirection()
-            fish3.move(1)
-
+            collideMove(fish3)
         elif fish2.getFlee() == True and fish2.getAltDirection() == True:
-            fish2.directionReverse()
-            fish2.move(1)
-            fish2.collideSetDirection()
-            fish2.move(1)
-
+            collideMove(fish2)
         if fish3.getAltDirection() == False and fish2.getAltDirection() == False: #CHECK THIS AGAINST SPECS
             fish2.move(1)
 

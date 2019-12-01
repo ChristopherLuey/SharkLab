@@ -17,6 +17,17 @@ class Fish:
         self.fishWallHittingStatus = wallHitting
         self.fishAltDirection = altDirection
 
+        self.directionInt = randrange(1,5)
+
+        if self.directionInt == 1:
+            self.fishDirection = "west"
+        elif self.directionInt == 2:
+            self.fishDirection = "east"
+        elif self.directionInt == 3:
+            self.fishDirection = "north"
+        elif self.directionInt == 3:
+            self.fishDirection = "south"
+
     #accessors
 
     def getAltDirection(self):
