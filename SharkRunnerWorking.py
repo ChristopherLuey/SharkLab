@@ -14,6 +14,35 @@ def collideMove(fish):
     fish.collideSetDirection()
     fish.move(1)
 
+def wallHitting(fishListObjects):
+
+    #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
+
+    for fishObject in fishListObjects:
+
+        if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
+            fishObject.directionReverse() #this should be done next round
+            fishObject.move(1)
+        elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
+            fishObject.reversePos()
+            fishObject.setFlee(sharkX,sharkY)
+
+def collideMove(fishListObjects):
+
+    #collisions scenario, use list to cycle between fish combinations. For loop cycles between combination 1,3 - 1,2 - 2,3 in that order
+    #tests if the coordinates of each fish match. If the fish have alternate directions (are fleeing from a corner), the fish moves back
+    #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
+
+    for fishObjectInt in range(0,3):
+            
+        if fishListObjects[fishObjectInt - 1].getX() == fishListObjects[fishObjectInt].getX() and fishListObjects[fishObjectInt - 1].getY() == fishListObjects[fishObjectInt].getY():
+            if fishListObjects[fishObjectInt].getFlee() == True and fishListObjects[fishObjectInt].getAltDirection() == True:
+                collideMove(fishListObjects[fishObjectInt])
+            elif fishListObjects[fishObjectInt - 1].getFlee() == True and fishListObjects[fishObjectInt - 1].getAltDirection() == True:
+                collideMove(fishListObjects[fishObjectInt - 1])
+            else: #CHECK THIS AGAINST SPECS
+                fishListObjects[fishObjectInt].move(-1)
+
 def main():
 
     #set up GUI, gather user input to feed into subsequent fish object constructor
@@ -61,28 +90,13 @@ def main():
 
             #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-            for fishObject in fishListObjects:
-
-                if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-                    fishObject.directionReverse() #this should be done next round
-                    fishObject.move(1)
-                elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
-                    fishObject.reversePos()
-                    fishObject.setFlee(sharkX,sharkY)
+            wallHitting(fishListObjects)
 
             #collisions scenario, use list to cycle between fish combinations. For loop cycles between combination 1,3 - 1,2 - 2,3 in that order
             #tests if the coordinates of each fish match. If the fish have alternate directions (are fleeing from a corner), the fish moves back
             #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
 
-            for fishObjectInt in range(0,3):
-                    
-                if fishListObjects[fishObjectInt - 1].getX() == fishListObjects[fishObjectInt].getX() and fishListObjects[fishObjectInt - 1].getY() == fishListObjects[fishObjectInt].getY():
-                    if fishListObjects[fishObjectInt].getFlee() == True and fishListObjects[fishObjectInt].getAltDirection() == True:
-                        collideMove(fishListObjects[fishObjectInt])
-                    elif fishListObjects[fishObjectInt - 1].getFlee() == True and fishListObjects[fishObjectInt - 1].getAltDirection() == True:
-                        collideMove(fishListObjects[fishObjectInt - 1])
-                    else: #CHECK THIS AGAINST SPECS
-                        fishListObjects[fishObjectInt].move(-1)
+            collideMove(fishListObjects)
             
             fishList = getFishList(fish1,fish2,fish3)
             GUI.updateFish(fishList)
