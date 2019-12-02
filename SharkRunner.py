@@ -5,8 +5,8 @@ from Fish import *
 from Shark import *
 
 #to do
-#win conditions
-#wallHitting
+#win conditions for fish (APZ)
+#south facing fish
 
 def getFishList(fish1,fish2,fish3):
     return [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
