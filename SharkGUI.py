@@ -198,9 +198,11 @@ class SharkGUI:
             self.fishButton.toggleActivation()
         if self.sharkButton.isActive():
             self.sharkButton.toggleActivation()
+
+        listOfConfetti = []
         for i in range(2):
             for j in range(3):
-                Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win)
+                listOfConfetti.append(Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win))
         if winner == 'fish':
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
         elif winner == 'shark':
@@ -211,10 +213,14 @@ class SharkGUI:
         popup.setBackground(color_rgb(52, 152, 219))
         playAgain = Text(Point(200,200), "Would you like to play again?\nClick on the start button!").draw(popup)
         playAgain.setTextColor('white')
-        playAgain.setSize(20)
+        playAgain.setSize(25)
+
+        for i in listOfConfetti:
+            i.undraw()
 
         fishList = self.gatherUserInput()
-        
+
+        popup.close()
         return fishList
 
 
