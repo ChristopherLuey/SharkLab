@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+.idea/misc.xml
+.idea/modules.xml
+.idea/SharkLab.iml
+.idea/vcs.xml
+.idea/workspace.xml
