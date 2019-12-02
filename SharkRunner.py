@@ -4,6 +4,10 @@ from SharkGUI import *
 from Fish import *
 from Shark import *
 
+#to do
+#win conditions
+#wallHitting
+
 def getFishList(fish1,fish2,fish3):
     return [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
 
@@ -13,15 +17,19 @@ def collideMove(fish):
     fish.collideSetDirection()
     fish.move(1)
 
-def wallHitting(fishListObjects):
+def wallHitting(fishListObjects,sharkX,sharkY):
 
     #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
     for fishObject in fishListObjects:
 
         if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-            fishObject.directionReverse() #this should be done next round
-            fishObject.move(1)
+            fishObject.setWallHittingRound(True)
+            if fishObject.getWallHittingRound() == 1:
+                fishObject.move(-1)
+            elif fishObject.getWallHittingRound() == 2:
+                fishObject.directionReverse() #this should be done next round
+                fishObject.move(2)
         elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
             fishObject.reversePos()
             fishObject.setFlee(sharkX,sharkY)
@@ -49,9 +57,9 @@ def main():
     GUI = SharkGUI()
     GUIList = GUI.gatherUserInput()
     
-    fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
-    fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
-    fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
+    fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,0,"DNE")
+    fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,0,"DNE")
+    fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,0,"DNE")
 
     fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
 
@@ -89,12 +97,10 @@ def main():
 
             #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-            wallHitting(fishListObjects)
+            wallHitting(fishListObjects,sharkX,sharkY)
 
-            #collisions scenario, use list to cycle between fish combinations. For loop cycles between combination 1,3 - 1,2 - 2,3 in that order
-            #tests if the coordinates of each fish match. If the fish have alternate directions (are fleeing from a corner), the fish moves back
-            #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
-
+            #collisions scenario
+            
             collisionScenario(fishListObjects)
             
             fishList = getFishList(fish1,fish2,fish3)

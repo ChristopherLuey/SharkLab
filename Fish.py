@@ -5,7 +5,7 @@ from random import randrange
 
 class Fish:
 
-    def __init__(self,x,y,direction,flee,alive,wallHitting,altDirection):
+    def __init__(self,x,y,direction,flee,alive,wallHitting,wallHittingRound,altDirection):
 
         #convert to self. form
 
@@ -15,6 +15,7 @@ class Fish:
         self.fishFleeStatus = flee
         self.fishAliveStatus = alive
         self.fishWallHittingStatus = wallHitting
+        self.fishWallHittingRound = wallHittingRound
         self.fishAltDirection = altDirection
 
         self.directionInt = randrange(1,5)
@@ -29,6 +30,9 @@ class Fish:
             self.fishDirection = "south"
 
     #accessors
+
+    def getWallHittingRound(self):
+        return self.fishWallHittingRound
 
     def getAltDirection(self):
         if self.fishAltDirection != "DNE":
@@ -65,6 +69,13 @@ class Fish:
 
     #mutators
 
+    def setWallHittingRound(self,addStatus):
+        self.addStatus = addStatus
+        if self.addStatus == True:  
+            self.fishWallHittingRound += 1
+        else:
+            self.fishWallHittingRound = 0
+        
     def eat(self):
         self.fishAliveStatus = False
 
