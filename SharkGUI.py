@@ -24,8 +24,9 @@ class SharkGUI:
 
         # Create the fish coord entries
         self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200), 10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
-        self.instructionsText = Text(Point(1035, 480), "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
+        self.instructionsText = Text(Point(1035, 450), "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
         self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
+        self.ripFishCounter = 0
 
 
         self.formatGUI()
@@ -150,6 +151,8 @@ class SharkGUI:
             else:
                 if not isAlive == self.storedFish[i*5+4]:
                     self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
+                    self.ripFishCounter += 1
+                    self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
         self.storedFish = fishList
 
 
@@ -195,16 +198,24 @@ class SharkGUI:
             self.fishButton.toggleActivation()
         if self.sharkButton.isActive():
             self.sharkButton.toggleActivation()
+        for i in range(2):
+            for j in range(3):
+                Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win)
         if winner == 'fish':
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
-            for i in range(2):
-                for j in range(3):
-                    Image(Point(i*700, j*500), 'confetti.gif').draw(self.win)
         elif winner == 'shark':
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
 
+        popup = GraphWin("Play Again?", 400, 400)
+        popup.setBackground(color_rgb(52, 152, 219))
+        playAgain = Text(Point(200,200), "Would you like to play again?\nClick on the start button!").draw(popup)
+        playAgain.setTextColor('white')
+        playAgain.setSize(20)
 
+        fishList = self.gatherUserInput()
+        
+        return fishList
 
 
     # Helper function: should not be called outside of this class
@@ -221,6 +232,9 @@ class SharkGUI:
         title.setSize(25)
         title.setTextColor('white')
         title.setStyle('bold')
+
+        self.ripFish.setSize(20)
+        self.ripFish.setTextColor("white")
         for i in range(7):
             Image(Point(120*i, 725), 'reef.gif').draw(self.win)
 
@@ -244,29 +258,3 @@ class SharkGUI:
             enterFish1.setSize(20)
             enterFish1.setTextColor('white')
 
-
-
-# # This is a tester script to draw the window and see if everything moves correctly. Please ignore below until I am fully done testing in which case I will delete this
-# def main():
-#     gui = SharkGUI()
-#     fish = gui.gatherUserInput()
-#     shark = Shark()
-#     sharkL = shark.getSharkList()
-#     p = gui.isClicked()
-#     gui.winner('fish')
-#     while not p == 'quit':
-#         if p == 'fish':
-#             # Move fish
-#             gui.updateFish(fish)
-#             gui.updateShark(shark.getSharkList())
-#             # Detect Fish win
-#         elif p == 'shark':
-#             # Move shark
-#             fish = shark.sharkTurn(fish)
-#             gui.updateFish(fish)
-#             gui.updateShark(shark.getSharkList())
-#             # Detect Shark win
-#         p = gui.isClicked()
-#     gui.endgame()
-#
-# main()
