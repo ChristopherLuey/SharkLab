@@ -28,7 +28,6 @@ class SharkGUI:
         self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
         self.ripFishCounter = 0
 
-
         self.formatGUI()
 
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
@@ -41,6 +40,7 @@ class SharkGUI:
 
 
     def gatherUserInput(self):
+        self.updateShark([7,2,'e',0])
         self.start.toggleActivation()
         p = self.win.getMouse()
         while not self.quitButton.isClicked(p):
@@ -131,7 +131,6 @@ class SharkGUI:
 
             fishx, fishy, fishD, fishf, isAlive = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3],  fishList[i*5+4]
 
-            # https://giphy.com/kittusz
             # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
             flee = ''
             if fishf: flee = 'Flee'
@@ -176,7 +175,6 @@ class SharkGUI:
             image = 'sharkSW.gif'
         elif sharkList[2] == 'nw':
             image = 'sharkNW.gif'
-
         self.shark = Image((Point(75 * sharkList[0] + 57, sharkList[1] * 75 + 57)), image).draw(self.win)
 
 
@@ -198,9 +196,11 @@ class SharkGUI:
             self.fishButton.toggleActivation()
         if self.sharkButton.isActive():
             self.sharkButton.toggleActivation()
+
+        listOfConfetti = []
         for i in range(2):
             for j in range(3):
-                Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win)
+                listOfConfetti.append(Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win))
         if winner == 'fish':
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
         elif winner == 'shark':
@@ -211,10 +211,18 @@ class SharkGUI:
         popup.setBackground(color_rgb(52, 152, 219))
         playAgain = Text(Point(200,200), "Would you like to play again?\nClick on the start button!").draw(popup)
         playAgain.setTextColor('white')
-        playAgain.setSize(20)
+        playAgain.setSize(25)
+
+        for i in range(2):
+            for j in range(3):
+                Image(Point(i * 700, j * 500), 'confetti.gif').draw(popup)
+
+        for k in listOfConfetti:
+            k.undraw()
 
         fishList = self.gatherUserInput()
-        
+
+        popup.close()
         return fishList
 
 
@@ -257,4 +265,3 @@ class SharkGUI:
             enterFish1, enterFish2, enterFish3 = enterFish2, enterFish3, enterFish1
             enterFish1.setSize(20)
             enterFish1.setTextColor('white')
-
