@@ -121,7 +121,7 @@ def main():
             looping = False
             break
 
-        else:
+        elif GUIList != []:
         
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
@@ -174,7 +174,7 @@ def main():
                     GUI.nextTurn()
 
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
-                        GUI.winner("fish")
+                        GUIList = GUI.winner("fish")
                         break
 
                 elif buttonClicked == "shark":
@@ -195,7 +195,7 @@ def main():
 
                     if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
 
-                        GUI.winner("shark")
+                        GUIList = GUI.winner("shark")
 
                 elif buttonClicked == "quit":
 
