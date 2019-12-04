@@ -131,7 +131,7 @@ class SharkGUI:
 
             fishx, fishy, fishD, fishf, isAlive = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3],  fishList[i*5+4]
 
-            # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
+                # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
             flee = ''
             if fishf: flee = 'Flee'
 
