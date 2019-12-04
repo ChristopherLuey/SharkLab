@@ -5,7 +5,7 @@ from random import randrange
 
 class Fish:
 
-    def __init__(self,x,y,direction,flee,alive,wallHitting,wallHittingRound,altDirection):
+    def __init__(self,x,y,direction,flee,alive,wallHitting,altDirection):
 
         #convert to self. form
 
@@ -15,7 +15,6 @@ class Fish:
         self.fishFleeStatus = flee
         self.fishAliveStatus = alive
         self.fishWallHittingStatus = wallHitting
-        self.fishWallHittingRound = wallHittingRound
         self.fishAltDirection = altDirection
 
         self.directionInt = randrange(1,5)
@@ -30,9 +29,6 @@ class Fish:
             self.fishDirection = "south"
 
     #accessors
-
-    def getWallHittingRound(self):
-        return self.fishWallHittingRound
 
     def getAltDirection(self):
         if self.fishAltDirection != "DNE":
@@ -68,13 +64,6 @@ class Fish:
         return self.fishWallHittingStatus
 
     #mutators
-
-    def setWallHittingRound(self,addStatus):
-        self.addStatus = addStatus
-        if self.addStatus == True:  
-            self.fishWallHittingRound += 1
-        else:
-            self.fishWallHittingRound = 0
         
     def eat(self):
         self.fishAliveStatus = False
@@ -157,9 +146,9 @@ class Fish:
                     
             elif self.fishXCoord == self.sharkXCoord:                    
                 if self.fishYCoord > self.sharkYCoord:
-                    self.fishDirection,self.fishAltDirection = "north","DNE"
-                elif self.fishYCoord < self.sharkYCoord:
                     self.fishDirection,self.fishAltDirection = "south","DNE"
+                elif self.fishYCoord < self.sharkYCoord:
+                    self.fishDirection,self.fishAltDirection = "north","DNE"
 
             else:
 
@@ -169,13 +158,13 @@ class Fish:
                 self.YDistance = abs(self.sharkYCoord - self.fishYCoord)
 
                 if (self.fishYCoord > self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
-                    directionList = ["north","east"]
-                elif (self.fishYCoord > self.sharkYCoord) and (self.fishXCoord < self.sharkXCoord):
-                    directionList = ["north","west"]
-                elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord < self.sharkXCoord):
-                    directionList = ["south","west"]
-                elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
                     directionList = ["south","east"]
+                elif (self.fishYCoord > self.sharkYCoord) and (self.fishXCoord < self.sharkXCoord):
+                    directionList = ["south","west"]
+                elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord < self.sharkXCoord):
+                    directionList = ["north","west"]
+                elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
+                    directionList = ["north","east"]
 
                 if self.XDistance < self.YDistance:
                     self.fishDirection,self.fishAltDirection = directionList[0],"DNE"
@@ -207,7 +196,7 @@ class Fish:
                 
             elif self.fishDirection == "north":
                 self.fishXCoord += 0
-                self.fishYCoord += self.moveDistance
+                self.fishYCoord += -self.moveDistance
                 
             elif self.fishDirection == "west":
                 self.fishXCoord += -self.moveDistance
@@ -215,7 +204,7 @@ class Fish:
 
             elif self.fishDirection == "south":
                 self.fishXCoord += 0
-                self.fishYCoord += -self.moveDistance
+                self.fishYCoord += self.moveDistance
 
     def collideSetDirection(self):
 
