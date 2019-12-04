@@ -117,85 +117,87 @@ def main():
         #set up GUI, gather user input to feed into subsequent fish object constructor
         
         GUIList = GUI.gatherUserInput()
+
+        if GUIList != []: #use this if statement to ensure that quit does not lead to error if start is not clicked
         
-        fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
-        fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
-        fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
+            fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
+            fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
+            fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
 
-        fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
+            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
 
-        #construct shark, gather coordinates to set flee status of each fish
-        
-        shark = Shark()
-        sharkX,sharkY = shark.getPosition()
-
-        for fishObject in fishListObjects:
-            fishObject.setFlee(sharkX,sharkY)
-
-        #update GUI to reflect these changes
-        
-        fishList = getFishList(fish1,fish2,fish3)
-        GUI.updateFish(fishList)
-
-        while True:
-
-            buttonClicked = GUI.isClicked()
-            #fishList = getFishList(fish1,fish2,fish3)
+            #construct shark, gather coordinates to set flee status of each fish
             
-            if buttonClicked == "fish":
+            shark = Shark()
+            sharkX,sharkY = shark.getPosition()
 
-                sharkList = shark.getSharkList()
-                sharkX,sharkY = shark.getPosition()
+            for fishObject in fishListObjects:
+                fishObject.setFlee(sharkX,sharkY)
 
-                for fishObject in fishListObjects:
-                    fishObject.setFlee(sharkX,sharkY)
-                    
-                for fishObject in fishListObjects:
-                    fishObject.setDirection(sharkX,sharkY)
-                    
-                for fishObject in fishListObjects:
-                    fishObject.move(1)
+            #update GUI to reflect these changes
+            
+            fishList = getFishList(fish1,fish2,fish3)
+            GUI.updateFish(fishList)
 
-                #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
+            while True:
 
-                wallHitting(fishListObjects,sharkX,sharkY)
-
-                #collisions scenario
+                buttonClicked = GUI.isClicked()
+                #fishList = getFishList(fish1,fish2,fish3)
                 
-                collisionScenario(fishListObjects)
+                if buttonClicked == "fish":
 
-                if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
-                    #GUI.winner("fish")
-                    print("true")
-                
-                fishList = getFishList(fish1,fish2,fish3)
-                GUI.updateFish(fishList)
-                GUI.nextTurn()
+                    sharkList = shark.getSharkList()
+                    sharkX,sharkY = shark.getPosition()
 
-            elif buttonClicked == "shark":
+                    for fishObject in fishListObjects:
+                        fishObject.setFlee(sharkX,sharkY)
+                        
+                    for fishObject in fishListObjects:
+                        fishObject.setDirection(sharkX,sharkY)
+                        
+                    for fishObject in fishListObjects:
+                        fishObject.move(1)
 
-                fishList = getFishList(fish1,fish2,fish3)
+                    #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-                placeHolderList = shark.sharkTurn(fishList)
-                sharkList = shark.getSharkList()
-                sharkX,sharkY = shark.getPosition()
+                    wallHitting(fishListObjects,sharkX,sharkY)
 
-                for fishObject in fishListObjects:
-                    if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
-                        fishObject.eat()
+                    #collisions scenario
+                    
+                    collisionScenario(fishListObjects)
 
-                GUI.updateShark(sharkList)
-                GUI.updateFish(fishList)
-                GUI.nextTurn()
+                    if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
+                        #GUI.winner("fish")
+                        print("true")
+                    
+                    fishList = getFishList(fish1,fish2,fish3)
+                    GUI.updateFish(fishList)
+                    GUI.nextTurn()
 
-                if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
+                elif buttonClicked == "shark":
 
-                    GUI.winner("shark")
+                    fishList = getFishList(fish1,fish2,fish3)
 
-            elif buttonClicked == "quit":
+                    shark.sharkTurn(fishList)
+                    sharkList = shark.getSharkList()
+                    sharkX,sharkY = shark.getPosition()
 
-                GUI.endGame()
-                looping = False
-                break
+                    for fishObject in fishListObjects:
+                        if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
+                            fishObject.eat()
+
+                    GUI.updateShark(sharkList)
+                    GUI.updateFish(fishList)
+                    GUI.nextTurn()
+
+                    if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
+
+                        GUI.winner("shark")
+
+                elif buttonClicked == "quit":
+
+                    GUI.endGame()
+                    looping = False
+                    break
         
 main()
