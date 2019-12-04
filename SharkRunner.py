@@ -86,7 +86,7 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             if abs(aliveFishList[0].getX() - sharkX) > 4:
                 fishWin = True
                 
-    """elif deadNumber == 1:
+    elif deadNumber == 1:
         if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY:
             if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX):
                 aliveFishList[0],aliveFishList[1] = aliveFishList[0],aliveFishList[1]
@@ -102,7 +102,7 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             elif aliveFishList[0].getY() == sharkY:
                 if aliveFishList[0].getX() == aliveFishList[1].getX():
                     if abs(aliveFishList[0].getX() - sharkX) > 4:
-                        fishWin = True"""
+                        fishWin = True
 
     return fishWin
 
