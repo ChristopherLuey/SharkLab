@@ -8,36 +8,7 @@ from Shark import *
 
 class SharkGUI:
     def __init__(self):
-        # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, True)
-        self.win.setBackground(color_rgb(52, 152, 219))
-
-        r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
-        r.setFill(color_rgb(41, 128, 185))
-        r.setOutline(color_rgb(41, 128, 185))
-
-        # Create the buttons
-        self.quitButton = Button(1245, 25, 100, 40, 10, color_rgb(231, 76, 60), 'Quit', 'white', 20, self.win)
-        self.start = Button(1035, 325, 200, 50, 10, color_rgb(46, 204, 113), 'Start', 'white', 25, self.win)
-        self.sharkButton = Button(1035, 650, 400, 50, 10, color_rgb(142, 68, 173), 'Move Shark', 'white', 25, self.win)
-        self.fishButton = Button(1035, 725, 400, 50, 10, color_rgb(243, 156, 18), 'Move Fish', 'white', 25, self.win)
-
-        # Create the fish coord entries
-        self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200), 10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
-        self.instructionsText = Text(Point(1035, 450), "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
-        self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
-        self.ripFishCounter = 0
-
-        self.formatGUI()
-
-        self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
-        # Draw the shark on the board
-        self.updateShark([7,2,'e',0])
-        self.storedFish = []
-
-        # Finally activate quit button
-        self.quitButton.toggleActivation()
-
+        self.createWin()
 
     def gatherUserInput(self):
         self.updateShark([7,2,'e',0])
@@ -131,7 +102,7 @@ class SharkGUI:
 
             fishx, fishy, fishD, fishf, isAlive = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3],  fishList[i*5+4]
 
-                # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
+            # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
             flee = ''
             if fishf: flee = 'Flee'
 
@@ -220,6 +191,8 @@ class SharkGUI:
         for k in listOfConfetti:
             k.undraw()
 
+        self.win.close()
+
         fishList = self.gatherUserInput()
 
         popup.close()
@@ -265,3 +238,40 @@ class SharkGUI:
             enterFish1, enterFish2, enterFish3 = enterFish2, enterFish3, enterFish1
             enterFish1.setSize(20)
             enterFish1.setTextColor('white')
+
+
+    def createWin(self):
+        # Create the window
+        self.win = GraphWin("Shark Game", 1300, 800, True)
+        self.win.setBackground(color_rgb(52, 152, 219))
+
+        r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
+        r.setFill(color_rgb(41, 128, 185))
+        r.setOutline(color_rgb(41, 128, 185))
+
+        # Create the buttons
+        self.quitButton = Button(1245, 25, 100, 40, 10, color_rgb(231, 76, 60), 'Quit', 'white', 20, self.win)
+        self.start = Button(1035, 325, 200, 50, 10, color_rgb(46, 204, 113), 'Start', 'white', 25, self.win)
+        self.sharkButton = Button(1035, 650, 400, 50, 10, color_rgb(142, 68, 173), 'Move Shark', 'white', 25, self.win)
+        self.fishButton = Button(1035, 725, 400, 50, 10, color_rgb(243, 156, 18), 'Move Fish', 'white', 25, self.win)
+
+        # Create the fish coord entries
+        self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200),
+                                                                                                  10).draw(
+            self.win), Entry(Point(1145, 250), 10).draw(self.win)
+        self.instructionsText = Text(Point(1035, 450),
+                                     "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(
+            self.win)
+        self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
+        self.ripFishCounter = 0
+
+        self.formatGUI()
+
+        self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(
+            0, 0).draw(self.win), Point(0, 0).draw(self.win)
+        # Draw the shark on the board
+        self.updateShark([7, 2, 'e', 0])
+        self.storedFish = []
+
+        # Finally activate quit button
+        self.quitButton.toggleActivation()
