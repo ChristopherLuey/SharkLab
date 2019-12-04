@@ -84,15 +84,16 @@ class SharkGUI:
 
     def isClicked(self):
         # Wait for user input
-        p = self.win.getMouse()
-        while True:
-            # Check which button, if any is clicked
-            if self.quitButton.isClicked(p): break
-            elif self.start.isClicked(p): return 'start'
-            elif self.fishButton.isClicked(p): return 'fish'
-            elif self.sharkButton.isClicked(p): return 'shark'
-            else: return 'none'
-        return 'quit'
+        if self.win.isClosed():
+            p = self.win.getMouse()
+            while True:
+                # Check which button, if any is clicked
+                if self.quitButton.isClicked(p): break
+                elif self.start.isClicked(p): return 'start'
+                elif self.fishButton.isClicked(p): return 'fish'
+                elif self.sharkButton.isClicked(p): return 'shark'
+                else: return 'none'
+            return 'quit'
 
 
     def updateFish(self, fishList):
@@ -186,7 +187,7 @@ class SharkGUI:
         playAgain.setSize(25)
         playAgainButton = Button(200,100,100,50,10,'light green', "Play Again", 'white', 20, popup)
         playAgainButton.toggleActivation()
-        quitButton = Button(50,50, 100,20,5,'red', "Quit", 'red', 20,popup)
+        quitButton = Button(50,50, 100,50,5,'red', "Quit", 'red', 20,popup)
         quitButton.toggleActivation()
 
         for i in range(2):
@@ -202,9 +203,8 @@ class SharkGUI:
         while not quitButton.isClicked(p):
             if playAgainButton.isClicked(p):
                 self.createWin()
-                fishList = self.gatherUserInput()
-
                 popup.close()
+                fishList = self.gatherUserInput()
                 return fishList
             if not popup.isClosed():
                 p = popup.getMouse()
