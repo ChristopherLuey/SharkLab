@@ -118,7 +118,11 @@ def main():
         
         GUIList = GUI.gatherUserInput()
 
-        if GUIList != []: #use this if statement to ensure that quit does not lead to error if start is not clicked
+        if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
+            looping = False
+            break
+
+        else:
         
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
@@ -166,13 +170,13 @@ def main():
                     
                     collisionScenario(fishListObjects)
 
-                    if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
-                        #GUI.winner("fish")
-                        print("true")
-                    
                     fishList = getFishList(fish1,fish2,fish3)
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
+
+                    if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
+                        GUI.winner("fish")
+                        break
 
                 elif buttonClicked == "shark":
 
