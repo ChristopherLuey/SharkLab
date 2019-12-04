@@ -11,7 +11,8 @@ class SharkGUI:
         self.createWin()
 
     def gatherUserInput(self):
-        self.updateShark([7,2,'e',0])
+        if not self.win.isClosed():
+            self.updateShark([7,2,'e',0])
         self.start.toggleActivation()
         p = self.win.getMouse()
         while not self.quitButton.isClicked(p):
