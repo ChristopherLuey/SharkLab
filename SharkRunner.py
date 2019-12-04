@@ -176,6 +176,9 @@ def main():
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
                         GUIList = GUI.winner("fish")
                         break
+                        if GUIList == []:
+                            looping = False
+
 
                 elif buttonClicked == "shark":
 
@@ -196,6 +199,9 @@ def main():
                     if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
 
                         GUIList = GUI.winner("shark")
+                        break
+                        if GUIList == []:
+                            looping = False
 
                 elif buttonClicked == "quit":
 
