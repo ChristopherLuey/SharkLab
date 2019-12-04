@@ -13,69 +13,69 @@ class SharkGUI:
     def gatherUserInput(self):
         if not self.win.isClosed():
             self.updateShark([7,2,'e',0])
-        self.start.toggleActivation()
-        p = self.win.getMouse()
-        while not self.quitButton.isClicked(p):
-            if self.start.isClicked(p):
+            self.start.toggleActivation()
+            p = self.win.getMouse()
+            while not self.quitButton.isClicked(p):
+                if self.start.isClicked(p):
 
-                self.entry1.setFill(color_rgb(26, 188, 156))
-                self.entry2.setFill(color_rgb(26, 188, 156))
-                self.entry3.setFill(color_rgb(26, 188, 156))
+                    self.entry1.setFill(color_rgb(26, 188, 156))
+                    self.entry2.setFill(color_rgb(26, 188, 156))
+                    self.entry3.setFill(color_rgb(26, 188, 156))
 
-                # Gather user entries
-                fishList, entry1, entry2, entry3 = [], self.entry1.getText(), self.entry2.getText(), self.entry3.getText()
+                    # Gather user entries
+                    fishList, entry1, entry2, entry3 = [], self.entry1.getText(), self.entry2.getText(), self.entry3.getText()
 
-                # For each entry
-                for i in range(3):
-                    # Check if it is properly formatted with m,n
-                    # This means entry must be 3 chars long, must include a comma at the second char, and the first and third chars must be from 0-9
-                    if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57:
-                        # Add this to the fish attributes list which will be passed into updateFish()
-                        fishList.extend([int(entry1[0]), int(entry1[2]), 'east', False, True])
-                        # Set the entry to green
-                        self.entry1.setFill(color_rgb(26, 188, 156))
-                    else:
-                        # Set the entry to red
-                        self.entry1.setFill(color_rgb(192, 57, 43))
-                        # Inform user of incorrect formatting of coords
-                        self.instructionsText.setText("Your inputted points are formatted\nincorrectly. Please try again.")
-
-                    # Swap values so every entry is checked
-                    entry1, entry2, entry3, self.entry1, self.entry2, self.entry3 = entry2, entry3, entry1, self.entry2, self.entry3, self.entry1
-
-                # If the list has 15 items, every fish coord must have been valid
-                if len(fishList) == 15:
-                    # Check for any overlapping coords
-                    invalid = False
-                    # Store all 3 fishes x,y
-                    f1x, f2x, f3x = fishList[0], fishList[5], fishList[10]
-                    f1y, f2y, f3y = fishList[1], fishList[6], fishList[11]
+                    # For each entry
                     for i in range(3):
-                        # Compare all fish coords to each other and shark
-                        if (f1x == f2x and f1y == f2y) or (f1x == 7 and f1y == 2):
+                        # Check if it is properly formatted with m,n
+                        # This means entry must be 3 chars long, must include a comma at the second char, and the first and third chars must be from 0-9
+                        if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57:
+                            # Add this to the fish attributes list which will be passed into updateFish()
+                            fishList.extend([int(entry1[0]), int(entry1[2]), 'east', False, True])
+                            # Set the entry to green
+                            self.entry1.setFill(color_rgb(26, 188, 156))
+                        else:
+                            # Set the entry to red
                             self.entry1.setFill(color_rgb(192, 57, 43))
-                            self.entry2.setFill(color_rgb(192, 57, 43))
-                            self.entry3.setFill(color_rgb(192, 57, 43))
-                            self.instructionsText.setText("Your inputted fish points overlap\nwith other fish or the shark.\nPlease try again.")
-                            invalid = True
-                        # Swap values so everything is checked
-                        f1x, f2x, f3x = f2x, f3x, f1x
-                        f1y, f2y, f3y = f2y, f3y, f1y
+                            # Inform user of incorrect formatting of coords
+                            self.instructionsText.setText("Your inputted points are formatted\nincorrectly. Please try again.")
 
-                    if not invalid:
-                        # Display fish and shark on the board
-                        self.fishButton.toggleActivation()
-                        self.storedFish = fishList
+                        # Swap values so every entry is checked
+                        entry1, entry2, entry3, self.entry1, self.entry2, self.entry3 = entry2, entry3, entry1, self.entry2, self.entry3, self.entry1
 
-                        self.updateFish(fishList)
-                        self.updateShark([7,2,'e', 0])
-                        # Turn off start button
-                        self.start.toggleActivation()
-                        # Return the entered fish locations
-                        return fishList
+                    # If the list has 15 items, every fish coord must have been valid
+                    if len(fishList) == 15:
+                        # Check for any overlapping coords
+                        invalid = False
+                        # Store all 3 fishes x,y
+                        f1x, f2x, f3x = fishList[0], fishList[5], fishList[10]
+                        f1y, f2y, f3y = fishList[1], fishList[6], fishList[11]
+                        for i in range(3):
+                            # Compare all fish coords to each other and shark
+                            if (f1x == f2x and f1y == f2y) or (f1x == 7 and f1y == 2):
+                                self.entry1.setFill(color_rgb(192, 57, 43))
+                                self.entry2.setFill(color_rgb(192, 57, 43))
+                                self.entry3.setFill(color_rgb(192, 57, 43))
+                                self.instructionsText.setText("Your inputted fish points overlap\nwith other fish or the shark.\nPlease try again.")
+                                invalid = True
+                            # Swap values so everything is checked
+                            f1x, f2x, f3x = f2x, f3x, f1x
+                            f1y, f2y, f3y = f2y, f3y, f1y
 
-            if not self.win.isClosed():
-                p = self.win.getMouse()
+                        if not invalid:
+                            # Display fish and shark on the board
+                            self.fishButton.toggleActivation()
+                            self.storedFish = fishList
+
+                            self.updateFish(fishList)
+                            self.updateShark([7,2,'e', 0])
+                            # Turn off start button
+                            self.start.toggleActivation()
+                            # Return the entered fish locations
+                            return fishList
+
+                if not self.win.isClosed():
+                    p = self.win.getMouse()
 
         # User quits so close window and return empty list
         self.win.close()
