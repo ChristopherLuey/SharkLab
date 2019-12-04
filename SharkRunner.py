@@ -50,6 +50,34 @@ def collisionScenario(fishListObjects):
             else: #CHECK THIS AGAINST SPECS
                 fishListObjects[fishObjectInt].move(-1)
 
+def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+
+    fishWin = False
+
+    deadNumber = 0
+
+    if fish1.getAlive() == False:
+        deadNumber += 1
+    else:
+        aliveFish = fish1
+        
+    if fish2.getAlive() == False:
+        deadNumber += 1
+    else:
+        aliveFish = fish2
+        
+    if fish3.getAlive() == False:
+        deadNumber += 1
+    else:
+        aliveFish = fish3
+
+    if deadNumber == 2:
+        if aliveFish.getX() == sharkX or aliveFish.getY() == sharkY:
+
+        
+
+    
+
 def main():
 
     #set up GUI, gather user input to feed into subsequent fish object constructor
@@ -125,7 +153,7 @@ def main():
 
             if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
 
-                pass #display game over message at this pt.
+                GUI.winner("shark")
 
         elif buttonClicked == "quit":
 
