@@ -107,16 +107,15 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
     return fishWin
 
 def main():
-    
+
+    #set up GUI, gather user input to feed into subsequent fish object constructor
+        
     GUI = SharkGUI()
+    GUIList = GUI.gatherUserInput()
 
     looping = True
 
     while looping == True:
-
-        #set up GUI, gather user input to feed into subsequent fish object constructor
-        
-        GUIList = GUI.gatherUserInput()
 
         if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
             looping = False
