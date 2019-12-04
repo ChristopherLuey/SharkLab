@@ -181,9 +181,13 @@ class SharkGUI:
 
         popup = GraphWin("Play Again?", 400, 400)
         popup.setBackground(color_rgb(52, 152, 219))
-        playAgain = Text(Point(200,200), "Would you like to play again?\nClick on the start button!").draw(popup)
+        playAgain = Text(Point(200,300), "Would you like to play again?\nClick on the start button!").draw(popup)
         playAgain.setTextColor('white')
         playAgain.setSize(25)
+        playAgainButton = Button(200,100,100,50,10,'light green', "Play Again", 'white', 20, popup)
+        playAgainButton.toggleActivation()
+        quitButton = Button(50,50, 100,20,5,'red', "Quit", 'red', 20,popup)
+        quitButton.toggleActivation()
 
         for i in range(2):
             for j in range(3):
@@ -194,10 +198,19 @@ class SharkGUI:
 
         self.win.close()
 
-        fishList = self.gatherUserInput()
+        p = popup.getMouse()
+        while not quitButton.isClicked(p):
+            if playAgainButton.isClicked(p):
+                self.createWin()
+                fishList = self.gatherUserInput()
+
+                popup.close()
+                return fishList
+            if not popup.isClosed():
+                p = popup.getMouse()
 
         popup.close()
-        return fishList
+        return []
 
 
     # Helper function: should not be called outside of this class
