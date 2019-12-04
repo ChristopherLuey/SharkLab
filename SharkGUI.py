@@ -201,7 +201,7 @@ class SharkGUI:
         p = popup.getMouse()
         while not quitButton.isClicked(p):
             if playAgainButton.isClicked(p):
-                self.createWin()
+                #self.createWin()
                 fishList = self.gatherUserInput()
 
                 popup.close()
