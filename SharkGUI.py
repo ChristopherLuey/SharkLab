@@ -84,7 +84,7 @@ class SharkGUI:
 
     def isClicked(self):
         # Wait for user input
-        if self.win.isClosed():
+        if not self.win.isClosed():
             p = self.win.getMouse()
             while True:
                 # Check which button, if any is clicked
