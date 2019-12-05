@@ -79,12 +79,14 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
     if deadNumber == 2:
         if aliveFishList[0].getX() == sharkX:
-            if (aliveFishList[0].getY() == 0 or aliveFishList[0].getY() == 9) and 2 < abs(aliveFishList[0].getY() - sharkY) and aliveFishList[0].getFlee() == True:
-                fishWin = True
-                
+            if sharkX <= 7 or sharkX >= 2:
+                if abs(aliveFishList[0].getY() - sharkY) > 4:
+                    fishWin = True
+                            
         elif aliveFishList[0].getY() == sharkY:
-            if (aliveFishList[0].getX() == 0 or aliveFishList[0].getX() == 9) and 2 < abs(aliveFishList[0].getX() - sharkX) and aliveFishList[0].getFlee() == True:
-                fishWin = True
+            if sharkY <= 7 or sharkY >= 2:
+                if abs(aliveFishList[0].getX() - sharkX) > 4:
+                    fishWin = True
                 
     elif deadNumber == 1:
         if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY:
@@ -134,7 +136,7 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
 
-            fish3.setInputDirection("north")
+            fish3.setInputDirection("east")
 
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
 
@@ -148,7 +150,7 @@ def main():
 
             #update GUI to reflect these changes
             
-            fishList = getFishList(fish1,fish2,fish3)
+            fishList = getFishList(fish3,fish1,fish2)
             GUI.updateFish(fishList)
 
             while True:
@@ -209,7 +211,7 @@ def main():
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
 
-                    if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
+                    if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
 
                         GUIList = GUI.winner("shark")
                         break
