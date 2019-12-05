@@ -203,6 +203,7 @@ def main():
                     for fishObject in fishListObjects:
                         if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
                             fishObject.eat()
+                            fishObject.setCoords(11,11) #use to avoid collisions after fish death
 
                     GUI.updateShark(sharkList)
                     GUI.updateFish(fishList)

@@ -108,8 +108,6 @@ class Fish:
         self.fishXCoord = x
         self.fishYCoord = y
 
-        self.anchorPoint = Point(self.fishXCoord,self.fishYCoord)
-
     def setInputDirection(self,direction):
         self.fishDirection = direction
 
