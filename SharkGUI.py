@@ -134,8 +134,6 @@ class SharkGUI:
 
             futureX, futureY = 75 * fishx + 57, fishy * 75 + 57
             moveX, moveY = futureX - currentX, futureY - currentY
-            print(moveX,moveY)
-            print(moveX != 0.0 or moveY != 0.0)
 
             if moveX != 0.0 or moveY != 0.0:
                 for i in range(10):
@@ -314,5 +312,3 @@ class SharkGUI:
 
         # Finally activate quit button
         self.quitButton.toggleActivation()
-
-
