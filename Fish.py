@@ -77,11 +77,11 @@ class Fish:
 
             if self.fishXCoord < 0:
                 self.fishXCoord = 9
-                self.fishDirection = "east"
+                self.fishDirection = "west"
 
             elif self.fishXCoord > 9:
                 self.fishXCoord = 0
-                self.fishDirection = "west"
+                self.fishDirection = "east"
 
             elif self.fishYCoord < 0:
                 self.fishYCoord = 9
@@ -90,6 +90,8 @@ class Fish:
             elif self.fishYCoord > 9:
                 self.fishYCoord = 0
                 self.fishDirection = "south"
+
+        self.fishFleeStatus = False
 
     def setFlee(self,sharkX,sharkY):
         

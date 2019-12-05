@@ -37,7 +37,6 @@ def wallHitting(fishListObjects,sharkX,sharkY):
             
         elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
             fishObject.reversePos()
-            fishObject.setFlee(sharkX,sharkY)
 
 def collisionScenario(fishListObjects):
 
@@ -114,6 +113,8 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
 def main():
 
+    fishWins = 0 # use this variable to delay fish win message
+
     #set up GUI, gather user input to feed into subsequent fish object constructor
         
     GUI = SharkGUI()
@@ -173,8 +174,6 @@ def main():
 
                     wallHitting(fishListObjects,sharkX,sharkY)
 
-                    print(fish2.getCoords())
-
                     #collisions scenario
                     
                     collisionScenario(fishListObjects)
@@ -182,8 +181,6 @@ def main():
                     fishList = getFishList(fish1,fish2,fish3)
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
-
-                    fishWins = 0
 
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
                         fishWins += 1
