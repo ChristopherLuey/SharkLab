@@ -77,15 +77,19 @@ class Fish:
 
             if self.fishXCoord < 0:
                 self.fishXCoord = 9
+                self.fishDirection = "east"
 
             elif self.fishXCoord > 9:
                 self.fishXCoord = 0
+                self.fishDirection = "west"
 
             elif self.fishYCoord < 0:
                 self.fishYCoord = 9
+                self.fishDirection = "north"
 
             elif self.fishYCoord > 9:
                 self.fishYCoord = 0
+                self.fishDirection = "south"
 
     def setFlee(self,sharkX,sharkY):
         
@@ -127,6 +131,21 @@ class Fish:
 
         elif self.fishDirection == "south":
             self.fishDirection = "north"
+
+    def wallSetDirection(self):
+
+        if self.fishYCoord < 0:
+            self.fishDirection = "south"
+            
+        elif self.fishYCoord > 9:
+            self.fishDirection = "north"
+            
+        elif self.fishXCoord < 0:
+            self.fishDirection = "east"
+            
+        elif self.fishXCoord > 9:
+            self.fishDirection = "west"
+
 
     def setDirection(self,sharkX,sharkY):
 

@@ -6,7 +6,7 @@ from Shark import *
 
 #to do
 #win conditions for 2 fish (APZ)
-#south facing fish
+#fish collide, head on collision
 
 def getFishList(fish1,fish2,fish3):
     #returns a list of fish data to be inputed into the GUI, which updates the graphic representations of fish
@@ -30,7 +30,7 @@ def wallHitting(fishListObjects,sharkX,sharkY):
         #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
 
         if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-            fishObject.directionReverse()
+            fishObject.wallSetDirection()
             fishObject.move(2)
 
         #if the fish hits the wall and is in flee mode, the fish will flip across the grid
@@ -80,29 +80,35 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
     if deadNumber == 2:
         if aliveFishList[0].getX() == sharkX:
-            if abs(aliveFishList[0].getY() - sharkY) > 4:
+            if (aliveFishList[0].getY() == 0 or aliveFishList[0].getY() == 9) and 2 < abs(aliveFishList[0].getY() - sharkY) and aliveFishList[0].getFlee() == True:
                 fishWin = True
+                
         elif aliveFishList[0].getY() == sharkY:
-            if abs(aliveFishList[0].getX() - sharkX) > 4:
+            if (aliveFishList[0].getX() == 0 or aliveFishList[0].getX() == 9) and 2 < abs(aliveFishList[0].getX() - sharkX) and aliveFishList[0].getFlee() == True:
                 fishWin = True
                 
     elif deadNumber == 1:
         if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY:
+
             if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX):
                 aliveFishList[0],aliveFishList[1] = aliveFishList[0],aliveFishList[1]
                 
             elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX):
                 aliveFishList[1],aliveFishList[0] = aliveFishList[0],aliveFishList[1]
 
-            if aliveFishList[0].getX() == sharkX:
-                if aliveFishList[0].getY() == aliveFishList[1].getY():
-                    if abs(aliveFishList[0].getY() - sharkY) > 4:
-                        fishWin = True
-                                
-            elif aliveFishList[0].getY() == sharkY:
-                if aliveFishList[0].getX() == aliveFishList[1].getX():
-                    if abs(aliveFishList[0].getX() - sharkX) > 4:
-                        fishWin = True
+            if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
+
+                if aliveFishList[0].getX() == sharkX:
+                    if aliveFishList[0].getY() == aliveFishList[1].getY():
+                        if sharkX <= 7 or sharkX >= 2:
+                            if abs(aliveFishList[0].getY() - sharkY) > 5:
+                                fishWin = True
+                                    
+                elif aliveFishList[0].getY() == sharkY:
+                    if aliveFishList[0].getX() == aliveFishList[1].getX():
+                        if sharkY <= 7 or sharkY >= 2:
+                            if abs(aliveFishList[0].getX() - sharkX) > 5:
+                                fishWin = True
 
     return fishWin
 
@@ -126,6 +132,8 @@ def main():
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
+
+            fish3.setInputDirection("north")
 
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
 
@@ -165,6 +173,8 @@ def main():
 
                     wallHitting(fishListObjects,sharkX,sharkY)
 
+                    print(fish2.getCoords())
+
                     #collisions scenario
                     
                     collisionScenario(fishListObjects)
@@ -173,11 +183,16 @@ def main():
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
 
+                    fishWins = 0
+
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
-                        GUIList = GUI.winner("fish")
-                        break
-                        if GUIList == []:
-                            looping = False
+                        fishWins += 1
+                        print("yes!, fish win")
+                        if fishWins == 2:
+                            GUIList = GUI.winner("fish")
+                            break
+                            if GUIList == []:
+                                looping = False
 
 
                 elif buttonClicked == "shark":
