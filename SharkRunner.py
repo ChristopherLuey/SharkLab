@@ -56,6 +56,8 @@ def collisionScenario(fishListObjects):
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
+    #test each fish for alive status, add them to a list of alive fish
+
     fishWin = False
 
     deadNumber = 0
@@ -80,12 +82,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
     if deadNumber == 2:
         if aliveFishList[0].getX() == sharkX:
             if sharkX <= 7 or sharkX >= 2:
-                if abs(aliveFishList[0].getY() - sharkY) > 4:
+                if abs(aliveFishList[0].getY() - sharkY) > 4 and abs(aliveFishList[0].getY() - sharkY) != 6:
                     fishWin = True
                             
         elif aliveFishList[0].getY() == sharkY:
             if sharkY <= 7 or sharkY >= 2:
-                if abs(aliveFishList[0].getX() - sharkX) > 4:
+                if abs(aliveFishList[0].getX() - sharkX) > 4 abd abs(aliveFishList[0].getY() - sharkY) != 6:
                     fishWin = True
                 
     elif deadNumber == 1:
@@ -138,7 +140,7 @@ def main():
 
             fish3.setInputDirection("east")
 
-            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
+            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
             #construct shark, gather coordinates to set flee status of each fish
             
