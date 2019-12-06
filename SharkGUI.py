@@ -77,8 +77,6 @@ class SharkGUI:
                             self.instructionsText.setText("Click on the fish button to move\nthe fish")
                             self.anim(1035, 220, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText)
                             self.anim(1035, 180, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle)
-                            self.updateFish(fishList)
-                            self.updateShark([7,2,'East', 0])
                             # Turn off start button
                             self.start.toggleActivation()
                             # Return the entered fish locations
@@ -168,10 +166,8 @@ class SharkGUI:
 
         popup = GraphWin("Play Again?", 400, 400)
         popup.setBackground(color_rgb(52, 152, 219))
-        for i in range(2):
-            for j in range(3):
-                Image(Point(i * 700, j * 500), 'confetti.gif').draw(popup)
-        playAgain = Text(Point(200,300), "The " + winner + "has won!\nWould you like to play again?\nClick on the start button!").draw(popup)
+
+        playAgain = Text(Point(200,300), "The " + winner + " has won!\nWould you like to play again?\nClick on the start button!").draw(popup)
         playAgain.setTextColor('white')
         playAgain.setSize(25)
         playAgainButton = Button(200,140,200,60,10,'light green', "Play Again", 'white', 20, popup)
@@ -181,6 +177,12 @@ class SharkGUI:
 
         for k in listOfConfetti: k.undraw()
         self.win.close()
+
+        fish = Image(Point(0,220), 'fishEast.gif').draw(popup)
+        shark = Image(Point(-50, 220), 'sharkEast.gif').draw(popup)
+        for i in range(200):
+            self.anim(fish.getAnchor().getX() + 450/200, 220, fish.getAnchor().getY(), 220, fish)
+            self.anim(shark.getAnchor().getX() + 450/200, 220, shark.getAnchor().getY(), 220, shark)
 
         p = popup.getMouse()
         while not quitButton.isClicked(p):
@@ -206,6 +208,11 @@ class SharkGUI:
         self.instructionsTitle.setSize(23)
         self.instructionsTitle.setStyle('bold')
         self.instructionsTitle.setTextColor('white')
+
+        title = Text(Point(1040, 105), "Shark Game").draw(self.win)
+        title.setSize(25)
+        title.setTextColor(color_rgb(10, 30, 20))
+        title.setStyle('bold')
 
         title = Text(Point(1035, 100), "Shark Game").draw(self.win)
         title.setSize(25)
@@ -246,6 +253,13 @@ class SharkGUI:
             l.setOutline(color_rgb(int(26+mover*i/102), int(117 - moveg*i/102), int(208 - moveb*i/102)))
             l.setWidth(8)
             l.draw(self.win)
+
+        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1290, 80), Point(1275, 60)).draw(self.win)
+        l.setFill(color_rgb(10, 30, 20))
+        l.setOutline(color_rgb(10, 30, 20))
+        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1275, 780)).draw(self.win)
+        l.setFill(color_rgb(10, 20, 10))
+        l.setOutline(color_rgb(10, 20, 10))
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
         r.setFill(color_rgb(41, 128, 185))
