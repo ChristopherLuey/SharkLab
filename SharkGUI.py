@@ -8,7 +8,7 @@ import time
 
 class SharkGUI:
     def __init__(self):
-        self.color = [color_rgb(26, 117, 208)]
+        self.color = [color_rgb(26, 117, 208), 'white', color_rgb(28,69,135)]
         self.createWin()
 
     def gatherUserInput(self):
@@ -75,6 +75,8 @@ class SharkGUI:
                             self.enterFish3.undraw()
                             self.start.undraw()
                             self.instructionsText.setText("Click on the fish button to move\nthe fish")
+                            self.anim(1035, 220, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText)
+                            self.anim(1035, 180, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle)
                             self.updateFish(fishList)
                             self.updateShark([7,2,'East', 0])
                             # Turn off start button
@@ -126,7 +128,7 @@ class SharkGUI:
                     self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
 
-            self.animateAnimal(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
+            self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
         self.storedFish = fishList
 
     def updateShark(self, sharkList):
@@ -138,7 +140,7 @@ class SharkGUI:
         else: currentX, currentY = self.shark.getAnchor().getX(), self.shark.getAnchor().getY()
         self.shark = Image(Point(currentX, currentY), image).draw(self.win)
 
-        self.animateAnimal(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark)
+        self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark)
 
     def nextTurn(self):
         self.sharkButton.toggleActivation()
@@ -198,9 +200,11 @@ class SharkGUI:
         self.enterFish2 = Text(Point(955, 200), "Mommy Coordinate(x,y): ").draw(self.win)
         self.enterFish3 = Text(Point(955, 250), "Granny Coordinate(x,y): ").draw(self.win)
 
-        self.instructionsText.setSize(23)
+        self.instructionsText.setSize(20)
         self.instructionsText.setTextColor(color_rgb(236, 240, 241))
-        self.instructionsText.setStyle('bold')
+        self.instructionsTitle.setSize(23)
+        self.instructionsTitle.setStyle('bold')
+        self.instructionsTitle.setTextColor('white')
 
         title = Text(Point(1035, 100), "Shark Game").draw(self.win)
         title.setSize(25)
@@ -232,8 +236,17 @@ class SharkGUI:
 
     def createWin(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, False)
+        self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(self.color[0])
+        mover = 28-26
+        moveg = 117-40
+        moveb = 208-100
+        for i in range(102):
+            l = Line(Point(0,i*8), Point(1300, i*8))
+            l.setFill(color_rgb(int(26+mover*i/102), int(117 - moveg*i/102), int(208 - moveb*i/102)))
+            l.setOutline(color_rgb(int(26+mover*i/102), int(117 - moveg*i/102), int(208 - moveb*i/102)))
+            l.setWidth(8)
+            l.draw(self.win)
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
         r.setFill(color_rgb(41, 128, 185))
@@ -251,6 +264,8 @@ class SharkGUI:
         self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
         self.ripFishCounter = 0
 
+        self.instructionsTitle = Text(Point(1500, 180), "Instructions:").draw(self.win)
+
         self.formatGUI()
 
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
@@ -261,9 +276,9 @@ class SharkGUI:
         # Finally activate quit button
         self.quitButton.toggleActivation()
 
-    def animateAnimal(self, futureX, futureY, currentX, currentY, animal):
+    def anim(self, futureX, futureY, currentX, currentY, graphics):
         moveX, moveY = futureX - currentX, futureY - currentY
         if moveX != 0.0 or moveY != 0.0:
             for i in range(10):
-                animal.move(moveX / 10, moveY / 10)
+                graphics.move(moveX / 10, moveY / 10)
                 time.sleep(0.001)
