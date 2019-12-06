@@ -45,16 +45,20 @@ def collisionScenario(fishListObjects):
     #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
 
     for fishObjectInt in range(0,3):
+
+        if fishListObjects[fishObjectInt - 1].getAlive() == True and fishListObjects[fishObjectInt].getAlive() == True:
             
-        if fishListObjects[fishObjectInt - 1].getX() == fishListObjects[fishObjectInt].getX() and fishListObjects[fishObjectInt - 1].getY() == fishListObjects[fishObjectInt].getY():
-            if fishListObjects[fishObjectInt].getFlee() == True and fishListObjects[fishObjectInt].getAltDirection() == True:
-                collideMove(fishListObjects[fishObjectInt])
-            elif fishListObjects[fishObjectInt - 1].getFlee() == True and fishListObjects[fishObjectInt - 1].getAltDirection() == True:
-                collideMove(fishListObjects[fishObjectInt - 1])
-            else:
-                fishListObjects[fishObjectInt].move(-1)
+            if fishListObjects[fishObjectInt - 1].getX() == fishListObjects[fishObjectInt].getX() and fishListObjects[fishObjectInt - 1].getY() == fishListObjects[fishObjectInt].getY():
+                if fishListObjects[fishObjectInt].getFlee() == True and fishListObjects[fishObjectInt].getAltDirection() == True:
+                    collideMove(fishListObjects[fishObjectInt])
+                elif fishListObjects[fishObjectInt - 1].getFlee() == True and fishListObjects[fishObjectInt - 1].getAltDirection() == True:
+                    collideMove(fishListObjects[fishObjectInt - 1])
+                else:
+                    fishListObjects[fishObjectInt].move(-1)
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+
+    #test each fish for alive status, add them to a list of alive fish
 
     fishWin = False
 
@@ -77,14 +81,20 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
     else:
         aliveFishList.append(fish3)
 
+    #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test distance from shark. Shark cannot be too close to edge.
+
     if deadNumber == 2:
         if aliveFishList[0].getX() == sharkX:
-            if (aliveFishList[0].getY() == 0 or aliveFishList[0].getY() == 9) and 2 < abs(aliveFishList[0].getY() - sharkY) and aliveFishList[0].getFlee() == True:
-                fishWin = True
-                
+            if sharkX <= 7 or sharkX >= 2:
+                if abs(aliveFishList[0].getY() - sharkY) > 4 and abs(aliveFishList[0].getY() - sharkY) != 6:
+                    fishWin = True
+                            
         elif aliveFishList[0].getY() == sharkY:
-            if (aliveFishList[0].getX() == 0 or aliveFishList[0].getX() == 9) and 2 < abs(aliveFishList[0].getX() - sharkX) and aliveFishList[0].getFlee() == True:
-                fishWin = True
+            if sharkY <= 7 or sharkY >= 2:
+                if abs(aliveFishList[0].getX() - sharkX) > 4 abd abs(aliveFishList[0].getY() - sharkY) != 6:
+                    fishWin = True
+
+    #if 1 fish is dead, 
                 
     elif deadNumber == 1:
         if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY:
@@ -134,9 +144,9 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
 
-            fish3.setInputDirection("north")
+            fish3.setInputDirection("east")
 
-            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences
+            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
             #construct shark, gather coordinates to set flee status of each fish
             
@@ -148,7 +158,7 @@ def main():
 
             #update GUI to reflect these changes
             
-            fishList = getFishList(fish1,fish2,fish3)
+            fishList = getFishList(fish3,fish1,fish2)
             GUI.updateFish(fishList)
 
             while True:
@@ -209,7 +219,7 @@ def main():
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
 
-                    if fish1.getAlive() == False and fish2.getAlive() == False and fish3.getAlive() == False:
+                    if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
 
                         GUIList = GUI.winner("shark")
                         break
