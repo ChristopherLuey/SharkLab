@@ -142,6 +142,7 @@ class SharkGUI:
 
         self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark)
 
+
     def nextTurn(self):
         self.sharkButton.toggleActivation()
         self.fishButton.toggleActivation()
