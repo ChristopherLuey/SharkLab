@@ -74,7 +74,7 @@ class SharkGUI:
                             self.enterFish2.undraw()
                             self.enterFish3.undraw()
                             self.start.undraw()
-                            self.instructions.setText("Click on the fish button to ")
+                            self.instructionsText.setText("Click on the fish button to move\nthe fish")
                             self.updateFish(fishList)
                             self.updateShark([7,2,'East', 0])
                             # Turn off start button
@@ -209,8 +209,6 @@ class SharkGUI:
 
         self.ripFish.setSize(20)
         self.ripFish.setTextColor("white")
-        for i in range(7):
-            Image(Point(120*i, 725), 'reef.gif').draw(self.win)
 
         for i in range(11):
             l = Line(Point(75*i + 25,25), Point(75*i + 25, 775)).draw(self.win)
