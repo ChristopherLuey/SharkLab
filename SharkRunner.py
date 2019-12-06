@@ -89,14 +89,15 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
     if deadNumber == 2:
         if aliveFishList[0].getX() == sharkX:
-            if sharkX <= 7 or sharkX >= 2:
-                if abs(aliveFishList[0].getY() - sharkY) > 4 and abs(aliveFishList[0].getY() - sharkY) != 6:
-                    fishWin = True
+            if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 4 > abs(aliveFishList[0].getY() - sharkY) > 2:
+                fishWin = True
                             
         elif aliveFishList[0].getY() == sharkY:
-            if sharkY <= 7 or sharkY >= 2:
-                if abs(aliveFishList[0].getX() - sharkX) > 4 and abs(aliveFishList[0].getY() - sharkY) != 6:
-                    fishWin = True
+            if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 4 > abs(aliveFishList[0].getX() - sharkX) > 2:
+                fishWin = True
+            #if sharkY <= 7 or sharkY >= 2:
+                #if abs(aliveFishList[0].getX() - sharkX) > 4 and abs(aliveFishList[0].getY() - sharkY) != 6:
+                    #fishWin = True
 
     #if 1 fish is dead, test which fish is on the same axis as the shark, and put that in index 0. Test if directions are the same, and then test distance to shark
                 
@@ -113,40 +114,39 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
                 if aliveFishList[0].getX() == sharkX:
                     if aliveFishList[0].getY() == aliveFishList[1].getY():
-                        if sharkX <= 7 or sharkX >= 2:
-                            if abs(aliveFishList[0].getY() - sharkY) > 5:
-                                fishWin = True
+                        if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 4 > abs(aliveFishList[0].getY() - sharkY) > 2:
+                            fishWin = True
                                     
                 elif aliveFishList[0].getY() == sharkY:
                     if aliveFishList[0].getX() == aliveFishList[1].getX():
-                        if sharkY <= 7 or sharkY >= 2:
-                            if abs(aliveFishList[0].getX() - sharkX) > 5:
-                                fishWin = True
+                        if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 4 > abs(aliveFishList[0].getX() - sharkX) > 2:
+                            fishWin = True
                                 
-        elif deadNumber == 0:
-            if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[2].getX() == SharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY or aliveFishList[2].getY() == sharkY:
+    elif deadNumber == 0:
 
-                if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX and aliveFishList[2].getX() != SharkX and aliveFishList[2].getY() == SharkY):
-                    aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[0],aliveFishList[1],aliveFishList[2]
-                
-                elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[2].getX() != SharkX and aliveFishList[2].getY() == SharkY):
-                    aliveFishList[1],aliveFishList[0],aliveFishList[2] = aliveFishList[0],aliveFishList[1],aliveFishList[2]
+        if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[2].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY or aliveFishList[2].getY() == sharkY:
 
-                elif aliveFishList[2].getX() == sharkX or aliveFishList[2].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[1].getX() != SharkX and aliveFishList[1].getY() == SharkY):
-                    aliveFishList[2],aliveFishList[0],aliveFishList[1] = aliveFishList[0],aliveFishList[1],aliveFishList[2]
+            if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
+                centerFish = aliveFishList[0]
+            
+            elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
+                centerFish = aliveFishList[1]
 
-                if aliveFishList[0].getDirection() == aliveFishList[1].getDirection() == aliveFishList[2].getDirection():
-                    if aliveFishList[0].getX() == sharkX:
-                        if aliveFishList[0].getY() == aliveFishList[1].getY() == aliveFishList[2].getY():
-                            if sharkX <= 7 or sharkX >= 2:
-                                if abs(aliveFishList[0].getY() - sharkY) > 5:
-                                    fishWin = True
-                                        
-                    elif aliveFishList[0].getY() == sharkY:
-                        if aliveFishList[0].getX() == aliveFishList[1].getX() == aliveFishList[2].getX():
-                            if sharkY <= 7 or sharkY >= 2:
-                                if abs(aliveFishList[0].getX() - sharkX) > 5:
-                                    fishWin = True
+            elif aliveFishList[2].getX() == sharkX or aliveFishList[2].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[1].getX() != sharkX and aliveFishList[1].getY() != sharkY):
+                centerFish = aliveFishList[2]
+
+            if aliveFishList[0].getDirection() == aliveFishList[1].getDirection() == aliveFishList[2].getDirection():
+                if centerFish.getX() == sharkX:
+                    if centerFish.getY() == aliveFishList[1].getY() == aliveFishList[2].getY() == aliveFishList[0].getY():
+                        if (centerFish.getY() == 9 or centerFish.getY() == 0) and 4 > abs(centerFish.getY() - sharkY) > 0:
+                            fishWin = True
+                                    
+                elif centerFish.getY() == sharkY:
+                    if centerFish.getX() == aliveFishList[1].getX() == aliveFishList[2].getX() == aliveFishList[0].getX():
+                        print(abs(centerFish.getX() - sharkX))
+                        print(centerFish.getX())
+                        if (centerFish.getX() == 9 or centerFish.getX() == 0) and 4 > abs(centerFish.getX() - sharkX) > 0:
+                            fishWin = True
                                     
     return fishWin
 
@@ -173,9 +173,9 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
 
-            fish1.setInputDirection("west")
-            fish2.setInputDirection("west")
-            fish3.setInputDirection("west")
+            fish1.setInputDirection("east")
+            fish2.setInputDirection("east")
+            fish3.setInputDirection("east")
 
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
@@ -228,6 +228,7 @@ def main():
                     #fish Win situation, fishWin delays display of fish victory
 
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
+                        print("yes")
                         fishWins += 1
                         if fishWins == 3:
                             GUIList = GUI.winner("fish")
