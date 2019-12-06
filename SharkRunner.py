@@ -147,10 +147,7 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
                             if sharkY <= 7 or sharkY >= 2:
                                 if abs(aliveFishList[0].getX() - sharkX) > 5:
                                     fishWin = True
-
-                    
-                
-                
+                                    
     return fishWin
 
 def main():
@@ -176,6 +173,10 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
 
+            fish1.setInputDirection("west")
+            fish2.setInputDirection("west")
+            fish3.setInputDirection("west")
+
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
             print(fish1.getCoords(),fish2.getCoords(),fish3.getCoords())
@@ -190,7 +191,7 @@ def main():
 
             #update GUI to reflect these changes
             
-            fishList = getFishList(fish3,fish1,fish2)
+            fishList = getFishList(fish1,fish2,fish3)
             GUI.updateFish(fishList)
 
             while True:
