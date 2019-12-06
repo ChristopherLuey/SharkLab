@@ -125,7 +125,7 @@ class SharkGUI:
             else:
                 if not isAlive == self.storedFish[i*5+4]:
                     self.ripFishCounter += 1
-                    self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
+                    self.instructionsText.setText("Fish " + str(i) + " has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
 
             self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
@@ -238,9 +238,7 @@ class SharkGUI:
         # Create the window
         self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(self.color[0])
-        mover = 28-26
-        moveg = 117-40
-        moveb = 208-100
+        mover, moveg, moveb = 28-26, 117-40, 208-100
         for i in range(102):
             l = Line(Point(0,i*8), Point(1300, i*8))
             l.setFill(color_rgb(int(26+mover*i/102), int(117 - moveg*i/102), int(208 - moveb*i/102)))
