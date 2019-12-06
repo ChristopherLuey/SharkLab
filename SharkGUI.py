@@ -4,7 +4,7 @@
 # Manages all GUI events for SharkRunner.py
 
 from Button import *
-from Shark import *
+import time
 
 class SharkGUI:
     def __init__(self):
@@ -116,7 +116,13 @@ class SharkGUI:
             elif fishD == 'south':
                 image = 'fishSouth'+flee+'.gif'
 
-            self.fish1 = Image(Point(75 * fishx + 57, fishy*75 + 57), image)
+            if type(self.fish1) == Point:
+                currentX, currentY = self.fish1.getX(), self.fish1.getY()
+
+            else:
+                currentX, currentY = self.fish1.getAnchor().getX(), self.fish1.getAnchor().getY()
+
+            self.fish1 = Image(Point(currentX, currentY), image)
 
             if isAlive:
                 self.fish1.draw(self.win)
@@ -125,6 +131,15 @@ class SharkGUI:
                     self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFishCounter += 1
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
+
+            futureX, futureY = 75 * fishx + 57, fishy * 75 + 57
+            moveX, moveY = futureX - currentX, futureY - currentY
+
+            if moveX != 0.0 or moveY != 0.0:
+                for i in range(10):
+                    self.fish1.move(moveX / 10, moveY / 10)
+                    time.sleep(0.001)
+
         self.storedFish = fishList
 
 
@@ -148,7 +163,20 @@ class SharkGUI:
             image = 'sharkSW.gif'
         elif sharkList[2] == 'nw':
             image = 'sharkNW.gif'
-        self.shark = Image((Point(75 * sharkList[0] + 57, sharkList[1] * 75 + 57)), image).draw(self.win)
+
+        if type(self.shark) == Point:
+            currentX, currentY = self.shark.getX(), self.shark.getY()
+        else:
+            currentX, currentY = self.shark.getAnchor().getX(), self.shark.getAnchor().getY()
+
+        self.shark = Image(Point(currentX, currentY), image).draw(self.win)
+
+        futureX, futureY = 75 * sharkList[0] + 57, sharkList[1] * 75 + 57
+        moveX, moveY = futureX - currentX, futureY - currentY
+
+        for i in range(10):
+            self.shark.move(moveX / 10, moveY / 10)
+            time.sleep(0.001)
 
 
     def nextTurn(self):
@@ -270,19 +298,14 @@ class SharkGUI:
         self.fishButton = Button(1035, 725, 400, 50, 10, color_rgb(243, 156, 18), 'Move Fish', 'white', 25, self.win)
 
         # Create the fish coord entries
-        self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200),
-                                                                                                  10).draw(
-            self.win), Entry(Point(1145, 250), 10).draw(self.win)
-        self.instructionsText = Text(Point(1035, 450),
-                                     "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(
-            self.win)
+        self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200),10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
+        self.instructionsText = Text(Point(1035, 450),"Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
         self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
         self.ripFishCounter = 0
 
         self.formatGUI()
 
-        self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(
-            0, 0).draw(self.win), Point(0, 0).draw(self.win)
+        self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
         # Draw the shark on the board
         self.updateShark([7, 2, 'e', 0])
         self.storedFish = []
