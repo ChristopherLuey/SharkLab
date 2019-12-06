@@ -14,14 +14,14 @@ class Shark:
         self.chasing = 0
         self.attributes = self.getSharkList()
 
-
     def sharkTurn(self, fishList):
+        # Find the fish the shark is chasing
         self.calculateFishChasing(fishList)
 
         # Find the x, y of the fish the shark is chasing in the fish list
         fishx, fishy = fishList[(self.chasing-1)*5], fishList[(self.chasing-1)*5+1]
 
-        # Shark can move 2 times, so loop twice
+        # Shark can move 2 spaces, so loop twice
         for i in range(2):
             self.calculatePath(fishx, fishy)
 
@@ -35,18 +35,11 @@ class Shark:
         # Return the fish list because some fish may have been killed
         return fishList
 
-
     def getPosition(self):
         return self.x, self.y
 
-
-    def getChasing(self):
-        return self.chasing
-
-
     def getSharkList(self):
         return [self.x, self.y, self.dir, self.chasing]
-
 
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
     def calculateFishChasing(self, fishList):
@@ -93,21 +86,8 @@ class Shark:
 
     def move(self, dir):
         # Change the x, y position of the shark depending on direction desired
-        if dir == 'n': self.y -= 1
-        elif dir == 'e': self.x += 1
-        elif dir == 's': self.y += 1
-        elif dir == 'w': self.x -= 1
-
-        elif dir == 'ne':
-            self.y -= 1
-            self.x += 1
-        elif dir == 'se':
-            self.y += 1
-            self.x += 1
-        elif dir == 'sw':
-            self.y += 1
-            self.x -= 1
-        elif dir == 'nw':
-            self.y -= 1
-            self.x -= 1
+        if dir.find('n') != -1: self.y -= 1
+        if dir.find('s') != -1: self.y += 1
+        if dir.find('e') != -1: self.x += 1
+        if dir.find('w') != -1: self.x -= 1
         self.dir = dir
