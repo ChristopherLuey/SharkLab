@@ -8,6 +8,7 @@ import time
 
 class SharkGUI:
     def __init__(self):
+        self.color = [color_rgb(26, 117, 208)]
         self.createWin()
 
     def gatherUserInput(self):
@@ -234,7 +235,7 @@ class SharkGUI:
     def createWin(self):
         # Create the window
         self.win = GraphWin("Shark Game", 1300, 800, False)
-        self.win.setBackground(color_rgb(52, 152, 219))
+        self.win.setBackground(self.color[0])
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
         r.setFill(color_rgb(41, 128, 185))
