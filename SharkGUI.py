@@ -12,7 +12,7 @@ class SharkGUI:
 
     def gatherUserInput(self):
         if not self.win.isClosed():
-            self.updateShark([7,2,'e',0])
+            self.updateShark([7,2,'East',0])
             self.start.toggleActivation()
             p = self.win.getMouse()
             while not self.quitButton.isClicked(p):
@@ -66,9 +66,16 @@ class SharkGUI:
                             # Display fish and shark on the board
                             self.fishButton.toggleActivation()
                             self.storedFish = fishList
-
+                            self.entry1.undraw()
+                            self.entry2.undraw()
+                            self.entry3.undraw()
+                            self.enterFish1.undraw()
+                            self.enterFish2.undraw()
+                            self.enterFish3.undraw()
+                            self.start.undraw()
+                            self.instructions.setText("Click on the fish button to ")
                             self.updateFish(fishList)
-                            self.updateShark([7,2,'e', 0])
+                            self.updateShark([7,2,'East', 0])
                             # Turn off start button
                             self.start.toggleActivation()
                             # Return the entered fish locations
@@ -80,7 +87,6 @@ class SharkGUI:
         # User quits so close window and return empty list
         self.win.close()
         return []
-
 
     def isClicked(self):
         # Wait for user input
@@ -95,7 +101,6 @@ class SharkGUI:
                 else: return 'none'
             return 'quit'
 
-
     def updateFish(self, fishList):
         # Draws the fish at the specified locations
         for i in range(3):
@@ -107,124 +112,70 @@ class SharkGUI:
             # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
             flee = ''
             if fishf: flee = 'Flee'
+            image = 'fish' + fishD.capitalize() + flee +'.gif'
 
-            image = 'fishWest' + flee +'.gif'
-            if fishD == 'north':
-                image = 'fishNorth'+flee+'.gif'
-            elif fishD == 'east':
-                image = 'fishEast'+flee+'.gif'
-            elif fishD == 'south':
-                image = 'fishSouth'+flee+'.gif'
-
-            if type(self.fish1) == Point:
-                currentX, currentY = self.fish1.getX(), self.fish1.getY()
-
-            else:
-                currentX, currentY = self.fish1.getAnchor().getX(), self.fish1.getAnchor().getY()
-
+            if type(self.fish1) == Point: currentX, currentY = self.fish1.getX(), self.fish1.getY()
+            else: currentX, currentY = self.fish1.getAnchor().getX(), self.fish1.getAnchor().getY()
             self.fish1 = Image(Point(currentX, currentY), image)
 
-            if isAlive:
-                self.fish1.draw(self.win)
+            if isAlive: self.fish1.draw(self.win)
             else:
                 if not isAlive == self.storedFish[i*5+4]:
-                    self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFishCounter += 1
+                    self.instructionsText.setText("Fish " + str(i) + "has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
 
-            futureX, futureY = 75 * fishx + 57, fishy * 75 + 57
-            moveX, moveY = futureX - currentX, futureY - currentY
-
-            if moveX != 0.0 or moveY != 0.0:
-                for i in range(10):
-                    self.fish1.move(moveX / 10, moveY / 10)
-                    time.sleep(0.001)
-
+            self.animateAnimal(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
         self.storedFish = fishList
-
 
     def updateShark(self, sharkList):
         self.shark.undraw()
         # https://www.animatedimages.org/cat-sharks-516.htm
-        image = 'sharkEast.gif'
-        if sharkList[2] == 'n':
-            image = 'sharkNorth.gif'
-        elif sharkList[2] == 'e':
-            image = 'sharkEast.gif'
-        elif sharkList[2] == 's':
-            image = 'sharkSouth.gif'
-        elif sharkList[2] == 'w':
-            image = 'sharkWest.gif'
-        elif sharkList[2] == 'ne':
-            image = 'sharkNE.gif'
-        elif sharkList[2] == 'se':
-            image = 'sharkSE.gif'
-        elif sharkList[2] == 'sw':
-            image = 'sharkSW.gif'
-        elif sharkList[2] == 'nw':
-            image = 'sharkNW.gif'
+        image = 'shark' + sharkList[2] + '.gif'
 
-        if type(self.shark) == Point:
-            currentX, currentY = self.shark.getX(), self.shark.getY()
-        else:
-            currentX, currentY = self.shark.getAnchor().getX(), self.shark.getAnchor().getY()
-
+        if type(self.shark) == Point: currentX, currentY = self.shark.getX(), self.shark.getY()
+        else: currentX, currentY = self.shark.getAnchor().getX(), self.shark.getAnchor().getY()
         self.shark = Image(Point(currentX, currentY), image).draw(self.win)
 
-        futureX, futureY = 75 * sharkList[0] + 57, sharkList[1] * 75 + 57
-        moveX, moveY = futureX - currentX, futureY - currentY
-
-        for i in range(10):
-            self.shark.move(moveX / 10, moveY / 10)
-            time.sleep(0.001)
-
+        self.animateAnimal(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark)
 
     def nextTurn(self):
         self.sharkButton.toggleActivation()
         self.fishButton.toggleActivation()
-        if self.fishButton.isActive():
-            self.instructionsText.setText("Click on the fish button to move\nthe fish")
-        else:
-            self.instructionsText.setText("Click on the shark button to move\nthe shark")
-
+        if self.fishButton.isActive(): self.instructionsText.setText("Click on the fish button to move\nthe fish")
+        else: self.instructionsText.setText("Click on the shark button to move\nthe shark")
 
     def endGame(self):
         self.win.close()
 
-
     def winner(self, winner):
-        if self.fishButton.isActive():
-            self.fishButton.toggleActivation()
-        if self.sharkButton.isActive():
-            self.sharkButton.toggleActivation()
+        if self.fishButton.isActive(): self.fishButton.toggleActivation()
+        if self.sharkButton.isActive(): self.sharkButton.toggleActivation()
 
         listOfConfetti = []
         for i in range(2):
             for j in range(3):
                 listOfConfetti.append(Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win))
+
         if winner == 'fish':
             self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
         elif winner == 'shark':
             self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
 
-
         popup = GraphWin("Play Again?", 400, 400)
         popup.setBackground(color_rgb(52, 152, 219))
-        playAgain = Text(Point(200,300), "Would you like to play again?\nClick on the start button!").draw(popup)
-        playAgain.setTextColor('white')
-        playAgain.setSize(25)
-        playAgainButton = Button(200,100,100,50,10,'light green', "Play Again", 'white', 20, popup)
-        playAgainButton.toggleActivation()
-        quitButton = Button(50,50, 100,50,5,'red', "Quit", 'red', 20,popup)
-        quitButton.toggleActivation()
-
         for i in range(2):
             for j in range(3):
                 Image(Point(i * 700, j * 500), 'confetti.gif').draw(popup)
+        playAgain = Text(Point(200,300), "The " + winner + "has won!\nWould you like to play again?\nClick on the start button!").draw(popup)
+        playAgain.setTextColor('white')
+        playAgain.setSize(25)
+        playAgainButton = Button(200,140,200,60,10,'light green', "Play Again", 'white', 20, popup)
+        playAgainButton.toggleActivation()
+        quitButton = Button(50,30,100,50,5,'red', "Quit", 'white', 20,popup)
+        quitButton.toggleActivation()
 
-        for k in listOfConfetti:
-            k.undraw()
-
+        for k in listOfConfetti: k.undraw()
         self.win.close()
 
         p = popup.getMouse()
@@ -240,12 +191,11 @@ class SharkGUI:
         popup.close()
         return []
 
-
     # Helper function: should not be called outside of this class
     def formatGUI(self):
-        enterFish1 = Text(Point(960, 150), "Daddy Coordinate(x,y): ").draw(self.win)
-        enterFish2 = Text(Point(955, 200), "Mommy Coordinate(x,y): ").draw(self.win)
-        enterFish3 = Text(Point(955, 250), "Granny Coordinate(x,y): ").draw(self.win)
+        self.enterFish1 = Text(Point(960, 150), "Daddy Coordinate(x,y): ").draw(self.win)
+        self.enterFish2 = Text(Point(955, 200), "Mommy Coordinate(x,y): ").draw(self.win)
+        self.enterFish3 = Text(Point(955, 250), "Granny Coordinate(x,y): ").draw(self.win)
 
         self.instructionsText.setSize(23)
         self.instructionsText.setTextColor(color_rgb(236, 240, 241))
@@ -277,14 +227,13 @@ class SharkGUI:
             self.entry1.setTextColor('white')
 
         for i in range(3):
-            enterFish1, enterFish2, enterFish3 = enterFish2, enterFish3, enterFish1
-            enterFish1.setSize(20)
-            enterFish1.setTextColor('white')
-
+            self.enterFish1, self.enterFish2, self.enterFish3 = self.enterFish2, self.enterFish3, self.enterFish1
+            self.enterFish1.setSize(20)
+            self.enterFish1.setTextColor('white')
 
     def createWin(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, True)
+        self.win = GraphWin("Shark Game", 1300, 800, False)
         self.win.setBackground(color_rgb(52, 152, 219))
 
         r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
@@ -307,8 +256,15 @@ class SharkGUI:
 
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
         # Draw the shark on the board
-        self.updateShark([7, 2, 'e', 0])
+        self.updateShark([7, 2, 'East', 0])
         self.storedFish = []
 
         # Finally activate quit button
         self.quitButton.toggleActivation()
+
+    def animateAnimal(self, futureX, futureY, currentX, currentY, animal):
+        moveX, moveY = futureX - currentX, futureY - currentY
+        if moveX != 0.0 or moveY != 0.0:
+            for i in range(10):
+                animal.move(moveX / 10, moveY / 10)
+                time.sleep(0.001)
