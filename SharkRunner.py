@@ -91,7 +91,7 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
                             
         elif aliveFishList[0].getY() == sharkY:
             if sharkY <= 7 or sharkY >= 2:
-                if abs(aliveFishList[0].getX() - sharkX) > 4 abd abs(aliveFishList[0].getY() - sharkY) != 6:
+                if abs(aliveFishList[0].getX() - sharkX) > 4 and abs(aliveFishList[0].getY() - sharkY) != 6:
                     fishWin = True
 
     #if 1 fish is dead, 
@@ -123,8 +123,6 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
 def main():
 
-    fishWins = 0 # use this variable to delay fish win message
-
     #set up GUI, gather user input to feed into subsequent fish object constructor
         
     GUI = SharkGUI()
@@ -133,6 +131,8 @@ def main():
     looping = True
 
     while looping == True:
+
+        fishWins = 0 # use this variable to delay fish win message
 
         if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
             looping = False
@@ -143,8 +143,6 @@ def main():
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
-
-            fish3.setInputDirection("east")
 
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
@@ -192,10 +190,11 @@ def main():
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
 
+                    #fish Win situation, fishWin delays display of fish victory
+
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
                         fishWins += 1
-                        print("yes!, fish win")
-                        if fishWins == 2:
+                        if fishWins == 3:
                             GUIList = GUI.winner("fish")
                             break
                             if GUIList == []:
@@ -210,14 +209,20 @@ def main():
                     sharkList = shark.getSharkList()
                     sharkX,sharkY = shark.getPosition()
 
+                    #eat fish
+
                     for fishObject in fishListObjects:
                         if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
                             fishObject.eat()
                             fishObject.setCoords(11,11) #use to avoid collisions after fish death
 
+                    #update GUI
+
                     GUI.updateShark(sharkList)
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
+
+                    #shark win situation
 
                     if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
 
