@@ -125,6 +125,13 @@ class SharkGUI:
                     self.ripFishCounter += 1
                     self.instructionsText.setText("Fish " + str(i) + " has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
+                    #https: // pngio.com / PNG / 28823 - wasted - png.html
+                    wasted = Image(Point(300, 400), 'wasted.gif').draw(self.win)
+                    self.anim(500, 400, 300, 400, wasted)
+                    self.anim(750, 400, 500, 400, wasted)
+                    self.anim(1000, 400, 750, 400, wasted)
+
+                    wasted.undraw()
 
             self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
         self.storedFish = fishList
@@ -178,12 +185,6 @@ class SharkGUI:
         for k in listOfConfetti: k.undraw()
         self.win.close()
 
-        fish = Image(Point(0,220), 'fishEast.gif').draw(popup)
-        shark = Image(Point(-50, 220), 'sharkEast.gif').draw(popup)
-        for i in range(200):
-            self.anim(fish.getAnchor().getX() + 450/200, 220, fish.getAnchor().getY(), 220, fish)
-            self.anim(shark.getAnchor().getX() + 450/200, 220, shark.getAnchor().getY(), 220, shark)
-
         p = popup.getMouse()
         while not quitButton.isClicked(p):
             if playAgainButton.isClicked(p):
@@ -221,6 +222,14 @@ class SharkGUI:
 
         self.ripFish.setSize(20)
         self.ripFish.setTextColor("white")
+
+        for i in range(11):
+            l = Line(Point(75*i + 30,30), Point(75*i + 30, 780)).draw(self.win)
+            l.setWidth(5)
+            l.setFill(color_rgb(10, 30, 20))
+            l = Line(Point(30, i*75 + 30), Point(780, i*75 + 30)).draw(self.win)
+            l.setWidth(5)
+            l.setFill(color_rgb(10, 30, 20))
 
         for i in range(11):
             l = Line(Point(75*i + 25,25), Point(75*i + 25, 775)).draw(self.win)
