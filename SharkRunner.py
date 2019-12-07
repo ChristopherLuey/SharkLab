@@ -14,24 +14,26 @@ def directionRel(fish1,fish2):
     fish2direction = fish2.getDirection()
 
     if fish1direction == fish2direction:
-        return "same"
+        return "same",""
 
     else:
         if fish1direction == "west":
             if fish2direction == "east":
-                return "parallel"
+                return "opposite","x"
             
         elif fish1direction == "east":
             if fish2direction == "west":
-                return "parallel"
+                return "opposite","x"
 
         elif fish1direction == "north":
             if fish2direction == "south":
-                return "parallel"
+                return "opposite","y"
 
         elif fish1direction == "south":
             if fish2direction == "north":
-                return "parallel"
+                return "opposite","y"
+
+    return "",""
             
 
 def getDistance(fish1,fish2):
@@ -90,7 +92,7 @@ def collisionScenario(fishListObjects):
                         fishListObjects[fishObjectInt].move(-1)
                         fishListObjects[fishObjectInt - 1].move(-1)
                     else:
-                        if directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]) == "parallel":
+                        if directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]) == "opposite":
                             fishListObjects[fishObjectInt].move(-1)
                             fishListObjects[fishObjectInt].setHeadOnStatus(True)
                             fishListObjects[fishObjectInt - 1].setHeadOnStatus(True)
@@ -98,12 +100,15 @@ def collisionScenario(fishListObjects):
                         else:
                             fishListObjects[fishObjectInt].move(-1)
 
-            if directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]) == "parallel":
-                if abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1 or abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1:
-                    print(abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()))
+            opposite,axis =  directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1])   
+
+            if opposite == "opposite":
+                if (axis == "x" and abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1) or (axis == "y" and abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
 
                     fishListObjects[fishObjectInt].move(-1)
                     fishListObjects[fishObjectInt - 1].move(-1)
+
+                    #if after movement, they are not longer in a headon collision, move again
                     
                     if not(abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1 or abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
                         fishListObjects[fishObjectInt].move(1)
@@ -218,6 +223,9 @@ def main():
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
+
+            fish2.setInputDirection("west")
+            fish3.setInputDirection("east")
             
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
@@ -262,8 +270,8 @@ def main():
                     collisionScenario(fishListObjects)
 
                     fishList = getFishList(fish1,fish2,fish3)
-                    GUI.updateFish(fishList)
                     GUI.nextTurn()
+                    GUI.updateFish(fishList)
 
                     #fish Win situation, fishWin delays display of fish victory
 
@@ -292,10 +300,10 @@ def main():
                             fishObject.setCoords(11,11) #use to avoid collisions after fish death
 
                     #update GUI
-
+                            
+                    GUI.nextTurn()
                     GUI.updateShark(sharkList)
                     GUI.updateFish(fishList)
-                    GUI.nextTurn()
 
                     #shark win situation
 
