@@ -333,8 +333,6 @@ def main():
 
                     fishList = getFishList(fish1,fish2,fish3)
 
-                    print(fish1.getCoords(),fish2.getCoords(),fish3.getCoords())
-
                     #move shark
 
                     shark.sharkTurn(fishList)
