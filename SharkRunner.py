@@ -312,9 +312,9 @@ def main():
 
                     #update GUI
                             
-                    GUI.nextTurn()
                     GUI.updateShark(sharkList)
                     GUI.updateFish(fishList)
+                    GUI.nextTurn()
 
                     #shark win situation
 
