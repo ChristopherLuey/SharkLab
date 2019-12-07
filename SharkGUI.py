@@ -76,7 +76,7 @@ class SharkGUI:
                             self.start.undraw()
                             self.instructionsText.setText("Click on the fish button to move\nthe fish")
                             self.anim(1035, 220, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText)
-                            self.anim(1035, 180, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle)
+                            self.anim(1035, 175, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle)
                             # Turn off start button
                             self.start.toggleActivation()
                             # Return the entered fish locations
@@ -301,7 +301,6 @@ class SharkGUI:
 
         #print(r.getCenter())
         self.anim(1037.5, 420.0, 1055.0, 430.0, r)
-
 
     def anim(self, futureX, futureY, currentX, currentY, graphics):
         moveX, moveY = futureX - currentX, futureY - currentY
