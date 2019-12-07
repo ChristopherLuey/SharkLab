@@ -103,16 +103,31 @@ def collisionScenario(fishListObjects):
             opposite,axis =  directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1])   
 
             if opposite == "opposite":
-                if (axis == "x" and abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1) or (axis == "y" and abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
+                if (axis == "x" and abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1) and fishListObjects[fishObjectInt].getY() == fishListObjects[fishObjectInt - 1].getY():
 
                     fishListObjects[fishObjectInt].move(-1)
                     fishListObjects[fishObjectInt - 1].move(-1)
 
                     #if after movement, they are not longer in a headon collision, move again
                     
-                    if not(abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1 or abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
+                    if not(abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1):
                         fishListObjects[fishObjectInt].move(1)
                         fishListObjects[fishObjectInt - 1].move(1)
+
+                elif (axis == "y" and abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1) and fishListObjects[fishObjectInt].getX() == fishListObjects[fishObjectInt - 1].getX():
+
+                    ishListObjects[fishObjectInt].move(-1)
+                    fishListObjects[fishObjectInt - 1].move(-1)
+
+                    #if after movement, they are not longer in a headon collision, move again
+                    
+                    if not(abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
+                        fishListObjects[fishObjectInt].move(1)
+                        fishListObjects[fishObjectInt - 1].move(1)
+
+                    
+
+
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
