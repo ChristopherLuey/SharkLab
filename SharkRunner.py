@@ -125,10 +125,6 @@ def collisionScenario(fishListObjects):
                         fishListObjects[fishObjectInt].move(1)
                         fishListObjects[fishObjectInt - 1].move(1)
 
-                    
-
-
-
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
     #test each fish for alive status, and if so, add them to a list of alive fish
@@ -179,12 +175,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
 
                 if aliveFishList[0].getX() == sharkX:
-                    if aliveFishList[0].getY() == aliveFishList[1].getY():
+                    if aliveFishList[0].getY() == aliveFishList[1].getY() or abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7:
                         if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
                             fishWin = True
                                     
                 elif aliveFishList[0].getY() == sharkY:
-                    if aliveFishList[0].getX() == aliveFishList[1].getX():
+                    if aliveFishList[0].getX() == aliveFishList[1].getX() or abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7:
                         if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                             fishWin = True
 
