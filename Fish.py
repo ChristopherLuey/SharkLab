@@ -16,6 +16,7 @@ class Fish:
         self.fishAliveStatus = alive
         self.fishWallHittingStatus = wallHitting
         self.fishAltDirection = altDirection
+        self.fishHeadOnStatus = False
 
         self.directionInt = randrange(1,5)
 
@@ -29,6 +30,9 @@ class Fish:
             self.fishDirection = "south"
 
     #accessors
+
+    def setHeadOnStatus(self,boolType):
+        self.fishHeadOnStatus = boolType  
 
     def getAltDirection(self):
         if self.fishAltDirection != "DNE":
@@ -99,6 +103,7 @@ class Fish:
         self.sharkYCoord = sharkY
 
         if (0 <= abs(self.sharkXCoord - self.fishXCoord) <= 3) and (0 <= abs(self.sharkYCoord - self.fishYCoord) <= 3):
+            self.fishHeadOnStatus = False
             self.fishFleeStatus = True
 
         else:
@@ -205,7 +210,7 @@ class Fish:
 
         self.moveDistance = distance
 
-        if self.fishAliveStatus == True:
+        if self.fishAliveStatus == True and not(self.fishHeadOnStatus == True and self.fishFleeStatus == False):
 
             #translate direction into coordinate movement.
 
