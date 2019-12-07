@@ -270,7 +270,8 @@ class SharkGUI:
         l.setFill(color_rgb(10, 20, 10))
         l.setOutline(color_rgb(10, 20, 10))
 
-        r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
+        #r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
+        r = Rectangle(Point(820, 70), Point(1290, 790)).draw(self.win)
         r.setFill(color_rgb(41, 128, 185))
         r.setOutline(color_rgb(41, 128, 185))
 
@@ -297,6 +298,10 @@ class SharkGUI:
 
         # Finally activate quit button
         self.quitButton.toggleActivation()
+
+        #print(r.getCenter())
+        self.anim(1037.5, 420.0, 1055.0, 430.0, r)
+
 
     def anim(self, futureX, futureY, currentX, currentY, graphics):
         moveX, moveY = futureX - currentX, futureY - currentY

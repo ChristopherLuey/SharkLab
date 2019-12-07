@@ -39,7 +39,8 @@ class Shark:
         lowestFishDist, closeFishIndex, randomFishChooser = 1000.0, self.chasing, []
         for i in range(3):
             fishx, fishy, alive = fishList[i*5], fishList[i*5+1], fishList[i*5+4]
-            fishDist = ((self.x - fishx) ** 2 + (self.y - fishy) ** 2) ** 1 / 2
+            dx, dy = abs(self.x - fishx), abs(self.y - fishy)
+            fishDist = abs(dx+dy) - min([dx,dy])
 
             if fishDist < lowestFishDist and alive:
                 lowestFishDist, closeFishIndex = fishDist, i+1
