@@ -68,13 +68,13 @@ class Button:
             win (GraphWin): The window to draw the Button on.
         """
         if self.radiusInd:
-            self.p1 = Point((self.centerX - self.width / 2 - 3) + self.radius,
+            self.p1 = Point((self.centerX - self.width / 2 + 3) + self.radius,
                             (self.centerY - self.height / 2 + 5) + self.radius)
-            self.p3 = Point((self.centerX + self.width / 2 - 3) - self.radius,
+            self.p3 = Point((self.centerX + self.width / 2 + 3) - self.radius,
                             (self.centerY + self.height / 2 + 5) - self.radius)
-            self.p2 = Point((self.centerX - self.width / 2 - 3) + self.radius,
+            self.p2 = Point((self.centerX - self.width / 2 + 3) + self.radius,
                             (self.centerY + self.height / 2 + 5) - self.radius)
-            self.p4 = Point((self.centerX + self.width / 2 - 3) - self.radius,
+            self.p4 = Point((self.centerX + self.width / 2 + 3) - self.radius,
                             (self.centerY - self.height / 2 + 5) + self.radius)
 
             self.shadowCircle1, self.shadowCircle2, self.shadowCircle3, self.shadowCircle4 = Circle(self.p1, self.radius), Circle(self.p2, self.radius), Circle(self.p3, self.radius), Circle(self.p4, self.radius)
