@@ -70,13 +70,22 @@ def wallHitting(fishListObjects,sharkX,sharkY):
         elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
             fishObject.reversePos()
 
-def collisionScenario(fishListObjects):
+def collisionScenario(fishList):
 
     #collisions scenario, use list to cycle between fish combinations. For loop cycles between combination 1,3 - 1,2 - 2,3 in that order
     #tests if the coordinates of each fish match. If the fish have alternate directions (are fleeing from a corner), the fish moves back
     #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
 
+    #because the order is 1, 2, 3, 2 reverses direction before 1, 3 before 1 and 2. Therefore, the higher index always moves. However, because
+    #fish 3 is being refered to by a negative index, it must switch indeces with fish 1 on the first iteration with the loop [A], in order to maintain
+    #the movement order. They will switch back at the end of the round. [B]
+
+    fishListObjects = fishList
+
     for fishObjectInt in range(0,3):
+
+        if fishObjectInt == 0: #[A]
+            fishListObjects[fishObjectInt - 1],fishListObjects[fishObjectInt] = fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]
 
         if fishListObjects[fishObjectInt - 1].getAlive() == True and fishListObjects[fishObjectInt].getAlive() == True:
             
@@ -128,6 +137,9 @@ def collisionScenario(fishListObjects):
                     if not(abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
                         fishListObjects[fishObjectInt].move(1)
                         fishListObjects[fishObjectInt - 1].move(1)
+
+        if fishObjectInt == 0: #[B]
+            fishListObjects[fishObjectInt - 1],fishListObjects[fishObjectInt] = fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
@@ -320,6 +332,8 @@ def main():
                 elif buttonClicked == "shark":
 
                     fishList = getFishList(fish1,fish2,fish3)
+
+                    print(fish1.getCoords(),fish2.getCoords(),fish3.getCoords())
 
                     #move shark
 
