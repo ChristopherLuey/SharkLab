@@ -36,19 +36,25 @@ class Shark:
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
     def calculateFishChasing(self, fishList):
         # Save the lowest fish distance, closest fish index, and how many fish need to be randomly chosen to pursue
-        lowestFishDist, closeFishIndex, randomFishChooser = 1000.0, self.chasing, []
+        lowestFishDist, closeFishIndex, randomFishChooser = 1000, self.chasing, []
         for i in range(3):
+            # Gather fish data
             fishx, fishy, alive = fishList[i*5], fishList[i*5+1], fishList[i*5+4]
-            dx, dy = abs(self.x - fishx), abs(self.y - fishy)
-            fishDist = abs(dx+dy) - min([dx,dy])
+
+            # Calculate dx and dy to fish and see how many tiles away the fish is (considering diagonals too)
+            fishDist = abs(self.x - fishx)+abs(self.y - fishy) - min([abs(self.y - fishy),abs(self.x - fishx)])
 
             if fishDist < lowestFishDist and alive:
-                lowestFishDist, closeFishIndex = fishDist, i+1
+                # Set this fish as the closest
+                lowestFishDist, closeFishIndex, randomFishChooser = fishDist, i+1, []
+
             elif fishDist == lowestFishDist and alive and not(self.chasing == i+1) and not(self.chasing == closeFishIndex):
                 randomFishChooser.append(i+1)
 
+        # Check if the list has fish to be randomly chosen
         if bool(randomFishChooser):
             randomFishChooser.append(closeFishIndex)
+            # Chose a random fish to chase
             closeFishIndex = randomFishChooser[randrange(0,len(randomFishChooser))]
 
         self.chasing = closeFishIndex

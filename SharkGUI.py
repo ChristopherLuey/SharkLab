@@ -253,7 +253,7 @@ class SharkGUI:
 
     def createWin(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, False)
+        self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(self.color[0])
         mover, moveg, moveb = 28-26, 117-40, 208-100
         for i in range(102):
