@@ -218,9 +218,6 @@ def main():
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
-
-            fish2.setInputDirection("east")
-            fish3.setInputDirection("west")
             
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
