@@ -192,7 +192,6 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
                     if abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7:
                         if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                             fishWin = True
-                
 
     #no fish are dead
                                 
@@ -244,10 +243,6 @@ def main():
             fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
-            
-            fish2.setInputDirection("west")
-            fish3.setInputDirection("east")
-            
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
             #construct shark, gather coordinates to set flee status of each fish
@@ -301,9 +296,6 @@ def main():
                         if fishWins == 3:
                             GUIList = GUI.winner("fish")
                             break
-                            if GUIList == []:
-                                looping = False
-
 
                 elif buttonClicked == "shark":
 
@@ -332,8 +324,6 @@ def main():
 
                         GUIList = GUI.winner("shark")
                         break
-                        if GUIList == []:
-                            looping = False
 
                 elif buttonClicked == "quit":
 
