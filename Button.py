@@ -68,6 +68,45 @@ class Button:
             win (GraphWin): The window to draw the Button on.
         """
         if self.radiusInd:
+            self.p1 = Point((self.centerX - self.width / 2 - 3) + self.radius,
+                            (self.centerY - self.height / 2 + 5) + self.radius)
+            self.p3 = Point((self.centerX + self.width / 2 - 3) - self.radius,
+                            (self.centerY + self.height / 2 + 5) - self.radius)
+            self.p2 = Point((self.centerX - self.width / 2 - 3) + self.radius,
+                            (self.centerY + self.height / 2 + 5) - self.radius)
+            self.p4 = Point((self.centerX + self.width / 2 - 3) - self.radius,
+                            (self.centerY - self.height / 2 + 5) + self.radius)
+
+            self.shadowCircle1, self.shadowCircle2, self.shadowCircle3, self.shadowCircle4 = Circle(self.p1, self.radius), Circle(self.p2, self.radius), Circle(self.p3, self.radius), Circle(self.p4, self.radius)
+            self.shadowCircle1.setOutline(color_rgb(10, 30, 20))
+            self.shadowCircle2.setOutline(color_rgb(10, 30, 20))
+            self.shadowCircle3.setOutline(color_rgb(10, 30, 20))
+            self.shadowCircle4.setOutline(color_rgb(10, 30, 20))
+            self.shadowCircle1.setFill(color_rgb(10, 30, 20))
+            self.shadowCircle2.setFill(color_rgb(10, 30, 20))
+            self.shadowCircle3.setFill(color_rgb(10, 30, 20))
+            self.shadowCircle4.setFill(color_rgb(10, 30, 20))
+            self.shadowCircle1.draw(win)
+            self.shadowCircle2.draw(win)
+            self.shadowCircle3.draw(win)
+            self.shadowCircle4.draw(win)
+
+            # Define points that form the polygon around the circles
+            pa = Point(self.p1.getX(), self.p1.getY() - self.radius)
+            pb = Point(self.p4.getX(), self.p4.getY() - self.radius)
+            pc = Point(self.p4.getX() + self.radius, self.p4.getY())
+            pd = Point(self.p3.getX() + self.radius, self.p3.getY())
+            pe = Point(self.p3.getX(), self.p3.getY() + self.radius)
+            pf = Point(self.p2.getX(), self.p2.getY() + self.radius)
+            pg = Point(self.p2.getX() - self.radius, self.p2.getY())
+            ph = Point(self.p1.getX() - self.radius, self.p1.getY())
+
+            self.polyShadow = Polygon(pa, pb, pc, pd, pe, pf, pg, ph)
+            self.polyShadow.setOutline(color_rgb(10, 30, 20))
+            self.polyShadow.setFill(color_rgb(10, 30, 20))
+            self.polyShadow.draw(win)
+
+
             # Create circles in 4 corners of Button
             self.p1 = Point((self.centerX - self.width / 2) + self.radius, (self.centerY - self.height / 2) + self.radius)
             self.p3 = Point((self.centerX + self.width / 2) - self.radius, (self.centerY + self.height / 2) - self.radius)
@@ -115,6 +154,11 @@ class Button:
             self.poly.setFill(self.color)
 
         # Create the Button text
+        # self.shadow = Text(Point(self.centerX+2, self.centerY + 2), self.text).draw(win)
+        # self.shadow.setOutline(color_rgb(10, 30, 20))
+        # self.shadow.setFill(color_rgb(10, 30, 20))
+        # self.shadow.setSize(self.textSize)
+
         self.textBox = Text(Point(self.centerX, self.centerY), self.text).draw(win)
         self.textBox.setFill(self.textColor)
         self.textBox.setOutline(self.textColor)
@@ -128,13 +172,20 @@ class Button:
         Function removes the button on the window it is currently placed on.
         """
 
-        self.poly.undraw(), self.textBox.undraw()
+        self.poly.undraw()
+        self.polyShadow.undraw()
+        self.textBox.undraw()
+        #self.shadow.undraw()
         if self.radiusInd:
             # If there are circles that form the Button:
             self.circle1.undraw()
             self.circle2.undraw()
             self.circle3.undraw()
             self.circle4.undraw()
+            self.shadowCircle1.undraw()
+            self.shadowCircle2.undraw()
+            self.shadowCircle3.undraw()
+            self.shadowCircle4.undraw()
 
     def toggleActivation(self):
         """
@@ -320,6 +371,7 @@ class Button:
             self.circle4.move(moveX, moveY)
         self.poly.move(moveX, moveY)
         self.textBox.move(moveX, moveY)
+        self.shadow.move(moveX, moveY)
         self.p1.move(moveX, moveY)
         self.p2.move(moveX, moveY)
         self.p3.move(moveX, moveY)
