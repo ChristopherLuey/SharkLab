@@ -125,12 +125,12 @@ class SharkGUI:
                     self.ripFishCounter += 1
                     self.instructionsText.setText("Fish " + str(i) + " has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
+
                     #https: // pngio.com / PNG / 28823 - wasted - png.html
                     wasted = Image(Point(300, 400), 'wasted.gif').draw(self.win)
                     self.anim(500, 400, 300, 400, wasted)
                     self.anim(750, 400, 500, 400, wasted)
                     self.anim(1000, 400, 750, 400, wasted)
-
                     wasted.undraw()
 
             self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
