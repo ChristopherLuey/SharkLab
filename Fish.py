@@ -31,9 +31,6 @@ class Fish:
 
     #accessors
 
-    def setHeadOnStatus(self,boolType):
-        self.fishHeadOnStatus = boolType  
-
     def getAltDirection(self):
         if self.fishAltDirection != "DNE":
             return True
@@ -68,6 +65,9 @@ class Fish:
         return self.fishWallHittingStatus
 
     #mutators
+
+    def setHeadOnStatus(self,boolType):
+        self.fishHeadOnStatus = boolType
         
     def eat(self):
         self.fishAliveStatus = False
