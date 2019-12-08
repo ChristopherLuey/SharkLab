@@ -255,6 +255,10 @@ class Fish:
                 elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
                     self.directionList = ["north","east"]
 
+                """else:
+                    self.directionList = []
+                    print("a")"""
+
                 #calculate which side of the quadrant it is. To carry on with the previous example, the fish has two options
                 #north and east. if the fish is further from the shark on the X axis, it will move east. Otherwise, it moves
                 #north.
@@ -269,7 +273,7 @@ class Fish:
 
                     #if fish is not facing in the flee direction, and must change, direction is randomly assigned.
                     
-                    if self.fishDirection != directionList[0] and self.fishDirection != directionList[1]:
+                    if self.fishDirection != self.directionList[0] and self.fishDirection != self.directionList[1]:
                         if self.fishDirectionInt == 1:
                             self.fishDirection,self.fishAltDirection = self.directionList[0],self.directionList[1]
                         elif self.fishDirectionInt == 2:
@@ -277,9 +281,9 @@ class Fish:
 
                     #otherwise, it defaults to its original direction.
                             
-                    elif self.fishDirection == directionList[0]:
+                    elif self.fishDirection == self.directionList[0]:
                         self.fishDirection,self.fishAltDirection = self.directionList[0],self.directionList[1]
-                    elif self.fishDirection == directionList[1]:
+                    elif self.fishDirection == self.directionList[1]:
                         self.fishDirection,self.fishAltDirection = self.directionList[1],self.directionList[0]
 
     def move(self,distance):
