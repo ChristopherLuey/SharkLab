@@ -24,14 +24,10 @@ class Shark:
                 fishList[(self.chasing-1)*5+4] = False
                 # Shark cannot move anymore after eating, so break out
                 break
-        # Return the fish list because some fish may have been killed
-        return fishList
 
-    def getPosition(self):
-        return self.x, self.y
+    def getPosition(self): return self.x, self.y
 
-    def getSharkList(self):
-        return [self.x, self.y, self.dir]
+    def getSharkList(self): return [self.x, self.y, self.dir]
 
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
     def calculateFishChasing(self, fishList):
@@ -56,21 +52,16 @@ class Shark:
             randomFishChooser.append(closeFishIndex)
             # Chose a random fish to chase
             closeFishIndex = randomFishChooser[randrange(0,len(randomFishChooser))]
-
         self.chasing = closeFishIndex
 
     def move(self, fishx, fishy):
         dir = ""
-        if self.y > fishy:
-            dir = "North"
-            self.y -= 1
-        elif self.y < fishy:
-            dir = "South"
-            self.y += 1
-        if self.x > fishx:
-            dir+="West"
-            self.x -= 1
-        elif self.x < fishx:
-            dir+="East"
-            self.x += 1
+        for i in [0,1]:
+            if self.y > fishy:
+                dir, self.y = dir+["North", "South"][i], self.y-1
+            fishy, self.y = fishy*-1, self.y*-1
+        for i in [0,1]:
+            if self.x > fishx:
+                dir, self.x = dir+["West", "East"][i], self.x-1
+            fishx, self.x = fishx*-1, self.x*-1
         self.dir = dir
