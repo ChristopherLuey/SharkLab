@@ -75,8 +75,10 @@ class SharkGUI:
                             self.enterFish3.undraw()
                             self.start.undraw()
                             self.instructionsText.setText("Click on the fish button to move\nthe fish")
-                            self.anim(1035, 220, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
-                            self.anim(1035, 175, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
+                            self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
+                            self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
+                            self.anim(1035, 280, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
+
                             # Turn off start button
                             self.start.toggleActivation()
                             # Return the entered fish locations
@@ -94,14 +96,12 @@ class SharkGUI:
         # Wait for user input
         if not self.win.isClosed():
             p = self.win.getMouse()
-            while True:
-                # Check which button, if any is clicked
-                if self.quitButton.isClicked(p): break
-                elif self.start.isClicked(p): return 'start'
-                elif self.fishButton.isClicked(p): return 'fish'
-                elif self.sharkButton.isClicked(p): return 'shark'
-                else: return 'none'
-            return 'quit'
+            # Check which button, if any is clicked
+            if self.quitButton.isClicked(p): return 'quit'
+            elif self.start.isClicked(p): return 'start'
+            elif self.fishButton.isClicked(p): return 'fish'
+            elif self.sharkButton.isClicked(p): return 'shark'
+            else: return 'none'
 
 
     def updateFish(self, fishList):
@@ -211,15 +211,23 @@ class SharkGUI:
 
     # Helper function: should not be called outside of this class
     def formatGUI(self):
-        self.enterFish1 = Text(Point(960, 150), "Mr. Ladd Coordinate(x,y): ").draw(self.win)
-        self.enterFish2 = Text(Point(955, 200), "Mr. Huntoon Coordinate(x,y): ").draw(self.win)
-        self.enterFish3 = Text(Point(955, 250), "Mr. Fisher Coordinate(x,y): ").draw(self.win)
+        self.enterFish1 = Text(Point(955, 150), "Mr. Ladd Coordinate(x,y): ").draw(self.win)
+        self.enterFish2 = Text(Point(950, 200), "Mr. Huntoon Coordinate(x,y): ").draw(self.win)
+        self.enterFish3 = Text(Point(950, 250), "Mr. Fisher Coordinate(x,y): ").draw(self.win)
 
         self.instructionsText.setSize(20)
         self.instructionsText.setTextColor(color_rgb(236, 240, 241))
         self.instructionsTitle.setSize(23)
         self.instructionsTitle.setStyle('bold')
         self.instructionsTitle.setTextColor('white')
+        self.gameLogTitle = Text(Point(1500, 270), "Game Log:").draw(self.win)
+        self.gameLogTitle.setSize(23)
+        self.gameLogTitle.setStyle('bold')
+        self.gameLogTitle.setTextColor('white')
+        self.gameLog = Text(Point(1500, 285), "Game Log:").draw(self.win)
+        self.gameLog.setSize(23)
+        self.gameLog.setStyle('bold')
+        self.gameLog.setTextColor('white')
 
         title = Text(Point(1040, 105), "Shark Game").draw(self.win)
         title.setSize(25)
@@ -265,7 +273,7 @@ class SharkGUI:
 
     def createWin(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, False)
+        self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(color_rgb(26, 117, 208))
 
         mover, moveg, moveb = 28-26, 117-40, 208-100
@@ -295,9 +303,9 @@ class SharkGUI:
         self.fishButton = Button(1035, 725, 400, 50, 10, color_rgb(243, 156, 18), 'Move Fish', 'white', 25, self.win)
 
         # Create the fish coord entries
-        self.entry1, self.entry2, self.entry3 = Entry(Point(1145, 150), 10).draw(self.win), Entry(Point(1145, 200),10).draw(self.win), Entry(Point(1145, 250), 10).draw(self.win)
+        self.entry1, self.entry2, self.entry3 = Entry(Point(1160, 150), 10).draw(self.win), Entry(Point(1160, 200),10).draw(self.win), Entry(Point(1160, 250), 10).draw(self.win)
         self.instructionsText = Text(Point(1035, 450),"Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates").draw(self.win)
-        self.ripFish = Text(Point(1035, 580), "Dead Fish Counter: 0\n").draw(self.win)
+        self.ripFish = Text(Point(1035, 590), "Dead Fish Counter: 0\n").draw(self.win)
         self.ripFishCounter = 0
 
         self.instructionsTitle = Text(Point(1500, 180), "Instructions:").draw(self.win)
