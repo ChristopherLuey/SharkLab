@@ -44,16 +44,20 @@ class Shark:
                 # Set this fish as the closest
                 lowestFishDist, closeFishIndex, randomFishChooser = fishDist, i+1, []
 
-            elif fishDist == lowestFishDist and alive:
-            #not(self.chasing == i+1) and not(self.chasing == closeFishIndex):
+            elif fishDist == lowestFishDist and alive and not(self.chasing == closeFishIndex):
                 randomFishChooser.append(i+1)
 
         # Check if the list has fish to be randomly chosen
         if bool(randomFishChooser):
             randomFishChooser.append(closeFishIndex)
             # Chose a random fish to chase
-            closeFishIndex = randomFishChooser[randrange(0,len(randomFishChooser))]
+            for i in randomFishChooser:
+                if i == self.chasing:
+                    closeFishIndex = i
+                    break
+                else: closeFishIndex = randomFishChooser[randrange(0, len(randomFishChooser))]
         self.chasing = closeFishIndex
+
 
     def move(self, fishx, fishy):
         dir = ""
