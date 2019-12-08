@@ -8,8 +8,8 @@ import time
 
 class SharkGUI:
     def __init__(self):
-        self.color = [color_rgb(26, 117, 208), 'white', color_rgb(28,69,135)]
         self.createWin()
+
 
     def gatherUserInput(self):
         if not self.win.isClosed():
@@ -75,8 +75,8 @@ class SharkGUI:
                             self.enterFish3.undraw()
                             self.start.undraw()
                             self.instructionsText.setText("Click on the fish button to move\nthe fish")
-                            self.anim(1035, 220, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText)
-                            self.anim(1035, 175, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle)
+                            self.anim(1035, 220, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
+                            self.anim(1035, 175, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
                             # Turn off start button
                             self.start.toggleActivation()
                             # Return the entered fish locations
@@ -88,6 +88,7 @@ class SharkGUI:
         # User quits so close window and return empty list
         self.win.close()
         return []
+
 
     def isClicked(self):
         # Wait for user input
@@ -101,6 +102,7 @@ class SharkGUI:
                 elif self.sharkButton.isClicked(p): return 'shark'
                 else: return 'none'
             return 'quit'
+
 
     def updateFish(self, fishList):
         # Draws the fish at the specified locations
@@ -127,14 +129,14 @@ class SharkGUI:
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
 
                     #https: // pngio.com / PNG / 28823 - wasted - png.html
-                    wasted = Image(Point(300, 400), 'wasted.gif').draw(self.win)
-                    self.anim(500, 400, 300, 400, wasted)
-                    self.anim(750, 400, 500, 400, wasted)
-                    self.anim(1000, 400, 750, 400, wasted)
+                    wasted = Image(Point(0, 400), 'wasted.gif').draw(self.win)
+                    self.anim(1300, 400, 0, 400, wasted, 50)
+
                     wasted.undraw()
 
-            self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1)
+            self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1, 10)
         self.storedFish = fishList
+
 
     def updateShark(self, sharkList):
         self.shark.undraw()
@@ -145,7 +147,7 @@ class SharkGUI:
         else: currentX, currentY = self.shark.getAnchor().getX(), self.shark.getAnchor().getY()
         self.shark = Image(Point(currentX, currentY), image).draw(self.win)
 
-        self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark)
+        self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark, 10)
 
 
     def nextTurn(self):
@@ -154,8 +156,10 @@ class SharkGUI:
         if self.fishButton.isActive(): self.instructionsText.setText("Click on the fish button to move\nthe fish")
         else: self.instructionsText.setText("Click on the shark button to move\nthe shark")
 
+
     def endGame(self):
         self.win.close()
+
 
     def winner(self, winner):
         if self.fishButton.isActive(): self.fishButton.toggleActivation()
@@ -174,22 +178,28 @@ class SharkGUI:
         popup = GraphWin("Play Again?", 400, 400)
         popup.setBackground(color_rgb(52, 152, 219))
 
-        playAgain = Text(Point(200,300), "The " + winner + " has won!\nWould you like to play again?\nClick on the start button!").draw(popup)
+        playAgain = Text(Point(200,300), "").draw(popup)
+        if winner == 'fish':
+            playAgain.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
+        elif winner == 'shark':
+            playAgain.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
         playAgain.setTextColor('white')
         playAgain.setSize(25)
         playAgainButton = Button(200,140,200,60,10,'light green', "Play Again", 'white', 20, popup)
         playAgainButton.toggleActivation()
-        quitButton = Button(50,30,100,50,5,'red', "Quit", 'white', 20,popup)
+
+        quitButton = Button(60,30,100,50,5,'red', "Quit", 'white', 20,popup)
         quitButton.toggleActivation()
 
         for k in listOfConfetti: k.undraw()
+
         self.win.close()
 
         p = popup.getMouse()
         while not quitButton.isClicked(p):
             if playAgainButton.isClicked(p):
-                self.createWin()
                 popup.close()
+                self.createWin()
                 fishList = self.gatherUserInput()
                 return fishList
             if not popup.isClosed():
@@ -198,11 +208,12 @@ class SharkGUI:
         popup.close()
         return []
 
+
     # Helper function: should not be called outside of this class
     def formatGUI(self):
-        self.enterFish1 = Text(Point(960, 150), "Daddy Coordinate(x,y): ").draw(self.win)
-        self.enterFish2 = Text(Point(955, 200), "Mommy Coordinate(x,y): ").draw(self.win)
-        self.enterFish3 = Text(Point(955, 250), "Granny Coordinate(x,y): ").draw(self.win)
+        self.enterFish1 = Text(Point(960, 150), "Mr. Ladd Coordinate(x,y): ").draw(self.win)
+        self.enterFish2 = Text(Point(955, 200), "Mr. Huntoon Coordinate(x,y): ").draw(self.win)
+        self.enterFish3 = Text(Point(955, 250), "Mr. Fisher Coordinate(x,y): ").draw(self.win)
 
         self.instructionsText.setSize(20)
         self.instructionsText.setTextColor(color_rgb(236, 240, 241))
@@ -251,10 +262,12 @@ class SharkGUI:
             self.enterFish1.setSize(20)
             self.enterFish1.setTextColor('white')
 
+
     def createWin(self):
         # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, True)
-        self.win.setBackground(self.color[0])
+        self.win = GraphWin("Shark Game", 1300, 800, False)
+        self.win.setBackground(color_rgb(26, 117, 208))
+
         mover, moveg, moveb = 28-26, 117-40, 208-100
         for i in range(102):
             l = Line(Point(0,i*8), Point(1300, i*8))
@@ -300,11 +313,12 @@ class SharkGUI:
         self.quitButton.toggleActivation()
 
         #print(r.getCenter())
-        self.anim(1037.5, 420.0, 1055.0, 430.0, r)
+        self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
 
-    def anim(self, futureX, futureY, currentX, currentY, graphics):
+
+    def anim(self, futureX, futureY, currentX, currentY, graphics, t):
         moveX, moveY = futureX - currentX, futureY - currentY
         if moveX != 0.0 or moveY != 0.0:
-            for i in range(10):
-                graphics.move(moveX / 10, moveY / 10)
+            for i in range(t):
+                graphics.move(moveX / t, moveY / t)
                 time.sleep(0.001)
