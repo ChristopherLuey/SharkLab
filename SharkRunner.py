@@ -70,76 +70,36 @@ def wallHitting(fishListObjects,sharkX,sharkY):
         elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
             fishObject.reversePos()
 
-def collisionScenario(fishList):
+def collisionScenario(fish1,fish2,fish3,roundFish):
 
-    #collisions scenario, use list to cycle between fish combinations. For loop cycles between combination 1,3 - 1,2 - 2,3 in that order
-    #tests if the coordinates of each fish match. If the fish have alternate directions (are fleeing from a corner), the fish moves back
-    #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
+    if roundFish.getAlive() == True:
 
-    #because the order is 1, 2, 3, 2 reverses direction before 1, 3 before 1 and 2. Therefore, the higher index always moves. However, because
-    #fish 3 is being refered to by a negative index, it must switch indeces with fish 1 on the first iteration with the loop [A], in order to maintain
-    #the movement order. They will switch back at the end of the round. [B]
+        fishList = []
 
-    fishListObjects = fishList
+        if roundFish == fish1:
+            if fish2.getAlive() == True:
+                fishList.append(fish2)
+            if fish3.getAlive() == True:
+                fishList.append(fish3)
+        elif roundFish == fish2:
+            if fish1.getAlive() == True:
+                fishList.append(fish1)
+            if fish3.getAlive() == True:
+                fishList.append(fish3)
+        elif roundFish == fish3:
+            if fish1.getAlive() == True:
+                fishList.append(fish1)
+            if fish2.getAlive() == True:
+                fishList.append(fish2)
 
-    for fishObjectInt in range(0,3):
+        for collideFish in fishList:
 
-        if fishObjectInt == 0: #[A]
-            fishListObjects[fishObjectInt - 1],fishListObjects[fishObjectInt] = fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]
+            if roundFish.getX() == collideFish.getX() and roundFish.getY() == collideFish.getY():
 
-        if fishListObjects[fishObjectInt - 1].getAlive() == True and fishListObjects[fishObjectInt].getAlive() == True:
-            
-            if fishListObjects[fishObjectInt - 1].getX() == fishListObjects[fishObjectInt].getX() and fishListObjects[fishObjectInt - 1].getY() == fishListObjects[fishObjectInt].getY(): #test collision
-
-                #situation if fish are on diagonal and can choose to move in alternate direction.    
-                if fishListObjects[fishObjectInt].getFlee() == True and fishListObjects[fishObjectInt].getAltDirection() == True:
-                    collideMove(fishListObjects[fishObjectInt])
-                elif fishListObjects[fishObjectInt - 1].getFlee() == True and fishListObjects[fishObjectInt - 1].getAltDirection() == True:
-                    fishListObjects[fishObjectInt].move(-1) #given 1,2,3 order, the first index should always move in a collision situation
+                if roundFish.getFlee() == True:
+                    collideMove(roundFish)
                 else:
-                    if fishListObjects[fishObjectInt - 1].getDirection() == fishListObjects[fishObjectInt].getDirection():
-                        fishListObjects[fishObjectInt].move(-1)
-                        fishListObjects[fishObjectInt - 1].move(-1)
-                    else:
-                        if directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]) == "opposite":
-
-                            #headOnStatus ensures that fish will not move when in a head on collision. However, once they enter flee, they will exit headOnStatus and move again
-                            fishListObjects[fishObjectInt].move(-1)
-                            fishListObjects[fishObjectInt].setHeadOnStatus(True)
-                            fishListObjects[fishObjectInt - 1].setHeadOnStatus(True)
-
-                        else:
-                            fishListObjects[fishObjectInt].move(-1)
-
-            #head on collision situation. If they face in opposite directions and are one space apart, they should not move
-
-            opposite,axis =  directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1])   
-
-            if opposite == "opposite":
-                if (axis == "x" and abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1) and fishListObjects[fishObjectInt].getY() == fishListObjects[fishObjectInt - 1].getY():
-
-                    fishListObjects[fishObjectInt].move(-1)
-                    fishListObjects[fishObjectInt - 1].move(-1)
-
-                    #if after movement, they are not longer in a headon collision, move again
-                    
-                    if not(abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1):
-                        fishListObjects[fishObjectInt].move(1)
-                        fishListObjects[fishObjectInt - 1].move(1)
-
-                elif (axis == "y" and abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1) and fishListObjects[fishObjectInt].getX() == fishListObjects[fishObjectInt - 1].getX():
-
-                    ishListObjects[fishObjectInt].move(-1)
-                    fishListObjects[fishObjectInt - 1].move(-1)
-
-                    #if after movement, they are not longer in a headon collision, move again
-                    
-                    if not(abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
-                        fishListObjects[fishObjectInt].move(1)
-                        fishListObjects[fishObjectInt - 1].move(1)
-
-        if fishObjectInt == 0: #[B]
-            fishListObjects[fishObjectInt - 1],fishListObjects[fishObjectInt] = fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]
+                    roundFish.move(-1)
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
@@ -309,13 +269,13 @@ def main():
                     for fishObject in fishListObjects:
                         fishObject.move(1)
 
+                        #collisions scenario, do after every round to ensure valid order
+                    
+                        collisionScenario(fish1,fish2,fish3,fishObject)
+
                     #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
                     wallHitting(fishListObjects,sharkX,sharkY)
-
-                    #collisions scenario
-                    
-                    collisionScenario(fishListObjects)
 
                     fishList = getFishList(fish1,fish2,fish3)
                     GUI.nextTurn()
