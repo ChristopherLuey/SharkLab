@@ -27,7 +27,6 @@ class SharkGUI:
         l.setFill(color_rgb(10, 20, 10))
         l.setOutline(color_rgb(10, 20, 10))
 
-        # r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
         r = Rectangle(Point(820, 70), Point(1290, 790)).draw(self.win)
         r.setFill(color_rgb(41, 128, 185))
         r.setOutline(color_rgb(41, 128, 185))
@@ -51,6 +50,7 @@ class SharkGUI:
         self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
         self.createWin()
         self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
+
 
     def gatherUserInput(self):
         if not self.win.isClosed():
@@ -122,7 +122,6 @@ class SharkGUI:
                             self.anim(1035, 280, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
                             self.anim(1035, 330, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
 
-
                             # Turn off start button
                             self.start.toggleActivation()
                             # Return the entered fish locations
@@ -149,7 +148,12 @@ class SharkGUI:
 
 
     def updateFish(self, fishList):
-        # Draws the fish at the specified locations
+        """
+        Draws the fish at the specified locations.
+
+        Args:
+            fishList:
+        """
         for i in range(3):
             self.fish1, self.fish2, self.fish3 = self.fish2, self.fish3, self.fish1
             self.fish1.undraw()
@@ -183,6 +187,10 @@ class SharkGUI:
 
 
     def updateShark(self, sharkList):
+        """
+        Args:
+            sharkList:
+        """
         self.shark.undraw()
         # https://www.animatedimages.org/cat-sharks-516.htm
         image = 'shark' + sharkList[2] + '.gif'
@@ -206,6 +214,10 @@ class SharkGUI:
 
 
     def winner(self, winner):
+        """
+        Args:
+            winner:
+        """
         if self.fishButton.isActive(): self.fishButton.toggleActivation()
         if self.sharkButton.isActive(): self.sharkButton.toggleActivation()
 
@@ -325,6 +337,15 @@ class SharkGUI:
 
 
     def anim(self, futureX, futureY, currentX, currentY, graphics, t):
+        """
+        Args:
+            futureX:
+            futureY:
+            currentX:
+            currentY:
+            graphics:
+            t:
+        """
         moveX, moveY = futureX - currentX, futureY - currentY
         if moveX != 0.0 or moveY != 0.0:
             for i in range(t):
