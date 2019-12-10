@@ -29,7 +29,7 @@ class Shark:
 
             # Check if shark has eaten the fish it's pursuing
             if fishx == self.x and fishy == self.y:
-
+                fishList[(self.chasing-1) * 5 + 4] = False
                 # Shark cannot move anymore after eating, so break out
                 break
 
