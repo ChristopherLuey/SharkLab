@@ -53,22 +53,20 @@ def collideMove(fish):
     fish.collideSetDirection()
     fish.move(1)
 
-def wallHitting(fishListObjects,sharkX,sharkY):
+def wallHitting(fishObject,sharkX,sharkY):
 
     #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-    for fishObject in fishListObjects:
+    #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
 
-        #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
+    if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
+        fishObject.wallSetDirection()
+        fishObject.move(2)
 
-        if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-            fishObject.wallSetDirection()
-            fishObject.move(2)
-
-        #if the fish hits the wall and is in flee mode, the fish will flip across the grid
-            
-        elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
-            fishObject.reversePos()
+    #if the fish hits the wall and is in flee mode, the fish will flip across the grid
+        
+    elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
+        fishObject.reversePos()
 
 def collisionScenario(fish1,fish2,fish3,roundFish):
 
@@ -298,13 +296,13 @@ def main():
                     for fishObject in fishListObjects:
                         fishObject.move(1)
 
+                        #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
+
+                        wallHitting(fishObject,sharkX,sharkY)
+
                         #collisions scenario, do after every round to ensure valid order
                     
                         collisionScenario(fish1,fish2,fish3,fishObject)
-
-                    #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
-
-                    wallHitting(fishListObjects,sharkX,sharkY)
 
                     fishList = getFishList(fish1,fish2,fish3)
                     GUI.nextTurn()
