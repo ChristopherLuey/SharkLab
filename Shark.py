@@ -11,6 +11,12 @@ class Shark:
 
 
     def sharkTurn(self, fishList):
+        """Function runs the shark's turn.
+
+        Args:
+            fishList: list of fish
+        positions and states in format [f1x, f1y, f1dir, f1flee, f1alive, f2x, f2y, ...]
+        """
         # Find the fish the shark is chasing
         self.calculateFishChasing(fishList)
 
@@ -23,7 +29,7 @@ class Shark:
 
             # Check if shark has eaten the fish it's pursuing
             if fishx == self.x and fishy == self.y:
-
+                fishList[(self.chasing-1) * 5 + 4] = False
                 # Shark cannot move anymore after eating, so break out
                 break
 
@@ -38,6 +44,10 @@ class Shark:
 
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
     def calculateFishChasing(self, fishList):
+        """
+        Args:
+            fishList:
+        """
         # Save the lowest fish distance, closest fish index, and how many fish need to be randomly chosen to pursue
         lowestFishDist, closeFishIndex, randomFishChooser = 1000, self.chasing, []
 
@@ -70,21 +80,13 @@ class Shark:
 
 
     def move(self, fishx, fishy):
+        """
+        Args:
+            fishx:
+            fishy:
+        """
         dir = ""
-        # for i in [0,1]:
-        #     if self.y > fishy:
-        #         dir, self.y = dir+["North", "South"][i], self.y-1
-        #     # After a loop, switch the inequality to check for the opposite direction
-        #     fishy, self.y = fishy*-1, self.y*-1
-        # for i in [0,1]:
-        #     if self.x > fishx:
-        #         dir, self.x = dir+["West", "East"][i], self.x-1
-        #     fishx, self.x = fishx*-1, self.x*-1
-        # self.dir = dir
-        #
         for i in [0,1,2,3]:
             if self.x > fishx:
                 dir, self.x = dir+["West", "South", "East", "North"][i], self.x-1
-            fishx, fishy, self.x, self.y = fishy*-1, fishx,self.y*-1, self.x
-        self.dir = dir
-
+            fishx, fishy, self.x, self.y, self.dir = fishy*-1, fishx,self.y*-1, self.x, dir
