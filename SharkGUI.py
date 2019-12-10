@@ -261,6 +261,7 @@ class SharkGUI:
                 p = popup.getMouse()
 
         popup.close()
+        self.win.close()
         return []
 
 
