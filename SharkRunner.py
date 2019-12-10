@@ -228,12 +228,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
             if (relation1 == "same" or relation1 == "opposite") and (relation2 == "same" or relation2 == "opposite"):
                 if aliveFishList[0].getX() == sharkX:
-                    if abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7 and abs(aliveFishList[0].getX() - aliveFishList[2].getX()) >= 7:
+                    if (abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7 and abs(aliveFishList[0].getX() - aliveFishList[2].getX()) >= 7) or (abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7 and abs(aliveFishList[0].getX() - aliveFishList[2].getX()) == 1) or (abs(aliveFishList[0].getX() - aliveFishList[1].getX()) == 1 and abs(aliveFishList[0].getX() - aliveFishList[2].getX()) >= 7):
                         if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
                             fishWin = True
                                     
                 elif aliveFishList[0].getY() == sharkY:
-                    if abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) >= 7:
+                    if (abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) >= 7) or (abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) == 1) or (abs(aliveFishList[0].getY() - aliveFishList[1].getY()) == 1 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) >= 7):
                         if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                             fishWin = True
                                     
