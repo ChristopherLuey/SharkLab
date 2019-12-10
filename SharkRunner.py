@@ -130,6 +130,8 @@ def getAliveList(fish1,fish2,fish3):
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
+    fishWin = False
+
     deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3)
 
     #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test whether the fish is just out of the shark's reach.
@@ -241,6 +243,9 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
+
+            fish2.setInputDirection("west")
+            fish3.setInputDirection("west")
             
             #construct shark, gather coordinates to set flee status of each fish, then set direction as well
             
