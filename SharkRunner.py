@@ -53,95 +53,56 @@ def collideMove(fish):
     fish.collideSetDirection()
     fish.move(1)
 
-def wallHitting(fishListObjects,sharkX,sharkY):
+def wallHitting(fishObject,sharkX,sharkY):
 
     #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-    for fishObject in fishListObjects:
+    #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
 
-        #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
+    if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
+        fishObject.wallSetDirection()
+        fishObject.move(2)
 
-        if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-            fishObject.wallSetDirection()
-            fishObject.move(2)
+    #if the fish hits the wall and is in flee mode, the fish will flip across the grid
+        
+    elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
+        fishObject.reversePos()
 
-        #if the fish hits the wall and is in flee mode, the fish will flip across the grid
-            
-        elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
-            fishObject.reversePos()
+def collisionScenario(fish1,fish2,fish3,roundFish):
 
-def collisionScenario(fishList):
+    if roundFish.getAlive() == True:
 
-    #collisions scenario, use list to cycle between fish combinations. For loop cycles between combination 1,3 - 1,2 - 2,3 in that order
-    #tests if the coordinates of each fish match. If the fish have alternate directions (are fleeing from a corner), the fish moves back
-    #switches to the alternate direction, and then moves in that direction. Otherwise, the fish stays in its original position.
+        fishList = []
 
-    #because the order is 1, 2, 3, 2 reverses direction before 1, 3 before 1 and 2. Therefore, the higher index always moves. However, because
-    #fish 3 is being refered to by a negative index, it must switch indeces with fish 1 on the first iteration with the loop [A], in order to maintain
-    #the movement order. They will switch back at the end of the round. [B]
+        if roundFish == fish1:
+            if fish2.getAlive() == True:
+                fishList.append(fish2)
+            if fish3.getAlive() == True:
+                fishList.append(fish3)
+        elif roundFish == fish2:
+            if fish1.getAlive() == True:
+                fishList.append(fish1)
+            if fish3.getAlive() == True:
+                fishList.append(fish3)
+        elif roundFish == fish3:
+            if fish1.getAlive() == True:
+                fishList.append(fish1)
+            if fish2.getAlive() == True:
+                fishList.append(fish2)
 
-    fishListObjects = fishList
+        collisionRound = 0
 
-    for fishObjectInt in range(0,3):
+        for collideFish in fishList:
 
-        if fishObjectInt == 0: #[A]
-            fishListObjects[fishObjectInt - 1],fishListObjects[fishObjectInt] = fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]
+            if roundFish.getX() == collideFish.getX() and roundFish.getY() == collideFish.getY():
 
-        if fishListObjects[fishObjectInt - 1].getAlive() == True and fishListObjects[fishObjectInt].getAlive() == True:
-            
-            if fishListObjects[fishObjectInt - 1].getX() == fishListObjects[fishObjectInt].getX() and fishListObjects[fishObjectInt - 1].getY() == fishListObjects[fishObjectInt].getY(): #test collision
-
-                #situation if fish are on diagonal and can choose to move in alternate direction.    
-                if fishListObjects[fishObjectInt].getFlee() == True and fishListObjects[fishObjectInt].getAltDirection() == True:
-                    collideMove(fishListObjects[fishObjectInt])
-                elif fishListObjects[fishObjectInt - 1].getFlee() == True and fishListObjects[fishObjectInt - 1].getAltDirection() == True:
-                    fishListObjects[fishObjectInt].move(-1) #given 1,2,3 order, the first index should always move in a collision situation
+                if roundFish.getFlee() == True and collisionRound != 0:
+                    collideMove(roundFish)
+                    collisionRound += 1
                 else:
-                    if fishListObjects[fishObjectInt - 1].getDirection() == fishListObjects[fishObjectInt].getDirection():
-                        fishListObjects[fishObjectInt].move(-1)
-                        fishListObjects[fishObjectInt - 1].move(-1)
-                    else:
-                        if directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]) == "opposite":
+                    roundFish.move(-1)
 
-                            #headOnStatus ensures that fish will not move when in a head on collision. However, once they enter flee, they will exit headOnStatus and move again
-                            fishListObjects[fishObjectInt].move(-1)
-                            fishListObjects[fishObjectInt].setHeadOnStatus(True)
-                            fishListObjects[fishObjectInt - 1].setHeadOnStatus(True)
-
-                        else:
-                            fishListObjects[fishObjectInt].move(-1)
-
-            #head on collision situation. If they face in opposite directions and are one space apart, they should not move
-
-            opposite,axis =  directionRel(fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1])   
-
-            if opposite == "opposite":
-                if (axis == "x" and abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1) and fishListObjects[fishObjectInt].getY() == fishListObjects[fishObjectInt - 1].getY():
-
-                    fishListObjects[fishObjectInt].move(-1)
-                    fishListObjects[fishObjectInt - 1].move(-1)
-
-                    #if after movement, they are not longer in a headon collision, move again
-                    
-                    if not(abs(fishListObjects[fishObjectInt - 1].getX() - fishListObjects[fishObjectInt].getX()) == 1):
-                        fishListObjects[fishObjectInt].move(1)
-                        fishListObjects[fishObjectInt - 1].move(1)
-
-                elif (axis == "y" and abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1) and fishListObjects[fishObjectInt].getX() == fishListObjects[fishObjectInt - 1].getX():
-
-                    ishListObjects[fishObjectInt].move(-1)
-                    fishListObjects[fishObjectInt - 1].move(-1)
-
-                    #if after movement, they are not longer in a headon collision, move again
-                    
-                    if not(abs(fishListObjects[fishObjectInt - 1].getY() - fishListObjects[fishObjectInt].getY()) == 1):
-                        fishListObjects[fishObjectInt].move(1)
-                        fishListObjects[fishObjectInt - 1].move(1)
-
-        if fishObjectInt == 0: #[B]
-            fishListObjects[fishObjectInt - 1],fishListObjects[fishObjectInt] = fishListObjects[fishObjectInt],fishListObjects[fishObjectInt - 1]
-
-def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+def getAliveList(fish1,fish2,fish3):
 
     #test each fish for alive status, and if so, add them to a list of alive fish. fishWin tracks the status of the fish winning throughout the module
 
@@ -165,6 +126,14 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
         deadNumber += 1
     else:
         aliveFishList.append(fish3)
+
+    return deadNumber,aliveFishList 
+
+def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+
+    fishWin = False
+
+    deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3)
 
     #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test whether the fish is just out of the shark's reach.
 
@@ -195,12 +164,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
 
                 if aliveFishList[0].getX() == sharkX:
-                    if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) == 1:
+                    if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) <= 4:
                         if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
                             fishWin = True
                                     
                 elif aliveFishList[0].getY() == sharkY:
-                    if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) == 1:
+                    if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) <= 4:
                         if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                             fishWin = True
 
@@ -226,29 +195,47 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
         if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[2].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY or aliveFishList[2].getY() == sharkY:
             continueVar = False
 
+            #reassign central fish 
+
             if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
-                centerFish = aliveFishList[0]
+                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[0],aliveFishList[1],aliveFishList[2]
                 continueVar = True
             
             elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
-                centerFish = aliveFishList[1]
+                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[1],aliveFishList[0],aliveFishList[2]
                 continueVar = True
 
             elif aliveFishList[2].getX() == sharkX or aliveFishList[2].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[1].getX() != sharkX and aliveFishList[1].getY() != sharkY):
-                centerFish = aliveFishList[2]
+                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[2],aliveFishList[1],aliveFishList[2]
                 continueVar = True
                 
             if continueVar == True: #this variable is used to ensure that only one fish is on the same axis as the shark
                 if aliveFishList[0].getDirection() == aliveFishList[1].getDirection() == aliveFishList[2].getDirection():
-                    if centerFish.getX() == sharkX:
-                        if centerFish.getY() == aliveFishList[1].getY() == aliveFishList[2].getY() == aliveFishList[0].getY():
-                            if (centerFish.getY() == 9 or centerFish.getY() == 0) and 5 > abs(centerFish.getY() - sharkY) > 0:
+                    if aliveFishList[0].getX() == sharkX:
+                        if aliveFishList[0].getY() == aliveFishList[1].getY() == aliveFishList[2].getY():
+                            if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 0:
                                 fishWin = True
                                         
-                    elif centerFish.getY() == sharkY:
-                        if centerFish.getX() == aliveFishList[1].getX() == aliveFishList[2].getX() == aliveFishList[0].getX():
-                            if (centerFish.getX() == 9 or centerFish.getX() == 0) and 5 > abs(centerFish.getX() - sharkX) > 0:
+                    elif aliveFishList[0].getY() == sharkY:
+                        if aliveFishList[0].getX() == aliveFishList[1].getX() == aliveFishList[2].getX():
+                            if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 0:
                                 fishWin = True
+
+            relation1,axis1 = directionRel(aliveFishList[0],aliveFishList[1])
+            relation2,axis2 = directionRel(aliveFishList[0],aliveFishList[1])
+
+            #test if shark is chasing at the top of the screen, while two fish are at the bottom.
+
+            if (relation1 == "same" or relation1 == "opposite") and (relation2 == "same" or relation2 == "opposite"):
+                if aliveFishList[0].getX() == sharkX:
+                    if abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7 and abs(aliveFishList[0].getX() - aliveFishList[2].getX()) >= 7:
+                        if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
+                            fishWin = True
+                                    
+                elif aliveFishList[0].getY() == sharkY:
+                    if abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) >= 7:
+                        if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
+                            fishWin = True
                                     
     return fishWin
 
@@ -275,7 +262,7 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
-
+            
             #construct shark, gather coordinates to set flee status of each fish, then set direction as well
             
             shark = Shark()
@@ -309,13 +296,13 @@ def main():
                     for fishObject in fishListObjects:
                         fishObject.move(1)
 
-                    #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
+                        #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-                    wallHitting(fishListObjects,sharkX,sharkY)
+                        wallHitting(fishObject,sharkX,sharkY)
 
-                    #collisions scenario
+                        #collisions scenario, do after every round to ensure valid order
                     
-                    collisionScenario(fishListObjects)
+                        collisionScenario(fish1,fish2,fish3,fishObject)
 
                     fishList = getFishList(fish1,fish2,fish3)
                     GUI.nextTurn()
