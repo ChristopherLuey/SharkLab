@@ -8,13 +8,55 @@ import time
 
 class SharkGUI:
     def __init__(self):
-        self.createWin()
+        # Create the window
+        self.win = GraphWin("Shark Game", 1300, 800, True)
+        self.win.setBackground(color_rgb(26, 117, 208))
 
+        mover, moveg, moveb = 28 - 26, 117 - 40, 208 - 100
+        for i in range(102):
+            l = Line(Point(0, i * 8), Point(1300, i * 8))
+            l.setFill(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
+            l.setOutline(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
+            l.setWidth(8)
+            l.draw(self.win)
+
+        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1290, 80), Point(1275, 60)).draw(self.win)
+        l.setFill(color_rgb(10, 30, 20))
+        l.setOutline(color_rgb(10, 30, 20))
+        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1275, 780)).draw(self.win)
+        l.setFill(color_rgb(10, 20, 10))
+        l.setOutline(color_rgb(10, 20, 10))
+
+        # r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
+        r = Rectangle(Point(820, 70), Point(1290, 790)).draw(self.win)
+        r.setFill(color_rgb(41, 128, 185))
+        r.setOutline(color_rgb(41, 128, 185))
+
+        for i in range(11):
+            l = Line(Point(75*i + 30,30), Point(75*i + 30, 780)).draw(self.win)
+            l.setWidth(5)
+            l.setFill(color_rgb(10, 30, 20))
+            l = Line(Point(30, i*75 + 30), Point(780, i*75 + 30)).draw(self.win)
+            l.setWidth(5)
+            l.setFill(color_rgb(10, 30, 20))
+
+        for i in range(11):
+            l = Line(Point(75*i + 25,25), Point(75*i + 25, 775)).draw(self.win)
+            l.setWidth(5)
+            l.setFill('white')
+            l = Line(Point(25, i*75 + 25), Point(775, i*75 + 25)).draw(self.win)
+            l.setWidth(5)
+            l.setFill('white')
+
+        self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
+        self.createWin()
+        self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
 
     def gatherUserInput(self):
         if not self.win.isClosed():
             self.updateShark([7,2,'East',0])
-            self.start.toggleActivation()
+            if not self.start.isActive():
+                self.start.toggleActivation()
             p = self.win.getMouse()
             while not self.quitButton.isClicked(p):
                 if self.start.isClicked(p):
@@ -78,6 +120,8 @@ class SharkGUI:
                             self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
                             self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
                             self.anim(1035, 280, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
+                            self.anim(1035, 330, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
+
 
                             # Turn off start button
                             self.start.toggleActivation()
@@ -191,15 +235,14 @@ class SharkGUI:
         quitButton = Button(60,30,100,50,5,'red', "Quit", 'white', 20,popup)
         quitButton.toggleActivation()
 
-        for k in listOfConfetti: k.undraw()
+        self.resetWin()
 
-        self.win.close()
+        for k in listOfConfetti: k.undraw()
 
         p = popup.getMouse()
         while not quitButton.isClicked(p):
             if playAgainButton.isClicked(p):
                 popup.close()
-                self.createWin()
                 fishList = self.gatherUserInput()
                 return fishList
             if not popup.isClosed():
@@ -242,22 +285,6 @@ class SharkGUI:
         self.ripFish.setSize(20)
         self.ripFish.setTextColor("white")
 
-        for i in range(11):
-            l = Line(Point(75*i + 30,30), Point(75*i + 30, 780)).draw(self.win)
-            l.setWidth(5)
-            l.setFill(color_rgb(10, 30, 20))
-            l = Line(Point(30, i*75 + 30), Point(780, i*75 + 30)).draw(self.win)
-            l.setWidth(5)
-            l.setFill(color_rgb(10, 30, 20))
-
-        for i in range(11):
-            l = Line(Point(75*i + 25,25), Point(75*i + 25, 775)).draw(self.win)
-            l.setWidth(5)
-            l.setFill('white')
-            l = Line(Point(25, i*75 + 25), Point(775, i*75 + 25)).draw(self.win)
-            l.setWidth(5)
-            l.setFill('white')
-
         for i in range(3):
             self.entry1, self.entry2, self.entry3 = self.entry2, self.entry3, self.entry1
             self.entry1.setSize(25)
@@ -272,30 +299,6 @@ class SharkGUI:
 
 
     def createWin(self):
-        # Create the window
-        self.win = GraphWin("Shark Game", 1300, 800, True)
-        self.win.setBackground(color_rgb(26, 117, 208))
-
-        mover, moveg, moveb = 28-26, 117-40, 208-100
-        for i in range(102):
-            l = Line(Point(0,i*8), Point(1300, i*8))
-            l.setFill(color_rgb(int(26+mover*i/102), int(117 - moveg*i/102), int(208 - moveb*i/102)))
-            l.setOutline(color_rgb(int(26+mover*i/102), int(117 - moveg*i/102), int(208 - moveb*i/102)))
-            l.setWidth(8)
-            l.draw(self.win)
-
-        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1290, 80), Point(1275, 60)).draw(self.win)
-        l.setFill(color_rgb(10, 30, 20))
-        l.setOutline(color_rgb(10, 30, 20))
-        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1275, 780)).draw(self.win)
-        l.setFill(color_rgb(10, 20, 10))
-        l.setOutline(color_rgb(10, 20, 10))
-
-        #r = Rectangle(Point(800, 60), Point(1275, 780)).draw(self.win)
-        r = Rectangle(Point(820, 70), Point(1290, 790)).draw(self.win)
-        r.setFill(color_rgb(41, 128, 185))
-        r.setOutline(color_rgb(41, 128, 185))
-
         # Create the buttons
         self.quitButton = Button(1245, 25, 100, 40, 10, color_rgb(231, 76, 60), 'Quit', 'white', 20, self.win)
         self.start = Button(1035, 325, 200, 50, 10, color_rgb(46, 204, 113), 'Start', 'white', 25, self.win)
@@ -320,9 +323,6 @@ class SharkGUI:
         # Finally activate quit button
         self.quitButton.toggleActivation()
 
-        #print(r.getCenter())
-        self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
-
 
     def anim(self, futureX, futureY, currentX, currentY, graphics, t):
         moveX, moveY = futureX - currentX, futureY - currentY
@@ -330,3 +330,18 @@ class SharkGUI:
             for i in range(t):
                 graphics.move(moveX / t, moveY / t)
                 time.sleep(0.001)
+
+
+    def resetWin(self):
+        self.instructionsText.undraw()
+        self.ripFish.undraw()
+        self.fish1.undraw()
+        self.fish2.undraw()
+        self.fish3.undraw()
+        self.instructionsTitle.undraw()
+        self.instructionsText.undraw()
+        self.quitButton.undraw()
+        self.shark.undraw()
+        self.gameLog.undraw()
+        self.gameLogTitle.undraw()
+        self.createWin()
