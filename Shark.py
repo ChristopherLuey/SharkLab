@@ -58,6 +58,7 @@ class Shark:
             # Calculate dx and dy to fish and see how many tiles away the fish is
             # (considering diagonals by subtracting the smallest distance of the two axis distances)
             fishDist = abs(self.x - fishx)+abs(self.y - fishy) - min([abs(self.y - fishy),abs(self.x - fishx)])
+
             if fishDist < lowestFishDist and alive:
                 # Set this fish as the closest
                 lowestFishDist, closeFishIndex, randomFishChooser = fishDist, i+1, []
@@ -74,7 +75,7 @@ class Shark:
                     closeFishIndex = fish
                     break
                 else:
-                    # Randomly chose the fish the shark is chasing
+                    # Randomly choose the fish the shark is chasing
                     closeFishIndex = randomFishChooser[randrange(0, len(randomFishChooser))]
         self.chasing = closeFishIndex
 
