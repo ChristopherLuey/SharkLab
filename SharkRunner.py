@@ -101,7 +101,7 @@ def collisionScenario(fish1,fish2,fish3,roundFish):
                 else:
                     roundFish.move(-1)
 
-def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+def getAliveList(fish1,fish2,fish3):
 
     #test each fish for alive status, and if so, add them to a list of alive fish. fishWin tracks the status of the fish winning throughout the module
 
@@ -125,6 +125,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
         deadNumber += 1
     else:
         aliveFishList.append(fish3)
+
+    return deadNumber,aliveFishList 
+
+def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+
+    deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3)
 
     #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test whether the fish is just out of the shark's reach.
 
@@ -155,12 +161,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
 
                 if aliveFishList[0].getX() == sharkX:
-                    if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) == 1:
+                    if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) <= 4:
                         if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
                             fishWin = True
                                     
                 elif aliveFishList[0].getY() == sharkY:
-                    if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) == 1:
+                    if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) <= 4:
                         if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                             fishWin = True
 
