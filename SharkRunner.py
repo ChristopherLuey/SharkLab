@@ -307,8 +307,8 @@ def main():
                         collisionScenario(fish1,fish2,fish3,fishObject)
 
                     fishList = getFishList(fish1,fish2,fish3)
-                    GUI.nextTurn()
                     GUI.updateFish(fishList)
+                    GUI.nextTurn()
 
                     #fish Win situation, fishWin delays display of fish victory
 
