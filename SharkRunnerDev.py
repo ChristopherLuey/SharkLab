@@ -39,8 +39,6 @@ def genList():
 
     return allFishSituationList
 
-    
-
 def directionRel(fish1,fish2):
 
     #function directionRel returns the relationship of the directions of two fish, whether they are opposite of each other or the same, and whether the fish are moving on the x or y axis.
@@ -283,9 +281,9 @@ def main():
     sharkWins = 0
     fishWins = 0
 
-    Fish1Win = 0
-    Fish2Win = 0
-    Fish3Win = 0
+    fish1Win = 0
+    fish2Win = 0
+    fish3Win = 0
 
     fish1SingleWin = 0
     fish2SingleWin = 0
@@ -293,130 +291,118 @@ def main():
 
     bigFishList = genList()
     print("list generation complete")
+    print(str(len(bigFishList)))
 
     combos = len(bigFishList)
 
     for smallFishList in bigFishList:
 
-        try:
+        fish1 = Fish(smallFishList[0],smallFishList[1],"west",False,True,False,"DNE")
+        fish2 = Fish(smallFishList[3],smallFishList[4],"west",False,True,False,"DNE")
+        fish3 = Fish(smallFishList[6],smallFishList[7],"west",False,True,False,"DNE")
+        fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
-            print(smallFishList[0])
+        fish1.setInputDirection(smallFishList[2])
+        fish2.setInputDirection(smallFishList[5])
+        fish3.setInputDirection(smallFishList[8])
+        
+        
+        #construct shark, gather coordinates to set flee status of each fish, then set direction as well
+        
+        shark = Shark()
+        sharkX,sharkY = shark.getPosition()
 
-            print("x")
+        for fishObject in fishListObjects:
+            fishObject.setFlee(sharkX,sharkY)
+            fishObject.setDirection(sharkX,sharkY)
 
-            fish1 = Fish(smallFishList[0],smallFishList[1],"west",False,True,False,"DNE")
-            fish2 = Fish(smallFishList[3],smallFishList[4],"west",False,True,False,"DNE")
-            fish3 = Fish(smallFishList[6],smallFishList[7],"west",False,True,False,"DNE")
-            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
+        noRounds = 0
 
-            fish1.setInputDirection(smallFishList[2])
-            fish2.setInputDirection(smallFishList[5])
-            fish3.setInputDirection(smallFishList[8])
+        looping = True
 
-            print(fish1.getCoords(),fish1.getDirection())
-            print(fish2.getCoords(),fish2.getDirection())
-            print(fish3.getCoords(),fish3.getDirection())
-            
-            
-            #construct shark, gather coordinates to set flee status of each fish, then set direction as well
-            
-            shark = Shark()
+        while looping == True:
+
+            sharkList = shark.getSharkList()
             sharkX,sharkY = shark.getPosition()
 
             for fishObject in fishListObjects:
                 fishObject.setFlee(sharkX,sharkY)
-                fishObject.setDirection(sharkX,sharkY)
-
-                noRounds = 0
-
-            while True:
-
-                sharkList = shark.getSharkList()
-                sharkX,sharkY = shark.getPosition()
-
-                for fishObject in fishListObjects:
-                    fishObject.setFlee(sharkX,sharkY)
-                    
-                for fishObject in fishListObjects:
-                    fishObject.setDirection(sharkX,sharkY)
-                    
-                for fishObject in fishListObjects:
-                    fishObject.move(1)
-
-                    #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
-
-                    wallHitting(fishObject,sharkX,sharkY)
-
-                    #collisions scenario, do after every round to ensure valid order
                 
-                    collisionScenario(fish1,fish2,fish3,fishObject)
+            for fishObject in fishListObjects:
+                fishObject.setDirection(sharkX,sharkY)
+                
+            for fishObject in fishListObjects:
+                fishObject.move(1)
 
-                print("d")
+                #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
 
-                #fish Win situation, fishWin delays display of fish victory
+                wallHitting(fishObject,sharkX,sharkY)
 
-                if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
+                #collisions scenario, do after every round to ensure valid order
+            
+                collisionScenario(fish1,fish2,fish3,fishObject)
 
-                    print("b")
-                    
-                    fishWins += 1
+            #fish Win situation, fishWin delays display of fish victory
 
-                    fishAliveList = getAliveList(fish1,fish2,fish3)
+            if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
+                
+                fishWins += 1
 
-                    if len(fishAliveList) == 1:
-                        fish1Win += 1
+                fishAliveList = getAliveList(fish1,fish2,fish3)
 
-                        if fishAliveList[0] == fish1:
-                            fish1SingleWin += 1
+                if len(fishAliveList) == 1:
+                    fish1Win += 1
 
-                        elif fishAliveList[0] == fish2:
-                            fish2SingleWin += 1
+                    if fishAliveList[0] == fish1:
+                        fish1SingleWin += 1
 
-                        elif fishAliveList[0] == fish3:
-                            fish3SingleWin += 1
+                    elif fishAliveList[0] == fish2:
+                        fish2SingleWin += 1
 
-                    elif len(fishAliveList) == 2:
-                        fish2Win += 1
+                    elif fishAliveList[0] == fish3:
+                        fish3SingleWin += 1
 
-                    elif len(fishAliveList) == 3:
-                        fish3Win += 1
+                elif len(fishAliveList) == 2:
+                    fish2Win += 1
 
-                    break
+                elif len(fishAliveList) == 3:
+                    fish3Win += 1
 
-                print("f")
+                looping = False
 
-                #move shark
+            #move shark
 
-                fishList = getFishList(fish1,fish2,fish3)
+            fishList = getFishList(fish1,fish2,fish3)
 
-                shark.sharkTurn(fishList)
-                sharkList = shark.getSharkList()
-                sharkX,sharkY = shark.getPosition()
+            shark.sharkTurn(fishList)
+            sharkList = shark.getSharkList()
+            sharkX,sharkY = shark.getPosition()
 
-                print("c")
+            #eat fish
 
-                #eat fish
+            for fishObject in fishListObjects:
+                if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
+                    fishObject.eat()
+                    fishObject.setCoords(11,11) #use to avoid collisions after fish death
 
-                for fishObject in fishListObjects:
-                    if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
-                        fishObject.eat()
-                        fishObject.setCoords(11,11) #use to avoid collisions after fish death
+            #shark win situation
 
-                #shark win situation
+            if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
 
-                if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
+                sharkWins += 1
 
-                    print("a")
+                looping = False
 
-                    SharkWins += 1
+            noRounds += 1
 
-                    break
+            if noRounds > 1000:
 
-                noRounds += 1
+                print("following stalemate")
+                print(fish1.getCoords(),fish1.getDirection())
+                print(fish2.getCoords(),fish2.getDirection())
+                print(fish3.getCoords(),fish3.getDirection())
 
-        except:
-
-            print(smallFishList,"generates an error")
+                looping = False
 
     print("there are this many combinations:",combos)
     print("shark wins this many times:",sharkWins)
