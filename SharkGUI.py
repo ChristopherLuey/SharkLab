@@ -47,7 +47,7 @@ class SharkGUI:
             l.setWidth(5)
             l.setFill('white')
 
-        self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
+        self.fishNameList = ["MR. Ladd 🤨", "Mr. Huntoon 🧐", "Mr. Fisher 🤪"]
         self.createWin()
         self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
 
@@ -400,10 +400,7 @@ class SharkGUI:
 
 
     def resetWin(self):
-        self.gameLogList = []
-        self.moveCounter = 0
-        self.txt = ""
-        self.previousLines = 0
+        self.gameLogList, self.moveCounter, self.txt, self.previousLines = [], 0, "", 0
         self.instructionsText.undraw()
         self.ripFish.undraw()
         self.fish1.undraw()
@@ -419,26 +416,14 @@ class SharkGUI:
 
 
     def updateGameLog(self):
-        extraLine = len(self.gameLogList) - 10
-        newLines = len(self.gameLogList) - self.previousLines
-        # if extraLine > 0:
-        #     for i in range(newLines):
-        #         self.txt = ""
-        #         self.gameLogList.pop(0)
-        #         for i in range(self.previousLines-1):
-        #             self.txt += self.gameLogList[i]
-        #         self.txt += self.animText(self.txt, self.gameLogList[i+self.previousLines-1], self.gameLog)
-        #
-        # else:
-        if True:
-            for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
-                if j > 10:
-                    self.txt = ""
-                    for i in range(9):
-                        self.txt+=self.gameLogList[i]
-                self.txt += self.animText(self.txt, self.gameLogList[j], self.gameLog)
-
-
+        newLines, shifter = len(self.gameLogList) - self.previousLines, 0
+        for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
+            if len(self.gameLogList) > 10:
+                self.txt, shifter = "", shifter + 1
+                self.gameLogList.pop(0)
+                for i in range(9):
+                    self.txt+=self.gameLogList[i]
+            self.txt += self.animText(self.txt, self.gameLogList[j-shifter], self.gameLog)
         self.previousLines = len(self.gameLogList)
 
 
