@@ -54,7 +54,7 @@ class SharkGUI:
 
     def gatherUserInput(self):
         if not self.win.isClosed():
-            self.animText("", "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates", self.instructionsText, self.instructionsText)
+            self.animText("", "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates", self.instructionsText)
             self.updateShark([7,2,'East',0])
             if not self.start.isActive():
                 self.start.toggleActivation()
@@ -121,7 +121,6 @@ class SharkGUI:
                             self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
                             self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
                             self.anim(1035, 275, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
-                            self.anim(1037, 448, self.gameLogShadow.getAnchor().getX(), self.gameLogShadow.getAnchor().getY(), self.gameLogShadow, 10)
                             self.anim(1035, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
                             for i in range(3):
                                 self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " is at: (" + str(fishList[i*5]) + ", " + str(fishList[i*5+1]) + ")\n")
@@ -200,8 +199,7 @@ class SharkGUI:
                     wasted = Image(Point(0, 400), 'wasted.gif').draw(self.win)
                     self.anim(1300, 400, 0, 400, wasted, 50)
                     wasted.undraw()
-
-                    self.animText("", "Dead Fish Counter: " + str(self.ripFishCounter), self.ripFish, self.ripFish)
+                    self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
                     self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " was WASTED by\n")
                     self.gameLogList.append("the shark!\n")
 
@@ -317,9 +315,7 @@ class SharkGUI:
         self.gameLogTitle.setSize(23)
         self.gameLogTitle.setStyle('bold')
         self.gameLogTitle.setTextColor('white')
-        self.gameLogShadow = Text(Point(1500 + 5, 285 + 5), "").draw(self.win)
-        self.gameLogShadow.setTextColor(color_rgb(10, 30, 20))
-        self.gameLogShadow.setSize(20)
+
         self.gameLog = Text(Point(1500, 285), "").draw(self.win)
         self.gameLog.setSize(20)
         self.gameLog.setTextColor('white')
@@ -418,7 +414,6 @@ class SharkGUI:
         self.quitButton.undraw()
         self.shark.undraw()
         self.gameLog.undraw()
-        self.gameLogShadow.undraw()
         self.gameLogTitle.undraw()
         self.createWin()
 
@@ -426,34 +421,32 @@ class SharkGUI:
     def updateGameLog(self):
         extraLine = len(self.gameLogList) - 10
         newLines = len(self.gameLogList) - self.previousLines
-        if len(self.gameLogList) >= 10:
-            for i in range(extraLine):
-                self.txt = ""
-                self.gameLogList.pop(0)
-                for i in range(9):
-                    self.txt += self.gameLogList[i]
-                self.txt = self.animText(self.txt, self.gameLogList[9], self.gameLog, self.gameLogShadow)
-
-        else:
+        # if extraLine > 0:
+        #     for i in range(newLines):
+        #         self.txt = ""
+        #         self.gameLogList.pop(0)
+        #         for i in range(self.previousLines-1):
+        #             self.txt += self.gameLogList[i]
+        #         self.txt += self.animText(self.txt, self.gameLogList[i+self.previousLines-1], self.gameLog)
+        #
+        # else:
+        if True:
             for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
-                self.txt += self.animText(self.txt, self.gameLogList[j], self.gameLog, self.gameLogShadow)
+                if j > 10:
+                    self.txt = ""
+                    for i in range(9):
+                        self.txt+=self.gameLogList[i]
+                self.txt += self.animText(self.txt, self.gameLogList[j], self.gameLog)
+
 
         self.previousLines = len(self.gameLogList)
 
 
-    def animText(self, originalText, newText, regularText, shadowText):
+    def animText(self, originalText, newText, regularText):
         for i in range(0,len(newText),2):
             if len(newText) - i < 2:
                 originalText += newText[i:i+len(newText) % 2]
             else:
                 originalText += newText[i:i+2]
             regularText.setText(originalText)
-            shadowText.setText(originalText)
         return newText
-
-
-
-
-
-
-
