@@ -169,8 +169,8 @@ class SharkGUI:
                 if fishf:
                     flee = 'Flee'
                     if not self.storedFish[i*5+3]:
-                        self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " senses the shark; he transforms\n")
-                        self.gameLogList.append("into flee mode!\n")
+                        self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " senses the shark;\n")
+                        self.gameLogList.append("he transforms into flee mode!\n")
                 else:
                     if self.storedFish[i * 5 + 3]:
                         self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " has escaped and\n")
@@ -194,7 +194,8 @@ class SharkGUI:
                 if not isAlive == self.storedFish[i*5+4]:
                     self.ripFishCounter += 1
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
-                    self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " was WASTED by the shark!\n")
+                    self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " was WASTED by\n")
+                    self.gameLogList.append("the shark!\n")
 
                     #https: // pngio.com / PNG / 28823 - wasted - png.html
                     wasted = Image(Point(0, 400), 'wasted.gif').draw(self.win)
@@ -222,7 +223,9 @@ class SharkGUI:
 
         self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark, 10)
         if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
-            self.gameLogList.append("[Move " + str(self.moveCounter) + "] Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + "; he is close by!\n")
+            self.gameLogList.append("[Move " + str(self.moveCounter) + "] Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + ";\n")
+            self.gameLogList.append("he is close by!\n")
+
         self.updateGameLog()
         self.sharkChasingVal = sharkList[3]
 
@@ -304,7 +307,7 @@ class SharkGUI:
         self.gameLogTitle.setStyle('bold')
         self.gameLogTitle.setTextColor('white')
         self.gameLog = Text(Point(1500, 285), "").draw(self.win)
-        self.gameLog.setSize(18)
+        self.gameLog.setSize(20)
         self.gameLog.setTextColor('white')
 
         title = Text(Point(1040, 105), "Shark Game").draw(self.win)
@@ -398,8 +401,8 @@ class SharkGUI:
 
     def updateGameLog(self):
         txt = ""
-        if len(self.gameLogList) >= 12:
-            for i in range(len(self.gameLogList) - 12):
+        if len(self.gameLogList) >= 9:
+            for i in range(len(self.gameLogList) - 9):
                 self.gameLogList.pop(0)
         for i in self.gameLogList:
             txt+=i
