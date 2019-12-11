@@ -20,7 +20,7 @@ def genList():
                     
                     for fish2x in range(10):
                         for fish2y in range(10):
-                            if fish2x != fish1x and fish2y != fish1y and (fish2x != 7 and fish2y !=2):
+                            if (fish2x != fish1x or fish2y != fish1y) and (fish2x != 7 and fish2y !=2):
                                 fishIndivSituationList.append(fish2x)
                                 fishIndivSituationList.append(fish2y)
                                 for fish2dir in directionList:
@@ -28,7 +28,7 @@ def genList():
 
                                     for fish3x in range(10):
                                         for fish3y in range(10):
-                                            if fish3x != fish2x and fish3x != fish1x and fish3y != fish2y and fish3y != fish1y and (fish3x != 7 and fish3y !=2):
+                                            if (fish3x != fish2x or fish3x != fish1x) and (fish3y != fish2y or fish3y != fish1y) and (fish3x != 7 and fish3y !=2):
                                                 fishIndivSituationList.append(fish3x)
                                                 fishIndivSituationList.append(fish3y)
                                                 for fish3dir in directionList:
@@ -298,33 +298,38 @@ def main():
 
     for smallFishList in bigFishList:
 
-        print("x")
-
         try:
 
+            print(smallFishList[0])
+
+            print("x")
+
+            fish1 = Fish(smallFishList[0],smallFishList[1],"west",False,True,False,"DNE")
+            fish2 = Fish(smallFishList[3],smallFishList[4],"west",False,True,False,"DNE")
+            fish3 = Fish(smallFishList[6],smallFishList[7],"west",False,True,False,"DNE")
+            fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
+
+            fish1.setInputDirection(smallFishList[2])
+            fish2.setInputDirection(smallFishList[5])
+            fish3.setInputDirection(smallFishList[8])
+
+            print(fish1.getCoords(),fish1.getDirection())
+            print(fish2.getCoords(),fish2.getDirection())
+            print(fish3.getCoords(),fish3.getDirection())
+            
+            
+            #construct shark, gather coordinates to set flee status of each fish, then set direction as well
+            
+            shark = Shark()
+            sharkX,sharkY = shark.getPosition()
+
+            for fishObject in fishListObjects:
+                fishObject.setFlee(sharkX,sharkY)
+                fishObject.setDirection(sharkX,sharkY)
+
+                noRounds = 0
+
             while True:
-
-                fish1 = Fish(smallFishList[0],smallFishList[1],"west",False,True,False,"DNE")
-                fish2 = Fish(smallFishList[3],smallFishList[4],"west",False,True,False,"DNE")
-                fish3 = Fish(smallFishList[6],smallFishList[7],"west",False,True,False,"DNE")
-                fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
-
-                fish1.setInputDirection(smallFishList[2])
-                fish2.setInputDirection(smallFishList[5])
-                fish3.setInputDirection(smallFishList[8])
-                
-                #construct shark, gather coordinates to set flee status of each fish, then set direction as well
-                
-                shark = Shark()
-                sharkX,sharkY = shark.getPosition()
-
-                for fishObject in fishListObjects:
-                    fishObject.setFlee(sharkX,sharkY)
-                    fishObject.setDirection(sharkX,sharkY)
-
-                #update GUI to reflect these changes
-                
-                fishList = getFishList(fish1,fish2,fish3)
 
                 sharkList = shark.getSharkList()
                 sharkX,sharkY = shark.getPosition()
@@ -345,6 +350,8 @@ def main():
                     #collisions scenario, do after every round to ensure valid order
                 
                     collisionScenario(fish1,fish2,fish3,fishObject)
+
+                print("d")
 
                 #fish Win situation, fishWin delays display of fish victory
 
@@ -382,6 +389,8 @@ def main():
                 sharkList = shark.getSharkList()
                 sharkX,sharkY = shark.getPosition()
 
+                print("c")
+
                 #eat fish
 
                 for fishObject in fishListObjects:
@@ -398,6 +407,8 @@ def main():
                     SharkWins += 1
 
                     break
+
+                noRounds += 1
 
         except:
 
