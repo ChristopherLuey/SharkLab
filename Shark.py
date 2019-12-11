@@ -39,14 +39,14 @@ class Shark:
 
 
     def getSharkList(self):
-        return [self.x, self.y, self.dir]
+        return [self.x, self.y, self.dir, self.chasing]
 
 
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
     def calculateFishChasing(self, fishList):
         """
         Args:
-            fishList:
+            fishList: List of fish attributes.
         """
         # Save the lowest fish distance, closest fish index, and how many fish need to be randomly chosen to pursue
         lowestFishDist, closeFishIndex, randomFishChooser = 1000, self.chasing, []
@@ -57,7 +57,9 @@ class Shark:
 
             # Calculate dx and dy to fish and see how many tiles away the fish is
             # (considering diagonals by subtracting the smallest distance of the two axis distances)
-            fishDist = abs(self.x - fishx)+abs(self.y - fishy) - min([abs(self.y - fishy),abs(self.x - fishx)])
+            dx, dy, min = abs(self.x - fishx), abs(self.y - fishy), abs(self.x - fishx)
+            if dy < dx: min = dy
+            fishDist = dx+dy-min
 
             if fishDist < lowestFishDist and alive:
                 # Set this fish as the closest
@@ -77,14 +79,16 @@ class Shark:
                 else:
                     # Randomly choose the fish the shark is chasing
                     closeFishIndex = randomFishChooser[randrange(0, len(randomFishChooser))]
+
         self.chasing = closeFishIndex
 
 
     def move(self, fishx, fishy):
         """
+        Function changes the shark position to swim to the fish.
         Args:
-            fishx:
-            fishy:
+            fishx: Closest fish x-position
+            fishy: Closest fish y-position
         """
         dir = ""
         for i in [0,1,2,3]:

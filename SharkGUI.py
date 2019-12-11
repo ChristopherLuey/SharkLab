@@ -119,8 +119,10 @@ class SharkGUI:
                             self.instructionsText.setText("Click on the fish button to move\nthe fish")
                             self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
                             self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
-                            self.anim(1035, 280, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
-                            self.anim(1035, 330, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
+                            self.anim(1035, 275, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
+                            self.anim(1035, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
+                            for i in range(3):
+                                self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " is at: (" + str(fishList[i*5]) + ", " + str(fishList[i*5+1]) + ")\n")
 
                             # Turn off start button
                             self.start.toggleActivation()
@@ -154,36 +156,55 @@ class SharkGUI:
         Args:
             fishList:
         """
+        moveFishCounter = 0
+
         for i in range(3):
             self.fish1, self.fish2, self.fish3 = self.fish2, self.fish3, self.fish1
             self.fish1.undraw()
-
             fishx, fishy, fishD, fishf, isAlive = fishList[i*5], fishList[i*5+1], fishList[i*5+2], fishList[i*5+3],  fishList[i*5+4]
 
-            # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
-            flee = ''
-            if fishf: flee = 'Flee'
-            image = 'fish' + fishD.capitalize() + flee +'.gif'
+            if isAlive:
+                # https://media.giphy.com/media/cRKRjNNmYCqUPK8leA/giphy.gif
+                flee = ''
+                if fishf:
+                    flee = 'Flee'
+                    if not self.storedFish[i*5+3]:
+                        self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " senses the shark; he transforms\n")
+                        self.gameLogList.append("into flee mode!\n")
+                else:
+                    if self.storedFish[i * 5 + 3]:
+                        self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " has escaped and\n")
+                        self.gameLogList.append("returned to normal state.\n")
 
-            if type(self.fish1) == Point: currentX, currentY = self.fish1.getX(), self.fish1.getY()
-            else: currentX, currentY = self.fish1.getAnchor().getX(), self.fish1.getAnchor().getY()
-            self.fish1 = Image(Point(currentX, currentY), image)
+                image = 'fish' + fishD.capitalize() + flee +'.gif'
 
-            if isAlive: self.fish1.draw(self.win)
+                if type(self.fish1) == Point:
+                    currentX, currentY = self.fish1.getX(), self.fish1.getY()
+                else:
+                    currentX, currentY = self.fish1.getAnchor().getX(), self.fish1.getAnchor().getY()
+
+                self.fish1 = Image(Point(currentX, currentY), image)
+
+                self.fish1.draw(self.win)
+                if (fishx != self.storedFish[i*5] or fishy != self.storedFish[i*5+1]) or self.moveCounter == 0:
+                    self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1, 10)
+                    moveFishCounter+=1
+
             else:
                 if not isAlive == self.storedFish[i*5+4]:
                     self.ripFishCounter += 1
-                    self.instructionsText.setText("Fish " + str(i) + " has been killed!\nWhat a tragedy! Oh No!")
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
+                    self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " was WASTED by the shark!\n")
 
                     #https: // pngio.com / PNG / 28823 - wasted - png.html
                     wasted = Image(Point(0, 400), 'wasted.gif').draw(self.win)
                     self.anim(1300, 400, 0, 400, wasted, 50)
 
                     wasted.undraw()
-
-            self.anim(75 * fishx + 57, fishy * 75 + 57, currentX, currentY,self.fish1, 10)
+        if self.moveCounter != 0 and self.moveCounter%2 == 0:
+            self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + str(moveFishCounter) + " fish have moved.\n")
         self.storedFish = fishList
+        self.updateGameLog()
 
 
     def updateShark(self, sharkList):
@@ -200,6 +221,10 @@ class SharkGUI:
         self.shark = Image(Point(currentX, currentY), image).draw(self.win)
 
         self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark, 10)
+        if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
+            self.gameLogList.append("[Move " + str(self.moveCounter) + "] Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + "; he is close by!\n")
+        self.updateGameLog()
+        self.sharkChasingVal = sharkList[3]
 
 
     def nextTurn(self):
@@ -207,6 +232,7 @@ class SharkGUI:
         self.fishButton.toggleActivation()
         if self.fishButton.isActive(): self.instructionsText.setText("Click on the fish button to move\nthe fish")
         else: self.instructionsText.setText("Click on the shark button to move\nthe shark")
+        self.moveCounter+=1
 
 
     def endGame(self):
@@ -226,19 +252,17 @@ class SharkGUI:
             for j in range(3):
                 listOfConfetti.append(Image(Point(i * 700, j * 500), 'confetti.gif').draw(self.win))
 
-        if winner == 'fish':
-            self.instructionsText.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
-        elif winner == 'shark':
-            self.instructionsText.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
-
         popup = GraphWin("Play Again?", 400, 400)
         popup.setBackground(color_rgb(52, 152, 219))
-
         playAgain = Text(Point(200,300), "").draw(popup)
+
         if winner == 'fish':
             playAgain.setText("The fish have won!\nShark died of starvation!\nPlay Again!")
+            self.instructionsText.setText("The fish have won!")
         elif winner == 'shark':
             playAgain.setText("The shark has won!\nAll the fish were eaten!\nPlay Again!")
+            self.instructionsText.setText("The shark has won!")
+
         playAgain.setTextColor('white')
         playAgain.setSize(25)
         playAgainButton = Button(200,140,200,60,10,'light green', "Play Again", 'white', 20, popup)
@@ -247,14 +271,13 @@ class SharkGUI:
         quitButton = Button(60,30,100,50,5,'red', "Quit", 'white', 20,popup)
         quitButton.toggleActivation()
 
-        self.resetWin()
-
         for k in listOfConfetti: k.undraw()
 
         p = popup.getMouse()
         while not quitButton.isClicked(p):
             if playAgainButton.isClicked(p):
                 popup.close()
+                self.resetWin()
                 fishList = self.gatherUserInput()
                 return fishList
             if not popup.isClosed():
@@ -280,9 +303,8 @@ class SharkGUI:
         self.gameLogTitle.setSize(23)
         self.gameLogTitle.setStyle('bold')
         self.gameLogTitle.setTextColor('white')
-        self.gameLog = Text(Point(1500, 285), "Game Log:").draw(self.win)
-        self.gameLog.setSize(23)
-        self.gameLog.setStyle('bold')
+        self.gameLog = Text(Point(1500, 285), "").draw(self.win)
+        self.gameLog.setSize(18)
         self.gameLog.setTextColor('white')
 
         title = Text(Point(1040, 105), "Shark Game").draw(self.win)
@@ -327,6 +349,9 @@ class SharkGUI:
         self.instructionsTitle = Text(Point(1500, 180), "Instructions:").draw(self.win)
 
         self.formatGUI()
+        self.gameLogList = []
+        self.moveCounter = 0
+        self.sharkChasingVal = 0
 
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
         # Draw the shark on the board
@@ -355,6 +380,8 @@ class SharkGUI:
 
 
     def resetWin(self):
+        self.gameLogList = []
+        self.moveCounter = 0
         self.instructionsText.undraw()
         self.ripFish.undraw()
         self.fish1.undraw()
@@ -367,3 +394,13 @@ class SharkGUI:
         self.gameLog.undraw()
         self.gameLogTitle.undraw()
         self.createWin()
+
+
+    def updateGameLog(self):
+        txt = ""
+        if len(self.gameLogList) >= 12:
+            for i in range(len(self.gameLogList) - 12):
+                self.gameLogList.pop(0)
+        for i in self.gameLogList:
+            txt+=i
+        self.gameLog.setText(txt)
