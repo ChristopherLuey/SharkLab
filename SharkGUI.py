@@ -120,6 +120,7 @@ class SharkGUI:
                             self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
                             self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
                             self.anim(1035, 275, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
+                            self.anim(1037, 448, self.gameLogShadow.getAnchor().getX(), self.gameLogShadow.getAnchor().getY(), self.gameLogShadow, 10)
                             self.anim(1035, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
                             for i in range(3):
                                 self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " is at: (" + str(fishList[i*5]) + ", " + str(fishList[i*5+1]) + ")\n")
@@ -306,6 +307,9 @@ class SharkGUI:
         self.gameLogTitle.setSize(23)
         self.gameLogTitle.setStyle('bold')
         self.gameLogTitle.setTextColor('white')
+        self.gameLogShadow = Text(Point(1500 + 5, 285 + 5), "").draw(self.win)
+        self.gameLogShadow.setTextColor(color_rgb(10, 30, 20))
+        self.gameLogShadow.setSize(20)
         self.gameLog = Text(Point(1500, 285), "").draw(self.win)
         self.gameLog.setSize(20)
         self.gameLog.setTextColor('white')
@@ -355,6 +359,8 @@ class SharkGUI:
         self.gameLogList = []
         self.moveCounter = 0
         self.sharkChasingVal = 0
+        self.txt = ""
+        self.previousLines = 0
 
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
         # Draw the shark on the board
@@ -385,6 +391,8 @@ class SharkGUI:
     def resetWin(self):
         self.gameLogList = []
         self.moveCounter = 0
+        self.txt = ""
+        self.previousLines = 0
         self.instructionsText.undraw()
         self.ripFish.undraw()
         self.fish1.undraw()
@@ -395,15 +403,32 @@ class SharkGUI:
         self.quitButton.undraw()
         self.shark.undraw()
         self.gameLog.undraw()
+        self.gameLogShadow.undraw()
         self.gameLogTitle.undraw()
         self.createWin()
 
 
     def updateGameLog(self):
-        txt = ""
+        extraLine = len(self.gameLogList) - 9
+        newLines = len(self.gameLogList) - self.previousLines
         if len(self.gameLogList) >= 9:
-            for i in range(len(self.gameLogList) - 9):
+            for i in range(extraLine):
+                self.txt = ""
                 self.gameLogList.pop(0)
-        for i in self.gameLogList:
-            txt+=i
-        self.gameLog.setText(txt)
+                for i in range(8):
+                    self.txt += self.gameLogList[i]
+                for j in self.gameLogList[8]:
+                    self.txt+=j
+                    self.gameLog.setText(self.txt)
+                    self.gameLogShadow.setText(self.txt)
+        else:
+            for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
+                for char in self.gameLogList[j]:
+                    self.txt += char
+                    self.gameLog.setText(self.txt)
+                    self.gameLogShadow.setText(self.txt)
+
+
+        self.previousLines = len(self.gameLogList)
+
+
