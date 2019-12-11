@@ -137,7 +137,7 @@ def getAliveList(fish1,fish2,fish3):
 
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
 
-    fishWin = False
+    fishWin = False #returns whether stalemate situation has been achieved
 
     deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3)
 
@@ -216,6 +216,8 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             elif aliveFishList[2].getX() == sharkX or aliveFishList[2].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[1].getX() != sharkX and aliveFishList[1].getY() != sharkY):
                 aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[2],aliveFishList[1],aliveFishList[2]
                 continueVar = True
+
+            #test if all three fish are on the same direction, on the same axis, and the requisite distance from the shark
                 
             if continueVar == True: #this variable is used to ensure that only one fish is on the same axis as the shark
                 if aliveFishList[0].getDirection() == aliveFishList[1].getDirection() == aliveFishList[2].getDirection():
@@ -232,7 +234,7 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             relation1,axis1 = directionRel(aliveFishList[0],aliveFishList[1])
             relation2,axis2 = directionRel(aliveFishList[0],aliveFishList[1])
 
-            #test if shark is chasing at the top of the screen, while two fish are at the bottom.
+            #test if shark is chasing at the top of the screen, while two fish are at the bottom, or vice versa
 
             if (relation1 == "same" or relation1 == "opposite") and (relation2 == "same" or relation2 == "opposite"):
                 if aliveFishList[0].getX() == sharkX:
@@ -258,7 +260,7 @@ def main():
 
     while looping == True:
 
-        fishWins = 0 # use this variable to delay fish win message
+        fishWins = 0 # use this variable to delay fish win message, accumulator variable
 
         if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
             looping = False
@@ -288,7 +290,6 @@ def main():
             while True:
 
                 buttonClicked = GUI.isClicked()
-                #fishList = getFishList(fish1,fish2,fish3)
                 
                 if buttonClicked == "fish":
 
