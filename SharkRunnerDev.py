@@ -1,16 +1,16 @@
-#File: SharkRunner.py
-#Written by: Andreas Petrou-Zeniou
-#Date: 12/10/19
-#executes movement of fish and shark, communicates with GUI to draw on 10x10 grid
+#File: SharkRunnerDev.py
 
 from SharkGUI import *
 from Fish import *
 from Shark import *
 
+def genList():
+
+    
+
 def directionRel(fish1,fish2):
 
-    #function directionRel returns the relationship of the directions of two fish, whether they are opposite of each other or the same,
-    #and whether the fish are moving on the x or y axis.
+    #function directionRel returns the relationship of the directions of two fish, whether they are opposite of each other or the same, and whether the fish are moving on the x or y axis.
 
     fish1direction = fish1.getDirection()
     fish2direction = fish2.getDirection()
@@ -34,8 +34,6 @@ def directionRel(fish1,fish2):
         elif fish1direction == "south":
             if fish2direction == "north":
                 return "opposite","y"
-
-    #if no special relation, returns empty strings
 
     return "",""
             
