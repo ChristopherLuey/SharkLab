@@ -383,7 +383,11 @@ def main():
 
                     break
 
+                print("f")
+
                 #move shark
+
+                fishList = getFishList(fish1,fish2,fish3)
 
                 shark.sharkTurn(fishList)
                 sharkList = shark.getSharkList()
