@@ -2,6 +2,7 @@
 
 from Fish import *
 from Shark import *
+import time
 
 def genList():
 
@@ -9,25 +10,25 @@ def genList():
 
     allFishSituationList = []
 
-    for fish1x in range(10):
+    for fish1x in range(0,10,3):
         fishIndivSituationList = []
-        for fish1y in range(10):
+        for fish1y in range(0,10,3):
             if (fish1x != 7 and fish1y !=2):
                 fishIndivSituationList.append(fish1x)
                 fishIndivSituationList.append(fish1y)
                 for fish1dir in directionList:
                     fishIndivSituationList.append(fish1dir)
                     
-                    for fish2x in range(10):
-                        for fish2y in range(10):
+                    for fish2x in range(0,10,3):
+                        for fish2y in range(0,10,3):
                             if (fish2x != fish1x or fish2y != fish1y) and (fish2x != 7 and fish2y !=2):
                                 fishIndivSituationList.append(fish2x)
                                 fishIndivSituationList.append(fish2y)
                                 for fish2dir in directionList:
                                     fishIndivSituationList.append(fish2dir)
 
-                                    for fish3x in range(10):
-                                        for fish3y in range(10):
+                                    for fish3x in range(0,10,3):
+                                        for fish3y in range(0,10,3):
                                             if (fish3x != fish2x or fish3x != fish1x) and (fish3y != fish2y or fish3y != fish1y) and (fish3x != 7 and fish3y !=2):
                                                 fishIndivSituationList.append(fish3x)
                                                 fishIndivSituationList.append(fish3y)
@@ -293,9 +294,22 @@ def main():
     print("list generation complete")
     print(str(len(bigFishList)))
 
+    a = input("yes")
+
     combos = len(bigFishList)
 
+    noRoundsOverall = 0
+
+    a = time.time()
+
     for smallFishList in bigFishList:
+
+        noRoundsOverall += 1
+        print(noRoundsOverall)
+
+        if noRoundsOverall == 1000:
+            b = time.time()
+            print(b - a)
 
         fish1 = Fish(smallFishList[0],smallFishList[1],"west",False,True,False,"DNE")
         fish2 = Fish(smallFishList[3],smallFishList[4],"west",False,True,False,"DNE")
