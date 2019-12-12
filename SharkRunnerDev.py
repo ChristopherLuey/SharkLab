@@ -3,6 +3,7 @@
 from Fish import *
 from Shark import *
 import time
+from random import randrange
 
 def genList():
 
@@ -10,36 +11,56 @@ def genList():
 
     allFishSituationList = []
 
-    for fish1x in range(0,10,3):
-        fishIndivSituationList = []
-        for fish1y in range(0,10,3):
-            if (fish1x != 7 and fish1y !=2):
-                fishIndivSituationList.append(fish1x)
-                fishIndivSituationList.append(fish1y)
-                for fish1dir in directionList:
-                    fishIndivSituationList.append(fish1dir)
-                    
-                    for fish2x in range(0,10,3):
-                        for fish2y in range(0,10,3):
-                            if (fish2x != fish1x or fish2y != fish1y) and (fish2x != 7 and fish2y !=2):
-                                fishIndivSituationList.append(fish2x)
-                                fishIndivSituationList.append(fish2y)
-                                for fish2dir in directionList:
-                                    fishIndivSituationList.append(fish2dir)
+    #randGen
 
-                                    for fish3x in range(0,10,3):
-                                        for fish3y in range(0,10,3):
-                                            if (fish3x != fish2x or fish3x != fish1x) and (fish3y != fish2y or fish3y != fish1y) and (fish3x != 7 and fish3y !=2):
-                                                fishIndivSituationList.append(fish3x)
-                                                fishIndivSituationList.append(fish3y)
-                                                for fish3dir in directionList:
-                                                    fishIndivSituationList.append(fish3dir)
+    noLists = 0
 
-                                                    allFishSituationList.append(fishIndivSituationList)
+    while noLists < 1001:
 
+        smallFishSituationList = []
+
+        fish1x = randrange(10)
+        fish1y = randrange(10)
+
+        if not(fish1x == 7 and fish1y == 2):
+            smallFishSituationList.append(fish1x)
+            smallFishSituationList.append(fish1y)
+            fish1dir = directionList[randrange(4)]
+            smallFishSituationList.append(fish1dir)
+
+        fish2x = randrange(10)
+        fish2y = randrange(10)
+
+        if not(fish2x == 7 and fish2y == 2):
+            if not (fish2x == fish1x and fish2y == fish1y):
+                smallFishSituationList.append(fish2x)
+                smallFishSituationList.append(fish2y)
+                fish2dir = directionList[randrange(4)]
+                smallFishSituationList.append(fish2dir)
+
+        fish3x = randrange(10)
+        fish3y = randrange(10)
+
+        if not(fish3x == 7 and fish3y == 2):
+            if not (fish3x == fish1x and fish3y == fish1y) and not(fish3x == fish2x and fish3y == fish2y):
+                smallFishSituationList.append(fish3x)
+                smallFishSituationList.append(fish3y)
+                fish3dir = directionList[randrange(4)]
+                smallFishSituationList.append(fish3dir)
+                
+        if len(smallFishSituationList) == 9:
+            allFishSituationList.append(smallFishSituationList)
+            noLists += 1
 
     return allFishSituationList
 
+        
+            
+            
+
+
+
+        
 def directionRel(fish1,fish2):
 
     #function directionRel returns the relationship of the directions of two fish, whether they are opposite of each other or the same, and whether the fish are moving on the x or y axis.
@@ -362,9 +383,9 @@ def main():
                 
                 fishWins += 1
 
-                fishAliveList = getAliveList(fish1,fish2,fish3)
+                deadNumber,fishAliveList = getAliveList(fish1,fish2,fish3)
 
-                if len(fishAliveList) == 1:
+                if deadNumber == 1:
                     fish1Win += 1
 
                     if fishAliveList[0] == fish1:
@@ -376,10 +397,10 @@ def main():
                     elif fishAliveList[0] == fish3:
                         fish3SingleWin += 1
 
-                elif len(fishAliveList) == 2:
+                elif deadNumber == 2:
                     fish2Win += 1
 
-                elif len(fishAliveList) == 3:
+                elif deadNumber == 3:
                     fish3Win += 1
 
                 looping = False
@@ -415,15 +436,18 @@ def main():
                 print(fish1.getCoords(),fish1.getDirection())
                 print(fish2.getCoords(),fish2.getDirection())
                 print(fish3.getCoords(),fish3.getDirection())
+                print("initial coords")
+                for thing in smallFishList:
+                    print(thing,end=" ")
 
                 looping = False
 
     print("there are this many combinations:",combos)
     print("shark wins this many times:",sharkWins)
     print("fish wins this many times:",fishWins)
-    print("there are this many single fish wins:",fish1win)
-    print("there are this many double fish wins:",fish2win)
-    print("there are this many triple fish wins:",fish3win)
+    print("there are this many single fish wins:",fish1Win)
+    print("there are this many double fish wins:",fish2Win)
+    print("there are this many triple fish wins:",fish3Win)
     print("fish 1 is the single winner this many times:",fish1SingleWin)
     print("fish 2 is the single winner this many times:",fish2SingleWin)
     print("fish 3 is the single winner this many times:",fish3SingleWin)
