@@ -47,7 +47,7 @@ class SharkGUI:
             l.setWidth(5)
             l.setFill('white')
 
-        self.fishNameList = ["MR. Ladd 🤨", "Mr. Huntoon 🧐", "Mr. Fisher 🤪"]
+        self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
         self.createWin()
         self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
 
@@ -121,9 +121,12 @@ class SharkGUI:
                             self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
                             self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
                             self.anim(1035, 275, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
-                            self.anim(1035, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
+                            self.anim(1090, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
+                            self.anim(865, 445, self.gameLogMove.getAnchor().getX(), self.gameLogMove.getAnchor().getY(), self.gameLogMove, 10)
+
                             for i in range(3):
-                                self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " is at: (" + str(fishList[i*5]) + ", " + str(fishList[i*5+1]) + ")\n")
+                                self.gameLogList.append(self.fishNameList[i] + " is at: (" + str(fishList[i*5]) + ", " + str(fishList[i*5+1]) + ")\n")
+                                self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
 
                             # Turn off start button
                             self.start.toggleActivation()
@@ -170,12 +173,16 @@ class SharkGUI:
                 if fishf:
                     flee = 'Flee'
                     if not self.storedFish[i*5+3]:
-                        self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " senses the shark;\n")
+                        self.gameLogList.append(self.fishNameList[i] + " senses the shark;\n")
                         self.gameLogList.append("he transforms into flee mode!\n")
+                        self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+                        self.gameLogListMoves.append("\n")
                 else:
                     if self.storedFish[i * 5 + 3]:
-                        self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " has escaped and\n")
+                        self.gameLogList.append(self.fishNameList[i] + " has escaped and\n")
                         self.gameLogList.append("returned to normal state.\n")
+                        self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+                        self.gameLogListMoves.append("\n")
 
                 image = 'fish' + fishD.capitalize() + flee +'.gif'
 
@@ -200,13 +207,17 @@ class SharkGUI:
                     self.anim(1300, 400, 0, 400, wasted, 50)
                     wasted.undraw()
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
-                    self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + self.fishNameList[i] + " was WASTED by\n")
+                    self.gameLogList.append(self.fishNameList[i] + " was WASTED by\n")
                     self.gameLogList.append("the shark!\n")
+                    self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+                    self.gameLogListMoves.append("\n")
 
         if self.moveCounter != 0 and self.moveCounter%2 == 0 and moveFishCounter != 1:
-            self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + str(moveFishCounter) + " fish have moved.\n")
+            self.gameLogList.append(str(moveFishCounter) + " fish have moved.\n")
+            self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
         elif moveFishCounter == 1:
-            self.gameLogList.append("[Move " + str(self.moveCounter) + "] " + str(moveFishCounter) + " fish has moved.\n")
+            self.gameLogList.append(str(moveFishCounter) + " fish has moved.\n")
+            self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
         self.storedFish = fishList
         self.updateGameLog()
 
@@ -226,12 +237,16 @@ class SharkGUI:
 
         self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark, 10)
         if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
-            self.gameLogList.append("[Move " + str(self.moveCounter) + "] Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + ";\n")
+            self.gameLogList.append("Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + ";\n")
             self.gameLogList.append("he is close by!\n")
+            self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+            self.gameLogListMoves.append("\n")
 
         elif sharkList[3] == self.sharkChasingVal and self.moveCounter != 0:
-            self.gameLogList.append("[Move " + str(self.moveCounter) + "] Dr. Mishkit continues to pursue\n")
+            self.gameLogList.append("Dr. Mishkit continues to pursue\n")
             self.gameLogList.append(self.fishNameList[sharkList[3]-1] + "\n")
+            self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+            self.gameLogListMoves.append("\n")
 
         self.updateGameLog()
         self.sharkChasingVal = sharkList[3]
@@ -319,6 +334,10 @@ class SharkGUI:
         self.gameLog = Text(Point(1500, 285), "").draw(self.win)
         self.gameLog.setSize(20)
         self.gameLog.setTextColor('white')
+        self.gameLogMove = Text(Point(1500, 285), "").draw(self.win)
+        self.gameLogMove.setSize(20)
+        self.gameLogMove.setTextColor('white')
+        self.gameLogMove.setStyle("italic")
 
         title = Text(Point(1040, 105), "Shark Game")
         title.setSize(25)
@@ -367,10 +386,10 @@ class SharkGUI:
         self.instructionsTitle = Text(Point(1500, 180), "Instructions:")
 
         self.formatGUI()
-        self.gameLogList = []
+        self.gameLogList, self.gameLogListMoves = [], []
         self.moveCounter = 0
         self.sharkChasingVal = 0
-        self.txt = ""
+        self.txt, self.moveTxt = "", ""
         self.previousLines = 0
 
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
@@ -400,7 +419,7 @@ class SharkGUI:
 
 
     def resetWin(self):
-        self.gameLogList, self.moveCounter, self.txt, self.previousLines = [], 0, "", 0
+        self.gameLogList, self.moveCounter, self.txt, self.previousLines, self.gameLogListMoves, self.moveTxt = [], 0, "", 0, [], ""
         self.instructionsText.undraw()
         self.ripFish.undraw()
         self.fish1.undraw()
@@ -412,6 +431,7 @@ class SharkGUI:
         self.shark.undraw()
         self.gameLog.undraw()
         self.gameLogTitle.undraw()
+        self.gameLogMoves.undraw()
         self.createWin()
 
 
@@ -419,10 +439,13 @@ class SharkGUI:
         newLines, shifter = len(self.gameLogList) - self.previousLines, 0
         for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
             if len(self.gameLogList) > 10:
-                self.txt, shifter = "", shifter + 1
+                self.txt, shifter, self.moveTxt = "", shifter + 1, ""
                 self.gameLogList.pop(0)
+                self.gameLogListMoves.pop(0)
                 for i in range(9):
                     self.txt+=self.gameLogList[i]
+                    self.moveTxt+=self.gameLogListMoves[i]
+            self.moveTxt += self.animText(self.moveTxt, self.gameLogListMoves[j-shifter], self.gameLogMove)
             self.txt += self.animText(self.txt, self.gameLogList[j-shifter], self.gameLog)
         self.previousLines = len(self.gameLogList)
 
