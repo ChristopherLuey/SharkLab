@@ -11,6 +11,7 @@ class SharkGUI:
         # Create the window
         self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(color_rgb(26, 117, 208))
+        gridList = []
 
         mover, moveg, moveb = 28 - 26, 117 - 40, 208 - 100
         for i in range(102):
@@ -18,34 +19,41 @@ class SharkGUI:
             l.setFill(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
             l.setOutline(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
             l.setWidth(8)
-            l.draw(self.win)
+            gridList.append(l)
 
-        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1290, 80), Point(1275, 60)).draw(self.win)
+        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1290, 80), Point(1275, 60))
         l.setFill(color_rgb(10, 30, 20))
         l.setOutline(color_rgb(10, 30, 20))
-        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1275, 780)).draw(self.win)
+        gridList.append(l)
+        l = Polygon(Point(800, 780), Point(820, 790), Point(1290, 790), Point(1275, 780))
         l.setFill(color_rgb(10, 20, 10))
         l.setOutline(color_rgb(10, 20, 10))
+        gridList.append(l)
 
-        r = Rectangle(Point(820, 70), Point(1290, 790)).draw(self.win)
+        r = Rectangle(Point(820, 70), Point(1290, 790))
         r.setFill(color_rgb(41, 128, 185))
         r.setOutline(color_rgb(41, 128, 185))
+        gridList.append(r)
+
 
         for i in range(11):
-            l = Line(Point(75*i + 30,30), Point(75*i + 30, 780)).draw(self.win)
+            l = Line(Point(75 * i + 30, 30), Point(75 * i + 30, 780))
             l.setWidth(5)
             l.setFill(color_rgb(10, 30, 20))
-            l = Line(Point(30, i*75 + 30), Point(780, i*75 + 30)).draw(self.win)
+            gridList.append(l)
+            l = Line(Point(30, i * 75 + 30), Point(780, i * 75 + 30))
             l.setWidth(5)
             l.setFill(color_rgb(10, 30, 20))
-
-        for i in range(11):
-            l = Line(Point(75*i + 25,25), Point(75*i + 25, 775)).draw(self.win)
+            gridList.append(l)
+            l = Line(Point(75*i + 25,25), Point(75*i + 25, 775))
             l.setWidth(5)
             l.setFill('white')
-            l = Line(Point(25, i*75 + 25), Point(775, i*75 + 25)).draw(self.win)
+            gridList.append(l)
+            l = Line(Point(25, i*75 + 25), Point(775, i*75 + 25))
             l.setWidth(5)
             l.setFill('white')
+            gridList.append(l)
+        for line in gridList: line.draw(self.win)
 
         self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
         self.createWin()
@@ -54,6 +62,9 @@ class SharkGUI:
 
     def gatherUserInput(self):
         if not self.win.isClosed():
+            self.animText("", "Mr. Ladd Coordinate(x,y): ", self.enterFish1)
+            self.animText("", "Mr. Huntoon Coordinate(x,y): ", self.enterFish2)
+            self.animText("", "Mr. Fisher Coordinate(x,y): ", self.enterFish3)
             self.animText("", "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates", self.instructionsText)
             self.updateShark([7,2,'East',0])
             if not self.start.isActive():
@@ -121,7 +132,7 @@ class SharkGUI:
                             self.anim(1035, 210, self.instructionsText.getAnchor().getX(), self.instructionsText.getAnchor().getY(), self.instructionsText, 10)
                             self.anim(1035, 165, self.instructionsTitle.getAnchor().getX(), self.instructionsTitle.getAnchor().getY(), self.instructionsTitle, 10)
                             self.anim(1035, 275, self.gameLogTitle.getAnchor().getX(), self.gameLogTitle.getAnchor().getY(), self.gameLogTitle, 10)
-                            self.anim(1090, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
+                            self.anim(1100, 445, self.gameLog.getAnchor().getX(), self.gameLog.getAnchor().getY(), self.gameLog, 10)
                             self.anim(865, 445, self.gameLogMove.getAnchor().getX(), self.gameLogMove.getAnchor().getY(), self.gameLogMove, 10)
 
                             for i in range(3):
@@ -177,12 +188,14 @@ class SharkGUI:
                         self.gameLogList.append("he transforms into flee mode!\n")
                         self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                         self.gameLogListMoves.append("\n")
+
                 else:
                     if self.storedFish[i * 5 + 3]:
                         self.gameLogList.append(self.fishNameList[i] + " has escaped and\n")
                         self.gameLogList.append("returned to normal state.\n")
                         self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                         self.gameLogListMoves.append("\n")
+
 
                 image = 'fish' + fishD.capitalize() + flee +'.gif'
 
@@ -209,15 +222,18 @@ class SharkGUI:
                     self.ripFish.setText("Dead Fish Counter: " + str(self.ripFishCounter))
                     self.gameLogList.append(self.fishNameList[i] + " was WASTED by\n")
                     self.gameLogList.append("the shark!\n")
+
                     self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                     self.gameLogListMoves.append("\n")
 
         if self.moveCounter != 0 and self.moveCounter%2 == 0 and moveFishCounter != 1:
             self.gameLogList.append(str(moveFishCounter) + " fish have moved.\n")
             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+
         elif moveFishCounter == 1:
             self.gameLogList.append(str(moveFishCounter) + " fish has moved.\n")
             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
+
         self.storedFish = fishList
         self.updateGameLog()
 
@@ -239,14 +255,18 @@ class SharkGUI:
         if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
             self.gameLogList.append("Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + ";\n")
             self.gameLogList.append("he is close by!\n")
+
             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
             self.gameLogListMoves.append("\n")
+
 
         elif sharkList[3] == self.sharkChasingVal and self.moveCounter != 0:
             self.gameLogList.append("Dr. Mishkit continues to pursue\n")
             self.gameLogList.append(self.fishNameList[sharkList[3]-1] + "\n")
+
             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
             self.gameLogListMoves.append("\n")
+
 
         self.updateGameLog()
         self.sharkChasingVal = sharkList[3]
@@ -315,9 +335,9 @@ class SharkGUI:
 
     # Helper function: should not be called outside of this class
     def formatGUI(self):
-        self.enterFish1 = Text(Point(955, 150), "Mr. Ladd Coordinate(x,y): ")
-        self.enterFish2 = Text(Point(950, 200), "Mr. Huntoon Coordinate(x,y): ")
-        self.enterFish3 = Text(Point(950, 250), "Mr. Fisher Coordinate(x,y): ")
+        self.enterFish1 = Text(Point(955, 150), "")
+        self.enterFish2 = Text(Point(950, 200), "")
+        self.enterFish3 = Text(Point(950, 250), "")
 
         self.instructionsText.setSize(20)
         self.instructionsText.setTextColor(color_rgb(236, 240, 241))
@@ -336,7 +356,7 @@ class SharkGUI:
         self.gameLog.setTextColor('white')
         self.gameLogMove = Text(Point(1500, 285), "").draw(self.win)
         self.gameLogMove.setSize(20)
-        self.gameLogMove.setTextColor('white')
+        self.gameLogMove.setTextColor('lightgray')
         self.gameLogMove.setStyle("italic")
 
         title = Text(Point(1040, 105), "Shark Game")
@@ -380,7 +400,7 @@ class SharkGUI:
         # Create the fish coord entries
         self.entry1, self.entry2, self.entry3 = Entry(Point(1160, 150), 10), Entry(Point(1160, 200),10), Entry(Point(1160, 250), 10)
         self.instructionsText = Text(Point(1035, 450),"")
-        self.ripFish = Text(Point(1035, 590), "Dead Fish Counter: 0\n")
+        self.ripFish = Text(Point(1035, 595), "Dead Fish Counter: 0\n")
         self.ripFishCounter = 0
 
         self.instructionsTitle = Text(Point(1500, 180), "Instructions:")
@@ -431,18 +451,18 @@ class SharkGUI:
         self.shark.undraw()
         self.gameLog.undraw()
         self.gameLogTitle.undraw()
-        self.gameLogMoves.undraw()
+        self.gameLogMove.undraw()
         self.createWin()
 
 
     def updateGameLog(self):
         newLines, shifter = len(self.gameLogList) - self.previousLines, 0
         for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
-            if len(self.gameLogList) > 10:
+            if len(self.gameLogList) > 11:
                 self.txt, shifter, self.moveTxt = "", shifter + 1, ""
                 self.gameLogList.pop(0)
                 self.gameLogListMoves.pop(0)
-                for i in range(9):
+                for i in range(10):
                     self.txt+=self.gameLogList[i]
                     self.moveTxt+=self.gameLogListMoves[i]
             self.moveTxt += self.animText(self.moveTxt, self.gameLogListMoves[j-shifter], self.gameLogMove)
