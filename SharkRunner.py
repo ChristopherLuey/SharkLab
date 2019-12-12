@@ -282,7 +282,7 @@ def main():
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
             
             fish1.setInputDirection("west")
-            fish2.setInputDirection("east")
+            fish2.setInputDirection("west")
             fish3.setInputDirection("east")
         
             #construct shark, gather coordinates to set flee status of each fish, then set direction as well
