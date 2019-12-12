@@ -196,7 +196,7 @@ def fish2WinTest(aliveFishList,sharkX,sharkY):
 
     return fishWin,gap
 
-def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
+def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
 
     fishWin = False #returns whether stalemate situation has been achieved
 
@@ -243,30 +243,33 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
             fishWin1,gap1 = fish2WinTest([aliveFishList[0],aliveFishList[1]],sharkX,sharkY)
             fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
 
-            statusList = []
-
             if fishWin1 == True:
                 statusList.append(fishWin1)
-                statusList.append(
-                
-                
-            #test if all three are on the same axis, on the same direction
+                statusList.append(gap1)
 
-            if fishWin1 == True and fishWin2 == True:
-                
-                if gap1 == False and gap2 == False:
-                    fishWin = True
+            if fishWin2 == True:
+                statusList.append(fishWin2)
+                statusList.append(gap2)
 
-                #test if 2 fish are adjacent and there is a gap to ther third
-                elif gap1 == False and gap2 == True:
-                    fishWin = True
-                elif gap2 == False and gap1 == True:
-                    fishWin = True
+            if len(statusList) >=4:
 
-                #test if 1 fish is adjacent and there is a gap to both
+                if statusList[0] == True and statusList[2] == True:
 
-                elif gap1 == True and gap3 == True:
-                    fishWin = True
+                    #test if all three are on the same axis, on the same direction
+                    
+                    if statusList[1] == False and statusList[3] == False:
+                        fishWin = True
+
+                    #test if 2 fish are adjacent and there is a gap to ther third
+                    elif statusList[1] == False and statusList[3] == True:
+                        fishWin = True
+                    elif statusList[1] == True and statusList[3] == False:
+                        fishWin = True
+
+                    #test if 1 fish is adjacent and there is a gap to both
+
+                    elif statusList[1] == True and statusList[3] == True:
+                        fishWin = True
  
     return fishWin
 
@@ -276,6 +279,8 @@ def main():
         
     GUI = SharkGUI()
     GUIList = GUI.gatherUserInput()
+
+    statusList = []
 
     looping = True
 
@@ -346,7 +351,7 @@ def main():
 
                     #fish Win situation, fishWin delays display of fish victory
 
-                    if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
+                    if fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList) == True:
                         fishWins += 1
                         if fishWins == 3:
                             GUIList = GUI.winner("fish")
