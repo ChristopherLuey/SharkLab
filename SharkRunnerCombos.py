@@ -312,10 +312,11 @@ def main():
     #GUIList = GUI.gatherUserInput()
     GUIList = generateList()
     print("list complete")
-    timeRun = 0
+    timeRun = 1
     fishWinsTimes = 0
+    staleMateCounter = 0
     sharks = 0
-
+    f = open('data.txt', 'w')
     looping = True
 
     while looping == True:
@@ -345,8 +346,25 @@ def main():
             # update GUI to reflect these changes
             fishList = getFishList(fish1, fish2, fish3)
             #GUI.updateFish(fishList)
+            iteration = 0
+            check = True
+            if GUIList[timeRun][0] == GUIList[timeRun][3] and GUIList[timeRun][1] == GUIList[timeRun][4]:
+                check = False
+            elif GUIList[timeRun][0] == GUIList[timeRun][6] and GUIList[timeRun][1] == GUIList[timeRun][7]:
+                check = False
+            elif GUIList[timeRun][3] == GUIList[timeRun][6] and GUIList[timeRun][4] == GUIList[timeRun][7]:
+                check = False
 
-            while True:
+            if GUIList[timeRun][0] == 7 and GUIList[timeRun][1] == 2:
+                check = False
+
+            if GUIList[timeRun][3] == 7 and GUIList[timeRun][4] == 2:
+                check = False
+
+            if GUIList[timeRun][6] == 7 and GUIList[timeRun][7] == 2:
+                check = False
+
+            while check:
                     sharkList = shark.getSharkList()
                     sharkX, sharkY = shark.getPosition()
 
@@ -373,10 +391,10 @@ def main():
 
                     if fishWinTest(fish1, fish2, fish3, sharkX, sharkY) == True:
                         fishWins += 1
-                        if fishWins == 3:
+                        if fishWins == 2:
                             #GUIList = GUI.winner("fish")
-                            print("fish wins: ", fishWinsTimes, "  ", timeRun)
                             fishWinsTimes +=1
+                            print("fish wins: ", fishWinsTimes, "  ", timeRun)
                             break
 
 
@@ -403,6 +421,15 @@ def main():
                         #GUIList = GUI.winner("shark")
                         sharks+=1
                         print("shark wins: ", sharks, "  ", timeRun)
+                        break
+
+                    iteration +=1
+                    if iteration > 200:
+                        print("Stalemate: ", GUIList[timeRun][0], GUIList[timeRun][1], GUIList[timeRun][3],
+                              GUIList[timeRun][4], GUIList[timeRun][6], GUIList[timeRun][7], file=f, end=" ")
+                        print(GUIList[timeRun][2], GUIList[timeRun][5], GUIList[timeRun][8], file=f)
+                        print("\n",file=f)
+                        staleMateCounter+=1
                         break
             timeRun+=1
 
