@@ -7,7 +7,7 @@ from random import randrange
 
 class Shark:
     def __init__(self):
-        self.x, self.y, self.dir, self.chasing = 7, 2, 'East', 0
+        self.x, self.y, self.dir, self.chasing = 3, 3, 'East', 0
 
 
     def sharkTurn(self, fishList):
