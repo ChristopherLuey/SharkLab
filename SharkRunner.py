@@ -254,8 +254,6 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY):
                     if (abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) >= 7) or (abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) == 1) or (abs(aliveFishList[0].getY() - aliveFishList[1].getY()) == 1 and abs(aliveFishList[0].getY() - aliveFishList[2].getY()) >= 7):
                         if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                             fishWin = True
-
-    print(fishWin)
                                     
     return fishWin
 
