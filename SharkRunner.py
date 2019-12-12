@@ -337,7 +337,6 @@ def main():
 
                     if fishWinTest(fish1,fish2,fish3,sharkX,sharkY) == True:
                         fishWins += 1
-                        print(fishWins)
                         if fishWins == 3:
                             GUIList = GUI.winner("fish")
                             break
