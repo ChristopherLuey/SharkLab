@@ -6,6 +6,7 @@
 from Fish import *
 from Shark import *
 from SharkGUI import *
+import time
 
 
 def directionRel(fish1, fish2):
@@ -262,7 +263,6 @@ def fishWinTest(fish1, fish2, fish3, sharkX, sharkY):
             relation2, axis2 = directionRel(aliveFishList[0], aliveFishList[1])
 
             # test if shark is chasing at the top of the screen, while two fish are at the bottom, or vice versa
-
             if (relation1 == "same" or relation1 == "opposite") and (relation2 == "same" or relation2 == "opposite"):
                 if aliveFishList[0].getX() == sharkX:
                     if (abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7 and abs(
@@ -288,37 +288,53 @@ def fishWinTest(fish1, fish2, fish3, sharkX, sharkY):
 
     return fishWin
 
+def generateList():
+    start = time.time()
+    print(start)
+    list = [[i,j,dir1,k,u,dir2,p,x,dir3]
+            for i in range(10)
+            for j in range(10)
+            for k in range(10)
+            for u in range(10)
+            for p in range(10)
+            for x in range(10)
+            for dir1 in ['north', 'east', 'south', 'west']
+            for dir2 in ['north', 'east', 'south', 'west']
+            for dir3 in ['north', 'east', 'south', 'west']
+            ]
+    print((time.time()-start))
 
+    return list
 def main():
     # set up GUI, gather user input to feed into subsequent fish object constructor
 
-    GUI = SharkGUI()
-    GUIList = GUI.gatherUserInput()
+    #GUI = SharkGUI()
+    #GUIList = GUI.gatherUserInput()
+    GUIList = generateList()
+    print("list complete")
+    timeRun = 0
+    fishWinsTimes = 0
+    sharks = 0
 
     looping = True
 
     while looping == True:
-
         fishWins = 0  # use this variable to delay fish win message, accumulator variable
 
-        if GUIList == []:  # use this if statement to ensure that quit does not lead to error if start is not clicked
-            looping = False
-            break
 
-        elif GUIList != []:
-
-            fish1 = Fish(GUIList[0], GUIList[1], "west", False, True, False, "DNE")
-            fish2 = Fish(GUIList[5], GUIList[6], "west", False, True, False, "DNE")
-            fish3 = Fish(GUIList[10], GUIList[11], "west", False, True, False, "DNE")
+        for i in range(64000000):
+            print(GUIList[timeRun][0], GUIList[timeRun][1], GUIList[timeRun][3], GUIList[timeRun][4],GUIList[timeRun][6], GUIList[timeRun][7])
+            print(GUIList[timeRun][2], GUIList[timeRun][5], GUIList[timeRun][8])
+            fish1 = Fish(GUIList[timeRun][0], GUIList[timeRun][1], "west", False, True, False, "DNE")
+            fish2 = Fish(GUIList[timeRun][3], GUIList[timeRun][4], "west", False, True, False, "DNE")
+            fish3 = Fish(GUIList[timeRun][6], GUIList[timeRun][7], "west", False, True, False, "DNE")
             fishListObjects = [fish1, fish2,
                                fish3]  # use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
-            
-            fish1.setInputDirection("north")
-            fish2.setInputDirection("north")
-            fish3.setInputDirection("north")
+            fish1.setInputDirection(GUIList[timeRun][2])
+            fish2.setInputDirection(GUIList[timeRun][5])
+            fish3.setInputDirection(GUIList[timeRun][8])
 
             # construct shark, gather coordinates to set flee status of each fish, then set direction as well
-
             shark = Shark()
             sharkX, sharkY = shark.getPosition()
 
@@ -327,16 +343,10 @@ def main():
                 fishObject.setDirection(sharkX, sharkY)
 
             # update GUI to reflect these changes
-
             fishList = getFishList(fish1, fish2, fish3)
-            GUI.updateFish(fishList)
+            #GUI.updateFish(fishList)
 
             while True:
-
-                buttonClicked = GUI.isClicked()
-
-                if buttonClicked == "fish":
-
                     sharkList = shark.getSharkList()
                     sharkX, sharkY = shark.getPosition()
 
@@ -350,59 +360,50 @@ def main():
                         fishObject.move(1)
 
                         # wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
-
                         wallHitting(fishObject, sharkX, sharkY)
 
                         # collisions scenario, do after every round to ensure valid order
-
                         collisionScenario(fish1, fish2, fish3, fishObject)
 
                     fishList = getFishList(fish1, fish2, fish3)
-                    GUI.updateFish(fishList)
-                    GUI.nextTurn()
+                    #GUI.updateFish(fishList)
+                    #GUI.nextTurn()
 
                     # fish Win situation, fishWin delays display of fish victory
 
                     if fishWinTest(fish1, fish2, fish3, sharkX, sharkY) == True:
                         fishWins += 1
                         if fishWins == 3:
-                            GUIList = GUI.winner("fish")
+                            #GUIList = GUI.winner("fish")
+                            print("fish wins: ", fishWinsTimes, "  ", timeRun)
+                            fishWinsTimes +=1
                             break
 
-                elif buttonClicked == "shark":
 
                     fishList = getFishList(fish1, fish2, fish3)
 
                     # move shark
-
                     shark.sharkTurn(fishList)
                     sharkList = shark.getSharkList()
                     sharkX, sharkY = shark.getPosition()
 
                     # eat fish
-
                     for fishObject in fishListObjects:
                         if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
                             fishObject.eat()
                             fishObject.setCoords(11, 11)  # use to avoid collisions after fish death
 
                     # update GUI
-
-                    GUI.updateShark(sharkList)
-                    GUI.updateFish(fishList)
-                    GUI.nextTurn()
+                    #GUI.updateShark(sharkList)
+                    #GUI.updateFish(fishList)
+                    #GUI.nextTurn()
 
                     # shark win situation
-
                     if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
-                        GUIList = GUI.winner("shark")
+                        #GUIList = GUI.winner("shark")
+                        sharks+=1
+                        print("shark wins: ", sharks, "  ", timeRun)
                         break
-
-                elif buttonClicked == "quit":
-
-                    GUI.endGame()
-                    looping = False
-                    break
-
+            timeRun+=1
 
 main()
