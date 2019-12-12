@@ -171,7 +171,7 @@ def fishWinTest(fish1, fish2, fish3, sharkX, sharkY):
 
             elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (
                     aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX):
-                aliveFishList[1], aliveFishList[0] = aliveFishList[0], aliveFishList[1]
+                aliveFishList[0], aliveFishList[1] = aliveFishList[1], aliveFishList[0]
 
             # situation where fish are right next to each other, facing the same direction and are both being chased by the shark
 
@@ -197,17 +197,17 @@ def fishWinTest(fish1, fish2, fish3, sharkX, sharkY):
 
             if relation == "same" or relation == "opposite":
                 if axis == "x":
-                    if aliveFishList[0].getX() == sharkX:
-                        if abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7:
-                            if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(
-                                    aliveFishList[0].getY() - sharkY) > 2:
-                                fishWin = True
-
-                if axis == "y":
                     if aliveFishList[0].getY() == sharkY:
                         if abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7:
                             if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(
                                     aliveFishList[0].getX() - sharkX) > 2:
+                                fishWin = True
+
+                if axis == "y":
+                    if aliveFishList[0].getX() == sharkX:
+                        if abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7:
+                            if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(
+                                    aliveFishList[0].getY() - sharkY) > 2:
                                 fishWin = True
 
     # no fish are dead
@@ -263,6 +263,7 @@ def fishWinTest(fish1, fish2, fish3, sharkX, sharkY):
             relation2, axis2 = directionRel(aliveFishList[0], aliveFishList[1])
 
             # test if shark is chasing at the top of the screen, while two fish are at the bottom, or vice versa
+
             if (relation1 == "same" or relation1 == "opposite") and (relation2 == "same" or relation2 == "opposite"):
                 if aliveFishList[0].getX() == sharkX:
                     if (abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7 and abs(
@@ -288,6 +289,7 @@ def fishWinTest(fish1, fish2, fish3, sharkX, sharkY):
 
     return fishWin
 
+
 def generateList():
     start = time.time()
     print(start)
@@ -312,10 +314,11 @@ def main():
     #GUIList = GUI.gatherUserInput()
     GUIList = generateList()
     print("list complete")
-    timeRun = 0
+    timeRun = 1
     fishWinsTimes = 0
+    staleMateCounter = 0
     sharks = 0
-
+    f = open('data.txt', 'w')
     looping = True
 
     while looping == True:
@@ -345,8 +348,25 @@ def main():
             # update GUI to reflect these changes
             fishList = getFishList(fish1, fish2, fish3)
             #GUI.updateFish(fishList)
+            iteration = 0
+            check = True
+            if GUIList[timeRun][0] == GUIList[timeRun][3] and GUIList[timeRun][1] == GUIList[timeRun][4]:
+                check = False
+            elif GUIList[timeRun][0] == GUIList[timeRun][6] and GUIList[timeRun][1] == GUIList[timeRun][7]:
+                check = False
+            elif GUIList[timeRun][3] == GUIList[timeRun][6] and GUIList[timeRun][4] == GUIList[timeRun][7]:
+                check = False
 
-            while True:
+            if GUIList[timeRun][0] == 7 and GUIList[timeRun][1] == 2:
+                check = False
+
+            if GUIList[timeRun][3] == 7 and GUIList[timeRun][4] == 2:
+                check = False
+
+            if GUIList[timeRun][6] == 7 and GUIList[timeRun][7] == 2:
+                check = False
+
+            while check:
                     sharkList = shark.getSharkList()
                     sharkX, sharkY = shark.getPosition()
 
@@ -373,10 +393,10 @@ def main():
 
                     if fishWinTest(fish1, fish2, fish3, sharkX, sharkY) == True:
                         fishWins += 1
-                        if fishWins == 3:
+                        if fishWins == 2:
                             #GUIList = GUI.winner("fish")
-                            print("fish wins: ", fishWinsTimes, "  ", timeRun)
                             fishWinsTimes +=1
+                            print("fish wins: ", fishWinsTimes, "  ", timeRun)
                             break
 
 
@@ -403,6 +423,14 @@ def main():
                         #GUIList = GUI.winner("shark")
                         sharks+=1
                         print("shark wins: ", sharks, "  ", timeRun)
+                        break
+
+                    iteration +=1
+                    if iteration > 200:
+                        print("Stalemate: ", GUIList[timeRun][0], GUIList[timeRun][1], GUIList[timeRun][3],
+                              GUIList[timeRun][4], GUIList[timeRun][6], GUIList[timeRun][7], file=f, end=" ")
+                        print(GUIList[timeRun][2], GUIList[timeRun][5], GUIList[timeRun][8], file=f)
+                        staleMateCounter+=1
                         break
             timeRun+=1
 
