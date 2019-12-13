@@ -53,7 +53,7 @@ def wallHitting(fishObject,sharkX,sharkY):
     #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
 
     if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-        fishObject.wallSetDirection()
+        fishObject.directionReverse()
         fishObject.move(2)
 
     #if the fish hits the wall and is in flee mode, the fish will flip across the grid
@@ -65,31 +65,27 @@ def collisionScenario(fish1,fish2,fish3,roundFish):
 
     if roundFish.getAlive() == True:
 
+        #generate list of alive fish that are not the roundFish (the fish that is moving)
+
+        oldFishList = [fish1,fish2,fish3]
         fishList = []
 
-        if roundFish == fish1:
-            if fish2.getAlive() == True:
-                fishList.append(fish2)
-            if fish3.getAlive() == True:
-                fishList.append(fish3)
-        elif roundFish == fish2:
-            if fish1.getAlive() == True:
-                fishList.append(fish1)
-            if fish3.getAlive() == True:
-                fishList.append(fish3)
-        elif roundFish == fish3:
-            if fish1.getAlive() == True:
-                fishList.append(fish1)
-            if fish2.getAlive() == True:
-                fishList.append(fish2)
+        for fish in oldFishList:
+            if fish != roundFish and fish.getAlive() == True:
+                fishList.append(fish)
+
+        #use collisionRound to test whether fish is in a flee diagonal and is blocked in both directions
 
         collisionRound = 0
+
+        #iterate through each alive fish, check if there is a collision, check if the fish has an alternate direction,
+        #and then move accordingly. If in flee diagonal, fish chooses altDirection. Otherwise, it moves back one spot.
 
         for collideFish in fishList:
 
             if roundFish.getX() == collideFish.getX() and roundFish.getY() == collideFish.getY():
 
-                if roundFish.getFlee() == True and collisionRound != 0:
+                if roundFish.getFlee() == True and roundFish.getAltDirection() == True and collisionRound != 0:
                     collideMove(roundFish)
                     collisionRound += 1
                 else:
@@ -101,21 +97,13 @@ def getAliveList(fish1,fish2,fish3):
 
     deadNumber = 0
     aliveFishList = []
+    allFishList = [fish1,fish2,fish3]
 
-    if fish1.getAlive() == False:
-        deadNumber += 1
-    else:
-        aliveFishList.append(fish1)
-        
-    if fish2.getAlive() == False:
-        deadNumber += 1
-    else:
-        aliveFishList.append(fish2)
-        
-    if fish3.getAlive() == False:
-        deadNumber += 1
-    else:
-        aliveFishList.append(fish3)
+    for fish in allFishList:
+        if fish.getAlive() == False:
+            deadNumber += 1
+        else:
+            aliveFishList.append(fish)
 
     return deadNumber,aliveFishList
 
@@ -273,7 +261,7 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
-        
+
             #construct shark, gather coordinates to set flee status of each fish, then set direction as well
             
             shark = Shark()

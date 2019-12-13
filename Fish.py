@@ -150,16 +150,6 @@ class Fish:
         
         self.fishDirection = direction
 
-    def setWallHitting(self):
-
-        #tests whether fish is within bounds of 10*10 grid. Returns none, unlike getWallHitting, which does both and returns
-        #wallHittingStatus
-        
-        if (self.fishXCoord < 0 or self.fishXCoord > 9) or (self.fishYCoord < 0 or self.fishYCoord > 9):
-            self.fishWallHittingStatus = True
-        else:
-            self.fishWallHittingStatus = False
-
     def directionReverse(self):
 
         #reverses fish direction
@@ -176,34 +166,13 @@ class Fish:
         elif self.fishDirection == "south":
             self.fishDirection = "north"
 
-    def wallSetDirection(self):
-
-        #if a fish is colliding into a wall, this mutator will change the fish'
-        #direction so that it faces away from the wall
-
-        if self.fishYCoord < 0:
-            self.fishDirection = "south"
-            
-        elif self.fishYCoord > 9:
-            self.fishDirection = "north"
-            
-        elif self.fishXCoord < 0:
-            self.fishDirection = "east"
-            
-        elif self.fishXCoord > 9:
-            self.fishDirection = "west"
-
-
     def setDirection(self,sharkX,sharkY):
 
         #detects if fish is in flee mode, selects appropriate direction as such.
 
         self.sharkXCoord = sharkX
         self.sharkYCoord = sharkY
-
-        if self.sharkXCoord == self.fishXCoord and self.sharkYCoord == self.fishYCoord:
-            self.fishAliveStatus = False
-
+        
         if self.fishAliveStatus == True and self.fishFleeStatus == True:
 
             #fish direction if fish is on same axis as shark. IF the fish, for example, is above
@@ -247,10 +216,6 @@ class Fish:
                 elif (self.fishYCoord < self.sharkYCoord) and (self.fishXCoord > self.sharkXCoord):
                     self.directionList = ["north","east"]
 
-                """else:
-                    self.directionList = []
-                    print("a")"""
-
                 #calculate which side of the quadrant it is. To carry on with the previous example, the fish has two options
                 #north and east. if the fish is further from the shark on the X axis, it will move east. Otherwise, it moves
                 #north.
@@ -288,18 +253,14 @@ class Fish:
 
             if self.fishDirection == "east":
                 self.fishXCoord += self.moveDistance
-                self.fishYCoord += 0
                 
             elif self.fishDirection == "north":
-                self.fishXCoord += 0
                 self.fishYCoord += -self.moveDistance
                 
             elif self.fishDirection == "west":
                 self.fishXCoord += -self.moveDistance
-                self.fishYCoord += 0
 
             elif self.fishDirection == "south":
-                self.fishXCoord += 0
                 self.fishYCoord += self.moveDistance
 
     def collideSetDirection(self):
