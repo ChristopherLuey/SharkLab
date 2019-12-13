@@ -279,8 +279,7 @@ def main():
         
     GUI = SharkGUI()
     GUIList = GUI.gatherUserInput()
-
-    statusList = []
+    statusList = [] #pass through fishWinTest in order to detect 3 win situation
 
     looping = True
 
@@ -298,10 +297,6 @@ def main():
             fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
             fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
-            
-            fish1.setInputDirection("south")
-            fish2.setInputDirection("south")
-            fish3.setInputDirection("north")
         
             #construct shark, gather coordinates to set flee status of each fish, then set direction as well
             
@@ -317,6 +312,8 @@ def main():
             fishList = getFishList(fish1,fish2,fish3)
             GUI.updateFish(fishList)
 
+            #loop through button clicking
+
             while True:
 
                 buttonClicked = GUI.isClicked()
@@ -325,24 +322,19 @@ def main():
 
                     sharkList = shark.getSharkList()
                     sharkX,sharkY = shark.getPosition()
-                        
-                    for fishObject in fishListObjects:
+                    
+                    #move procedure    
+                    for fishObject in fishListObjects: 
                         
                         fishObject.setFlee(sharkX,sharkY)
-                        fishObject.setDirection(sharkX,sharkY)
-                        
+                        fishObject.setDirection(sharkX,sharkY)    
                         fishObject.move(1)
-
                         #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
-
                         wallHitting(fishObject,sharkX,sharkY)
-
                         #collisions scenario, do after every round to ensure valid order
-                    
                         collisionScenario(fish1,fish2,fish3,fishObject)
 
                         #ensure that fish is not collided when it flips across grid
-
                         wallHitting(fishObject,sharkX,sharkY)
 
                     fishList = getFishList(fish1,fish2,fish3)
