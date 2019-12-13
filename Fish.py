@@ -1,4 +1,8 @@
 #File: Fish.py
+#Written By: Andreas Petrou-Zeniou
+#Date: 12/12/19
+#Handles all individual fish movement (more complex interactions are handled
+#within SharkRunner, with the fish 
 
 import math
 from random import randrange
