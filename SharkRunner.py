@@ -15,36 +15,23 @@ def directionRel(fish1,fish2):
     fish1direction = fish1.getDirection()
     fish2direction = fish2.getDirection()
 
+    #if the direction is the same, returns same
+    
     if fish1direction == fish2direction:
         return "same",""
 
+    #returns if fish are opposite each other, and the axis they are on
+
     else:
-        if fish1direction == "west":
-            if fish2direction == "east":
-                return "opposite","x"
-            
-        elif fish1direction == "east":
-            if fish2direction == "west":
+        if fish1direction == "west" and fish2direction == "east" or fish1direction == "east" and fish2direction == "west":
                 return "opposite","x"
 
-        elif fish1direction == "north":
-            if fish2direction == "south":
-                return "opposite","y"
-
-        elif fish1direction == "south":
-            if fish2direction == "north":
+        elif fish1direction == "north" and fish2direction == "south" or fish1direction == "south" and fish2direction == "north":
                 return "opposite","y"
 
     #if no special relation, returns empty strings
 
     return "",""
-            
-
-def getDistance(fish1,fish2):
-
-    #returns the distance between two fish
-
-    distance = abs(fish1.getX() - fish2.getX()) + abs(fish1.getY() - fish2.getY())
 
 def getFishList(fish1,fish2,fish3):
     #returns a list of fish data to be inputed into the GUI, which updates the graphic representations of fish
@@ -73,14 +60,6 @@ def wallHitting(fishObject,sharkX,sharkY):
         
     elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
         fishObject.reversePos()
-
-def finalWallHitting(fishObject,sharkX,sharkY):
-
-    #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
-
-    if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False:
-        fishObject.wallSetDirection()
-        fishObject.move(2)
 
 def collisionScenario(fish1,fish2,fish3,roundFish):
 
@@ -120,10 +99,7 @@ def getAliveList(fish1,fish2,fish3):
 
     #test each fish for alive status, and if so, add them to a list of alive fish. fishWin tracks the status of the fish winning throughout the module
 
-    fishWin = False
-
     deadNumber = 0
-
     aliveFishList = []
 
     if fish1.getAlive() == False:
@@ -199,8 +175,7 @@ def fish2WinTest(aliveFishList,sharkX,sharkY):
 def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
 
     fishWin = False #returns whether stalemate situation has been achieved
-
-    deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3)
+    deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3) #returns number of dead fish, list of alive fish
 
     #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test whether the fish is just out of the shark's reach.
 
@@ -240,36 +215,38 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                 aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[2],aliveFishList[1],aliveFishList[2]
                 continueVar = True
 
-            fishWin1,gap1 = fish2WinTest([aliveFishList[0],aliveFishList[1]],sharkX,sharkY)
-            fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
+            if continueVar == True:
 
-            if fishWin1 == True:
-                statusList.append(fishWin1)
-                statusList.append(gap1)
+                fishWin1,gap1 = fish2WinTest([aliveFishList[0],aliveFishList[1]],sharkX,sharkY)
+                fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
 
-            if fishWin2 == True:
-                statusList.append(fishWin2)
-                statusList.append(gap2)
+                if fishWin1 == True:
+                    statusList.append(fishWin1)
+                    statusList.append(gap1)
 
-            if len(statusList) >=4:
+                if fishWin2 == True:
+                    statusList.append(fishWin2)
+                    statusList.append(gap2)
 
-                if statusList[0] == True and statusList[2] == True:
+                if len(statusList) >=4:
 
-                    #test if all three are on the same axis, on the same direction
-                    
-                    if statusList[1] == False and statusList[3] == False:
-                        fishWin = True
+                    if statusList[0] == True and statusList[2] == True:
 
-                    #test if 2 fish are adjacent and there is a gap to ther third
-                    elif statusList[1] == False and statusList[3] == True:
-                        fishWin = True
-                    elif statusList[1] == True and statusList[3] == False:
-                        fishWin = True
+                        #test if all three are on the same axis, on the same direction
+                        
+                        if statusList[1] == False and statusList[3] == False:
+                            fishWin = True
 
-                    #test if 1 fish is adjacent and there is a gap to both
+                        #test if 2 fish are adjacent and there is a gap to ther third
+                        elif statusList[1] == False and statusList[3] == True:
+                            fishWin = True
+                        elif statusList[1] == True and statusList[3] == False:
+                            fishWin = True
 
-                    elif statusList[1] == True and statusList[3] == True:
-                        fishWin = True
+                        #test if 1 fish is adjacent and there is a gap to both
+
+                        elif statusList[1] == True and statusList[3] == True:
+                            fishWin = True
  
     return fishWin
 
@@ -282,7 +259,6 @@ def main():
     statusList = [] #pass through fishWinTest in order to detect 3 win situation
 
     looping = True
-
     while looping == True:
 
         fishWins = 0 # use this variable to delay fish win message, accumulator variable
@@ -350,7 +326,6 @@ def main():
                             break
 
                 elif buttonClicked == "shark":
-
                     fishList = getFishList(fish1,fish2,fish3)
 
                     #move shark
@@ -375,12 +350,12 @@ def main():
                     #shark win situation
 
                     if fish3.getAlive() == False and fish1.getAlive() == False and fish2.getAlive() == False:
-
                         GUIList = GUI.winner("shark")
                         break
 
-                elif buttonClicked == "quit":
+                #close window if quit is pressed, and cease execution of program via breaks
 
+                elif buttonClicked == "quit":
                     GUI.endGame()
                     looping = False
                     break

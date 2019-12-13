@@ -16,7 +16,6 @@ class Fish:
         self.fishAliveStatus = alive
         self.fishWallHittingStatus = wallHitting
         self.fishAltDirection = altDirection
-        self.fishHeadOnStatus = False
 
         #use to randomly assign direction at beginning of game
 
@@ -90,13 +89,6 @@ class Fish:
         return self.fishWallHittingStatus
 
     #mutators
-
-    def setHeadOnStatus(self,boolType):
-
-        #use this variable to determine whether a fish is in a head on collision.
-        #if so, moving is disabled until fish enters flee mode
-        
-        self.fishHeadOnStatus = boolType
         
     def eat(self):
 
@@ -290,7 +282,7 @@ class Fish:
 
         self.moveDistance = distance
 
-        if self.fishAliveStatus == True and not(self.fishHeadOnStatus == True and self.fishFleeStatus == False):
+        if self.fishAliveStatus == True:
 
             #translate direction into coordinate movement.
 
