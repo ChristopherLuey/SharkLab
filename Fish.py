@@ -102,26 +102,25 @@ class Fish:
 
     def reversePos(self):
 
-        #if the fish is in flee mode and hits a barrier, reversePos
+        #if the fish hits a barrier, reversePos
         #flips the fish across the grid
 
-        if self.fishFleeStatus == True:
 
-            if self.fishXCoord < 0:
-                self.fishXCoord = 9
-                self.fishDirection = "west"
+        if self.fishXCoord < 0:
+            self.fishXCoord = 9
+            self.fishDirection = "west"
 
-            elif self.fishXCoord > 9:
-                self.fishXCoord = 0
-                self.fishDirection = "east"
+        elif self.fishXCoord > 9:
+            self.fishXCoord = 0
+            self.fishDirection = "east"
 
-            elif self.fishYCoord < 0:
-                self.fishYCoord = 9
-                self.fishDirection = "north"
+        elif self.fishYCoord < 0:
+            self.fishYCoord = 9
+            self.fishDirection = "north"
 
-            elif self.fishYCoord > 9:
-                self.fishYCoord = 0
-                self.fishDirection = "south"
+        elif self.fishYCoord > 9:
+            self.fishYCoord = 0
+            self.fishDirection = "south"
 
         self.fishFleeStatus = False
 
