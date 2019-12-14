@@ -7,6 +7,155 @@ from SharkGUI import *
 from Fish import *
 from Shark import *
 
+def getAliveList(fish1,fish2,fish3):
+
+    #test each fish for alive status, and if so, add them to a list of alive fish. fishWin tracks the status of the fish winning throughout the module
+
+    deadNumber = 0
+    aliveFishList = []
+    allFishList = [fish1,fish2,fish3]
+
+    for fish in allFishList:
+        if fish.getAlive() == False:
+            deadNumber += 1
+        else:
+            aliveFishList.append(fish)
+
+    return deadNumber,aliveFishList
+
+def fish2WinTest(aliveFishList,sharkX,sharkY):
+
+    fishWin = False
+
+    gap = False
+
+    if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY:
+
+        #set index of center fish to index 0
+
+        if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX):
+            aliveFishList[0],aliveFishList[1] = aliveFishList[0],aliveFishList[1]
+            
+        elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX):
+            aliveFishList[0],aliveFishList[1] = aliveFishList[1],aliveFishList[0]
+
+        #situation where fish are right next to each other, facing the same direction and are both being chased by the shark
+
+        if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
+
+            if aliveFishList[0].getX() == sharkX:
+                if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) <= 4:
+                    if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
+                        fishWin = True
+                        gap = False
+                                
+            elif aliveFishList[0].getY() == sharkY:
+                if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) <= 4:
+                    if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
+                        fishWin = True
+                        gap = False
+
+        #alternate situation where 1 fish is getting chased, and the other is more than 6 spots away, making it impossible for the shark to switch chasing.
+
+        relation,axis = directionRel(aliveFishList[0],aliveFishList[1])
+
+        if relation == "same" or relation == "opposite":
+            if axis == "x":
+                if aliveFishList[0].getY() == sharkY:
+                    if abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7:
+                        if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
+                            fishWin = True
+                            gap = True
+
+            if axis == "y":
+                if aliveFishList[0].getX() == sharkX:
+                    if abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7:
+                        if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
+                            fishWin = True
+                            gap = True
+
+    return fishWin,gap
+
+def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
+
+    fishWin = False #returns whether stalemate situation has been achieved
+    deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3) #returns number of dead fish, list of alive fish
+
+    #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test whether the fish is just out of the shark's reach.
+
+    if deadNumber == 2:
+        if aliveFishList[0].getX() == sharkX:
+            if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
+                fishWin = True
+                            
+        elif aliveFishList[0].getY() == sharkY:
+            if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
+                fishWin = True
+
+    #if 1 fish is dead, test which fish is on the same axis as the shark, and set that fish to index 0. Test if fish directions are the same, and then test distances to shark
+                
+    elif deadNumber == 1:
+
+        fishWin,gap = fish2WinTest(aliveFishList,sharkX,sharkY)
+        
+    #no fish are dead
+                                
+    elif deadNumber == 0:
+
+        if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[2].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY or aliveFishList[2].getY() == sharkY:
+            continueVar = False
+
+            #reassign central fish to index zero
+
+            if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
+                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[0],aliveFishList[1],aliveFishList[2]
+                continueVar = True
+            
+            elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
+                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[1],aliveFishList[0],aliveFishList[2]
+                continueVar = True
+
+            elif aliveFishList[2].getX() == sharkX or aliveFishList[2].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[1].getX() != sharkX and aliveFishList[1].getY() != sharkY):
+                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[2],aliveFishList[1],aliveFishList[2]
+                continueVar = True
+
+            if continueVar == True:
+
+                fishWin1,gap1 = fish2WinTest([aliveFishList[0],aliveFishList[1]],sharkX,sharkY)
+                fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
+
+                if fishWin1 == True:
+                    statusList.append(fishWin1)
+                    statusList.append(gap1)
+
+                if fishWin2 == True:
+                    statusList.append(fishWin2)
+                    statusList.append(gap2)
+
+                if len(statusList) >=4:
+
+                    if statusList[0] == True and statusList[2] == True:
+
+                        #test if all three are on the same axis, on the same direction
+                        
+                        if statusList[1] == False and statusList[3] == False:
+                            fishWin = True
+
+                        #test if 2 fish are adjacent and there is a gap to ther third
+                        elif statusList[1] == False and statusList[3] == True:
+                            fishWin = True
+                        elif statusList[1] == True and statusList[3] == False:
+                            fishWin = True
+
+                        #test if 1 fish is adjacent and there is a gap to both
+
+                        elif statusList[1] == True and statusList[3] == True:
+                            fishWin = True
+ 
+    return fishWin
+
+
+
 def directionRel(fish1,fish2):
 
     #function directionRel returns the relationship of the directions of two fish, whether they are opposite of each other or the same,
@@ -211,151 +360,3 @@ def main():
                     break
         
 main()
-
-def getAliveList(fish1,fish2,fish3):
-
-    #test each fish for alive status, and if so, add them to a list of alive fish. fishWin tracks the status of the fish winning throughout the module
-
-    deadNumber = 0
-    aliveFishList = []
-    allFishList = [fish1,fish2,fish3]
-
-    for fish in allFishList:
-        if fish.getAlive() == False:
-            deadNumber += 1
-        else:
-            aliveFishList.append(fish)
-
-    return deadNumber,aliveFishList
-
-def fish2WinTest(aliveFishList,sharkX,sharkY):
-
-    fishWin = False
-
-    gap = False
-
-    if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY:
-
-        #set index of center fish to index 0
-
-        if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX):
-            aliveFishList[0],aliveFishList[1] = aliveFishList[0],aliveFishList[1]
-            
-        elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX):
-            aliveFishList[0],aliveFishList[1] = aliveFishList[1],aliveFishList[0]
-
-        #situation where fish are right next to each other, facing the same direction and are both being chased by the shark
-
-        if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
-
-            if aliveFishList[0].getX() == sharkX:
-                if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) <= 4:
-                    if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
-                        fishWin = True
-                        gap = False
-                                
-            elif aliveFishList[0].getY() == sharkY:
-                if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) <= 4:
-                    if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
-                        fishWin = True
-                        gap = False
-
-        #alternate situation where 1 fish is getting chased, and the other is more than 6 spots away, making it impossible for the shark to switch chasing.
-
-        relation,axis = directionRel(aliveFishList[0],aliveFishList[1])
-
-        if relation == "same" or relation == "opposite":
-            if axis == "x":
-                if aliveFishList[0].getY() == sharkY:
-                    if abs(aliveFishList[0].getY() - aliveFishList[1].getY()) >= 7:
-                        if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
-                            fishWin = True
-                            gap = True
-
-            if axis == "y":
-                if aliveFishList[0].getX() == sharkX:
-                    if abs(aliveFishList[0].getX() - aliveFishList[1].getX()) >= 7:
-                        if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
-                            fishWin = True
-                            gap = True
-
-    return fishWin,gap
-
-def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
-
-    fishWin = False #returns whether stalemate situation has been achieved
-    deadNumber,aliveFishList = getAliveList(fish1,fish2,fish3) #returns number of dead fish, list of alive fish
-
-    #if 2 fish are dead, test that the last fish is on the same axis. If on the same axis, test whether the fish is just out of the shark's reach.
-
-    if deadNumber == 2:
-        if aliveFishList[0].getX() == sharkX:
-            if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
-                fishWin = True
-                            
-        elif aliveFishList[0].getY() == sharkY:
-            if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
-                fishWin = True
-
-    #if 1 fish is dead, test which fish is on the same axis as the shark, and set that fish to index 0. Test if fish directions are the same, and then test distances to shark
-                
-    elif deadNumber == 1:
-
-        fishWin,gap = fish2WinTest(aliveFishList,sharkX,sharkY)
-        
-    #no fish are dead
-                                
-    elif deadNumber == 0:
-
-        if aliveFishList[0].getX() == sharkX or aliveFishList[1].getX() == sharkX or aliveFishList[2].getX() == sharkX or aliveFishList[0].getY() == sharkY or aliveFishList[1].getY() == sharkY or aliveFishList[2].getY() == sharkY:
-            continueVar = False
-
-            #reassign central fish to index zero
-
-            if aliveFishList[0].getX() == sharkX or aliveFishList[0].getY() == sharkY and (aliveFishList[1].getY() != sharkY and aliveFishList[1].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
-                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[0],aliveFishList[1],aliveFishList[2]
-                continueVar = True
-            
-            elif aliveFishList[1].getX() == sharkX or aliveFishList[1].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[2].getX() != sharkX and aliveFishList[2].getY() != sharkY):
-                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[1],aliveFishList[0],aliveFishList[2]
-                continueVar = True
-
-            elif aliveFishList[2].getX() == sharkX or aliveFishList[2].getY() == sharkY and (aliveFishList[0].getY() != sharkY and aliveFishList[0].getX() != sharkX and aliveFishList[1].getX() != sharkX and aliveFishList[1].getY() != sharkY):
-                aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[2],aliveFishList[1],aliveFishList[2]
-                continueVar = True
-
-            if continueVar == True:
-
-                fishWin1,gap1 = fish2WinTest([aliveFishList[0],aliveFishList[1]],sharkX,sharkY)
-                fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
-
-                if fishWin1 == True:
-                    statusList.append(fishWin1)
-                    statusList.append(gap1)
-
-                if fishWin2 == True:
-                    statusList.append(fishWin2)
-                    statusList.append(gap2)
-
-                if len(statusList) >=4:
-
-                    if statusList[0] == True and statusList[2] == True:
-
-                        #test if all three are on the same axis, on the same direction
-                        
-                        if statusList[1] == False and statusList[3] == False:
-                            fishWin = True
-
-                        #test if 2 fish are adjacent and there is a gap to ther third
-                        elif statusList[1] == False and statusList[3] == True:
-                            fishWin = True
-                        elif statusList[1] == True and statusList[3] == False:
-                            fishWin = True
-
-                        #test if 1 fish is adjacent and there is a gap to both
-
-                        elif statusList[1] == True and statusList[3] == True:
-                            fishWin = True
- 
-    return fishWin
-
