@@ -321,11 +321,7 @@ def main():
     f = open('data.txt', 'w')
     looping = True
 
-    while looping == True:
-        fishWins = 0  # use this variable to delay fish win message, accumulator variable
-
-
-        for i in range(64000000):
+    for i in range(64000000):
             print(GUIList[timeRun][0], GUIList[timeRun][1], GUIList[timeRun][3], GUIList[timeRun][4],GUIList[timeRun][6], GUIList[timeRun][7])
             print(GUIList[timeRun][2], GUIList[timeRun][5], GUIList[timeRun][8])
             fish1 = Fish(GUIList[timeRun][0], GUIList[timeRun][1], "west", False, True, False, "DNE")
@@ -365,7 +361,7 @@ def main():
 
             if GUIList[timeRun][6] == 7 and GUIList[timeRun][7] == 2:
                 check = False
-
+            fishWins = 0
             while check:
                     sharkList = shark.getSharkList()
                     sharkX, sharkY = shark.getPosition()
@@ -393,7 +389,7 @@ def main():
 
                     if fishWinTest(fish1, fish2, fish3, sharkX, sharkY) == True:
                         fishWins += 1
-                        if fishWins == 2:
+                        if fishWins == 3:
                             #GUIList = GUI.winner("fish")
                             fishWinsTimes +=1
                             print("fish wins: ", fishWinsTimes, "  ", timeRun)

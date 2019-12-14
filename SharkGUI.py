@@ -7,13 +7,46 @@ from Button import *
 import time
 
 class SharkGUI:
+    """This class uses John Zelle's Graphics library in order to create a GUI to display the fishes and
+    sharks theoretical positions and states.
+
+    Attributes:
+        self.win: The Graphics window
+        self.fishNameList: List of the names of the fishes
+        self.start: Start Button
+        self.quitButton: Quit Button
+        self.entry1, self.entry2, self.entry3: 3 fish Entry boxes where coordinates of fish are entered
+        self.instructionsText: The instructions text
+        self.fishButton: Fish move Button
+        self.storedFish: The list of current fish states and positions
+        self.enterFish1, self.enterFish2, self.enterFish3: The title next to the fish Entry boxes
+        self.instructionsTitle: The instructions title text
+        self.gameLogTitle: The game log title text
+        self.gameLog: The game log text
+        self.gameLogMove: The game log moves text
+        self.gameLogList: The list of stored game log messages
+        self.gameLogListMoves: The list of stored game log moves
+        self.sharkButton: The shark move Button
+        self.fish1, self.fish2, self.fish3: The 3 graphic fishes drawn on the board
+        self.moveCounter: The accumulator for the number of moves of a game
+        self.ripFishCounter: The number of fish dead
+        self.ripFish: The number of fish dead Text
+        self.shark: The drawn shark on the board
+        self.sharkChasingVal: The current fish that the shark is chasing
+        self.txt: The current text that the game log is displaying
+        self.moveTxt: The current text that the game log moves is displaying
+        self.previousLines: The current number of game log lines
+    """
+
     def __init__(self):
+        """Constructor for SharkGUI object. Creates the window and all window attributes."""
         # Create the window
         self.win = GraphWin("Shark Game", 1300, 800, True)
         self.win.setBackground(color_rgb(26, 117, 208))
         gridList = []
 
-        mover, moveg, moveb = 28 - 26, 117 - 40, 208 - 100
+        # Change of colors over time in order to create a gradient
+        mover, moveg, moveb = 24, 117 - 40, 208 - 100
         for i in range(102):
             l = Line(Point(0, i * 8), Point(1300, i * 8))
             l.setFill(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
@@ -29,20 +62,18 @@ class SharkGUI:
         l.setFill(color_rgb(10, 20, 10))
         l.setOutline(color_rgb(10, 20, 10))
         gridList.append(l)
-
         r = Rectangle(Point(820, 70), Point(1290, 790))
         r.setFill(color_rgb(41, 128, 185))
         r.setOutline(color_rgb(41, 128, 185))
         gridList.append(r)
 
-
         for i in range(11):
             l = Line(Point(75 * i + 30, 30), Point(75 * i + 30, 780))
-            l.setWidth(5)
+            l.setWidth(7)
             l.setFill(color_rgb(10, 30, 20))
             gridList.append(l)
             l = Line(Point(30, i * 75 + 30), Point(780, i * 75 + 30))
-            l.setWidth(5)
+            l.setWidth(7)
             l.setFill(color_rgb(10, 30, 20))
             gridList.append(l)
             l = Line(Point(75*i + 25,25), Point(75*i + 25, 775))
@@ -53,6 +84,7 @@ class SharkGUI:
             l.setWidth(5)
             l.setFill('white')
             gridList.append(l)
+
         for line in gridList: line.draw(self.win)
 
         self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
@@ -61,6 +93,12 @@ class SharkGUI:
 
 
     def gatherUserInput(self):
+        """Function gathers the inputs of the fish Entry and determines whether they are formatted correctly.
+
+        Returns:
+            fishList: List of fish positions and states in format [fish1x, fish1y, fish1dir, fish1flee, fish1alive, fish2x ... ]
+                      List if blank if inputted points are formatted incorrectly.
+        """
         if not self.win.isClosed():
             self.animText("", "Mr. Ladd Coordinate(x,y): ", self.enterFish1)
             self.animText("", "Mr. Huntoon Coordinate(x,y): ", self.enterFish2)
@@ -153,6 +191,11 @@ class SharkGUI:
 
 
     def isClicked(self):
+        """Function determines which button, if any, has been clicked.
+
+        Returns:
+            'quit', 'start', 'fish', 'shark', 'none' depending on the button clicked
+        """
         # Wait for user input
         if not self.win.isClosed():
             p = self.win.getMouse()
@@ -169,7 +212,7 @@ class SharkGUI:
         Draws the fish at the specified locations.
 
         Args:
-            fishList:
+            fishList: List of fish states and positions in format [fish1x, fish1y, fish1dir, fish1flee, fish1alive, fish2x ...]
         """
         moveFishCounter = 0
 
@@ -195,7 +238,6 @@ class SharkGUI:
                         self.gameLogList.append("returned to normal state.\n")
                         self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                         self.gameLogListMoves.append("\n")
-
 
                 image = 'fish' + fishD.capitalize() + flee +'.gif'
 
@@ -239,40 +281,48 @@ class SharkGUI:
 
 
     def updateShark(self, sharkList):
-        """
+        """Function draws the shark on the window according to the theoretical inputted coordinates and state.
+
         Args:
-            sharkList:
+            sharkList: List of shark theoretical position and state in format [sharkx, sharky, sharkdir, sharkchasing]
         """
         self.shark.undraw()
         # https://www.animatedimages.org/cat-sharks-516.htm
+        # retrieve the proper shark image based on shark's direction
         image = 'shark' + sharkList[2] + '.gif'
 
+        # Depending on the shark type, get the x and y position of the shark (point is used at first before fish coordinates are inputted)
         if type(self.shark) == Point: currentX, currentY = self.shark.getX(), self.shark.getY()
         else: currentX, currentY = self.shark.getAnchor().getX(), self.shark.getAnchor().getY()
+
+        # Create the image object (updates the shark's direction facing)
         self.shark = Image(Point(currentX, currentY), image).draw(self.win)
 
+        # Animate the movement of the shark
         self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark, 10)
+
+        # Tell the GUI which fish is being chased
+        # If the shark switches fish, tell the GUI
         if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
             self.gameLogList.append("Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + ";\n")
             self.gameLogList.append("he is close by!\n")
-
             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
             self.gameLogListMoves.append("\n")
-
 
         elif sharkList[3] == self.sharkChasingVal and self.moveCounter != 0:
             self.gameLogList.append("Dr. Mishkit continues to pursue\n")
             self.gameLogList.append(self.fishNameList[sharkList[3]-1] + "\n")
-
             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
             self.gameLogListMoves.append("\n")
 
-
         self.updateGameLog()
+        # Save the fish that the shark is chasing for later use
         self.sharkChasingVal = sharkList[3]
 
 
     def nextTurn(self):
+        """Function tells GUI that fish and sharks have moved and its time for the next turn."""
+        # Swap buttons and instructions
         self.sharkButton.toggleActivation()
         self.fishButton.toggleActivation()
         if self.fishButton.isActive(): self.instructionsText.setText("Click on the fish button to move\nthe fish")
@@ -281,13 +331,18 @@ class SharkGUI:
 
 
     def endGame(self):
+        """Function tells GUI that game has ended."""
         self.win.close()
 
 
     def winner(self, winner):
-        """
+        """Function initiates win sequence and returns list of new fish coordinates.
+
         Args:
-            winner:
+            winner: The team that has won the game ('fish' or 'shark')
+
+        Returns:
+            fishList: List of theoretical fish states and positions. Returns [] if user quits.
         """
         if self.fishButton.isActive(): self.fishButton.toggleActivation()
         if self.sharkButton.isActive(): self.sharkButton.toggleActivation()
@@ -332,9 +387,10 @@ class SharkGUI:
         self.win.close()
         return []
 
-
-    # Helper function: should not be called outside of this class
+    """Helper functions. Should not be called outside of this class."""
     def formatGUI(self):
+        """Function formats the GUI."""
+
         self.enterFish1 = Text(Point(955, 150), "")
         self.enterFish2 = Text(Point(950, 200), "")
         self.enterFish3 = Text(Point(950, 250), "")
@@ -391,6 +447,7 @@ class SharkGUI:
 
 
     def createWin(self):
+        """Function creates the GUI."""
         # Create the buttons
         self.quitButton = Button(1245, 25, 100, 40, 10, color_rgb(231, 76, 60), 'Quit', 'white', 20, self.win)
         self.start = Button(1035, 325, 200, 50, 10, color_rgb(46, 204, 113), 'Start', 'white', 25, self.win)
@@ -422,14 +479,15 @@ class SharkGUI:
 
 
     def anim(self, futureX, futureY, currentX, currentY, graphics, t):
-        """
+        """Function animates the movement of graphics objects.
+
         Args:
-            futureX:
-            futureY:
-            currentX:
-            currentY:
-            graphics:
-            t:
+            futureX: The x position to move the object
+            futureY: The y position to move the object
+            currentX: The current x position of the object
+            currentY: The current y position of the object
+            graphics: The object to be moved
+            t: The speed at which the object should be moved
         """
         moveX, moveY = futureX - currentX, futureY - currentY
         if moveX != 0.0 or moveY != 0.0:
@@ -439,6 +497,7 @@ class SharkGUI:
 
 
     def resetWin(self):
+        """Function resets the GUI values and graphics."""
         self.gameLogList, self.moveCounter, self.txt, self.previousLines, self.gameLogListMoves, self.moveTxt = [], 0, "", 0, [], ""
         self.instructionsText.undraw()
         self.ripFish.undraw()
@@ -456,6 +515,7 @@ class SharkGUI:
 
 
     def updateGameLog(self):
+        """Function updates and displays the dynamic gamelog."""
         newLines, shifter = len(self.gameLogList) - self.previousLines, 0
         for j in range(len(self.gameLogList)-newLines, len(self.gameLogList)):
             if len(self.gameLogList) > 11:
@@ -471,6 +531,16 @@ class SharkGUI:
 
 
     def animText(self, originalText, newText, regularText):
+        """Function animates the movement of text.
+
+        Args:
+            originalText: The current text of the object
+            newText: The to be displayed text of the object
+            regularText: The Text graphics object to be animated
+
+        Returns:
+            newText: The nexText inputted into the function.
+        """
         for i in range(0,len(newText),2):
             if len(newText) - i < 2:
                 originalText += newText[i:i+len(newText) % 2]
