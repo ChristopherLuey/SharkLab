@@ -87,7 +87,7 @@ class Shark:
                 # Set this fish as the closest
                 lowestFishDist, closeFishIndex, randomFishChooser = fishDist, i+1, []
 
-            elif fishDist == lowestFishDist and alive and not(self.chasing == closeFishIndex):
+            elif fishDist == lowestFishDist and alive:
                 randomFishChooser.append(i+1)
 
         randomFishChooser.append(closeFishIndex)
