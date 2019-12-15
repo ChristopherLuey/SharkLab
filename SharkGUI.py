@@ -145,7 +145,7 @@ class SharkGUI:
                                 originalText+= i+"Your x-coordinate is not between 0-9.\n"
                             if len(entry1) >= 3 and not(48<=ord(entry1[2])<=57):
                                 originalText+= i+"Your y-coordinate is not between 0-9.\n"
-                            if len(entry1) >= 3 and int(entry1[0]) == 7 and int(entry1[2]) == 2:
+                            if len(entry1) >= 3 and (48<=ord(entry1[0])<=57) and (48<=ord(entry1[2])<=57) and int(entry1[0]) == 7 and int(entry1[2]) == 2:
                                 originalText+= i+"Your inputted fish point overlaps with the shark.\n"
 
                         # Swap values so every entry is checked
@@ -166,7 +166,7 @@ class SharkGUI:
                                 originalText+= ["Input 1: ", "Input 2: ", "Input 3: ", "Input 1: "][i]+"Your inputted fish point overlaps with other fish\n"
                                 originalText+= ["Input 1: ", "Input 2: ", "Input 3: ", "Input 1: "][i+1]+"Your inputted fish point overlaps with other fish\n"
                                 invalid = True
-                            elif (f1x == f2x == f3x and f1y == f2y == f3y):
+                            elif f1x == f2x == f3x and f1y == f2y == f3y:
                                 self.entry1.setFill(color_rgb(192, 57, 43))
                                 originalText+= ["Input 1: ", "Input 2: ", "Input 3: "][i]+"Your inputted fish point overlaps with other fish\n"
                                 invalid = True
@@ -177,6 +177,7 @@ class SharkGUI:
                             self.entry1, self.entry2, self.entry3 = self.entry2, self.entry3, self.entry1
 
                         if not invalid:
+                            self.storedFish = fishList
                             self.startGame()
                             for i in range(3):
                                 self.gameLogList.append(self.fishNameList[i] + " is at: (" + str(fishList[i * 5]) + ", " + str(fishList[i * 5 + 1]) + ")\n")
@@ -184,6 +185,7 @@ class SharkGUI:
 
                             # Return the entered fish locations
                             return fishList
+
                     self.animText("", originalText[0:len(originalText)-1], self.instructionsText)
 
                 if not self.win.isClosed():
@@ -309,7 +311,6 @@ class SharkGUI:
             # Create the image object (updates the shark's direction facing)
             self.shark = Image(Point(currentX, currentY), image).draw(self.win)
 
-            # Animate the movement of the shark
             self.anim(75 * sharkList[0] + 57, sharkList[1] * 75 + 57, currentX, currentY, self.shark, 10)
 
             # Tell the GUI which fish is being chased
@@ -580,9 +581,9 @@ class SharkGUI:
 
 
     def startGame(self):
+        """Function initiates starting sequence of events."""
         # Display fish and shark on the board
         self.fishButton.toggleActivation()
-        self.storedFish = fishList
         self.entry1.undraw()
         self.entry2.undraw()
         self.entry3.undraw()
