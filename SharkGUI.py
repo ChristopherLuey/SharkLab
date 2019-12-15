@@ -370,6 +370,7 @@ class SharkGUI:
 
         quitButton = Button(60,30,100,50,5,'red', "Quit", 'white', 20,popup)
         quitButton.toggleActivation()
+        self.quitButton.toggleActivation()
 
         for k in listOfConfetti: k.undraw()
 
