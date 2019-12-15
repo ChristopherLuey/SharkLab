@@ -30,6 +30,9 @@ class Shark:
 
         Args:
             fishList: list of fish positions and states in format [f1x, f1y, f1dir, f1flee, f1alive, f2x, f2y, ...]
+
+        Returns:
+            sharkList: list of shark position and state in format [sharkx, sharky, dir, chasing]
         """
         # Find the fish the shark is chasing
         self.calculateFishChasing(fishList)
@@ -47,6 +50,8 @@ class Shark:
                 # Shark cannot move anymore after eating, so break out
                 break
 
+        return [self.x, self.y, self.dir, self.chasing]
+
 
     def getPosition(self):
         """Function returns the current theoretical position of the shark.
@@ -56,16 +61,6 @@ class Shark:
             y: y position of the shark
         """
         return self.x, self.y
-
-
-    def getSharkList(self):
-        """Function returns the current theoretical position and state of the shark
-        to be passed into SharkGUI.
-
-        Returns:
-            sharkList: list of shark state and attributes in format [x, y, dir, chasing]
-        """
-        return [self.x, self.y, self.dir, self.chasing]
 
 
     # Shark Helper Methods - Not Included in API Since They Should Not Be Called Outside of This Class
