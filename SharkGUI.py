@@ -48,7 +48,7 @@ class SharkGUI:
         gridList = []
 
         # Change of colors over time in order to create a gradient
-        mover, moveg, moveb = 24, 117 - 40, 208 - 100
+        mover, moveg, moveb = 100, 77, 108
         for i in range(102):
             l = Line(Point(0, i * 8), Point(1300, i * 8))
             l.setFill(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
@@ -67,10 +67,17 @@ class SharkGUI:
         gridList.append(p2)
 
         # Box
-        r = Rectangle(Point(820, 70), Point(1290, 790))
-        r.setFill(color_rgb(41, 128, 185))
-        r.setOutline(color_rgb(41, 128, 185))
-        gridList.append(r)
+        # r = Rectangle(Point(820, 70), Point(1290, 790))
+        # r.setFill(color_rgb(41, 128, 185))
+        # r.setOutline(color_rgb(41, 128, 185))
+        # gridList.append(r)
+        mover, moveg, moveb = 40, 90, 108
+        for i in range(143):
+            l = Line(Point(800, i * 5 + 65), Point(1275, i * 5 + 65))
+            l.setFill(color_rgb(int(70 + mover * i / 143), int(90 - moveg * i / 143), int(255 - moveb * i / 143)))
+            l.setOutline(color_rgb(int(70 + mover * i / 143), int(90 - moveg * i / 143), int(255 - moveb * i / 143)))
+            l.setWidth(10)
+            gridList.append(l)
 
         # Draw the grid shadow and grid
         for i in range(11):
@@ -96,7 +103,6 @@ class SharkGUI:
 
         self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
         self.createWin()
-        self.anim(1037.5, 420.0, 1055.0, 430.0, r, 10)
 
 
     def gatherUserInput(self):
@@ -130,7 +136,7 @@ class SharkGUI:
                     for i in ["Input 1: ", "Input 2: ", "Input 3: "]:
                         # Check if it is properly formatted with m,n
                         # This means entry must be 3 chars long, must include a comma at the second char, and the first and third chars must be from 0-9
-                        if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57 and int(entry1[0]) != 7 and int(entry1[2]) != 2:
+                        if len(entry1) == 3 and entry1[1] == "," and 48<=ord(entry1[0])<=57 and 48<=ord(entry1[2])<=57 and (int(entry1[0]) != 7 or int(entry1[2]) != 2):
                             # Add this to the fish attributes list which will be passed into updateFish()
                             fishList.extend([int(entry1[0]), int(entry1[2]), 'east', False, True])
                             self.entry1.setFill(color_rgb(26, 188, 156))
@@ -139,14 +145,16 @@ class SharkGUI:
                             # Check the error type
                             if len(entry1) != 3:
                                 originalText+= i+"Your inputted point is not 3 chars\n"
-                            if len(entry1) >= 2 and entry1[1] != ",":
-                                originalText+= i+"Your inputted points are not\nseparated by a comma at the second character.\n"
-                            if len(entry1) >= 1 and not(48<=ord(entry1[0])<=57):
-                                originalText+= i+"Your x-coordinate is not between 0-9.\n"
-                            if len(entry1) >= 3 and not(48<=ord(entry1[2])<=57):
-                                originalText+= i+"Your y-coordinate is not between 0-9.\n"
-                            if len(entry1) >= 3 and (48<=ord(entry1[0])<=57) and (48<=ord(entry1[2])<=57) and int(entry1[0]) == 7 and int(entry1[2]) == 2:
-                                originalText+= i+"Your inputted fish point overlaps with the shark.\n"
+                            else:
+                                if len(entry1) >= 2 and entry1[1] != ",":
+                                    originalText+= i+"Your inputted points are not\nseparated by a comma at the second character.\n"
+                                else:
+                                    if len(entry1) >= 1 and not(48<=ord(entry1[0])<=57):
+                                        originalText+= i+"Your x-coordinate is not between 0-9.\n"
+                                    if len(entry1) >= 3 and not(48<=ord(entry1[2])<=57):
+                                        originalText+= i+"Your y-coordinate is not between 0-9.\n"
+                                    if len(entry1) >= 3 and (48<=ord(entry1[0])<=57) and (48<=ord(entry1[2])<=57) and int(entry1[0]) == 7 and int(entry1[2]) == 2:
+                                        originalText+= i+"Your inputted fish point overlaps with the shark.\n"
 
                         # Swap values so every entry is checked
                         entry1, entry2, entry3, self.entry1, self.entry2, self.entry3 = entry2, entry3, entry1, self.entry2, self.entry3, self.entry1
