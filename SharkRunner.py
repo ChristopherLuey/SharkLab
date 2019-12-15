@@ -251,7 +251,6 @@ def main():
                 
                 if buttonClicked == "fish":
 
-                    sharkList = shark.getSharkList()
                     sharkX,sharkY = shark.getPosition()
                     
                     #move procedure    
@@ -285,8 +284,7 @@ def main():
 
                     #move shark
 
-                    shark.sharkTurn(fishList)
-                    sharkList = shark.getSharkList()
+                    sharkList = shark.sharkTurn(fishList)
                     sharkX,sharkY = shark.getPosition()
 
                     #eat fish
