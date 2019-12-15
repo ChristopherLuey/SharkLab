@@ -144,22 +144,6 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
 
                     if statusList[0] == True and statusList[2] == True:
                         fishWin = True
-
-                        """#test if all three are on the same axis, on the same direction
-                        
-                        if statusList[1] == False and statusList[3] == False:
-                            fishWin = True
-
-                        #test if 2 fish are adjacent and there is a gap to ther third
-                        elif statusList[1] == False and statusList[3] == True:
-                            fishWin = True
-                        elif statusList[1] == True and statusList[3] == False:
-                            fishWin = True
-
-                        #test if 1 fish is adjacent and there is a gap to both
-
-                        elif statusList[1] == True and statusList[3] == True:
-                            fishWin = True"""
  
     return fishWin
 
