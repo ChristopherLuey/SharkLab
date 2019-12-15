@@ -1,7 +1,7 @@
 #File: SharkRunner.py
 #Written by: Andreas Petrou-Zeniou
 #Date: 12/10/19
-#executes movement of fish and shark, communicates with GUI to draw on 10x10 grid
+#executes movement of fish and shark, communicates with GUI to draw on 10x10 grid, calculates stalemate
 
 from SharkGUI import *
 from Fish import *
@@ -25,6 +25,8 @@ def getAliveList(fish1,fish2,fish3):
 
 def fish2WinTest(aliveFishList,sharkX,sharkY):
 
+    #if 1 fish is dead, test which fish is on the same axis as the shark, and set that fish to index 0. Test if fish directions are the same, and then test distances to shark
+
     fishWin = False
 
     gap = False
@@ -41,16 +43,20 @@ def fish2WinTest(aliveFishList,sharkX,sharkY):
 
         #situation where fish are right next to each other, facing the same direction and are both being chased by the shark
 
+        #in order, test if central fish is on axis with shark
+        #test if central fish is 1 block adjacent to other fish, and if they are on the same axis as one another
+        #test basic win situation
+
         if aliveFishList[0].getDirection() == aliveFishList[1].getDirection():
 
             if aliveFishList[0].getX() == sharkX:
-                if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) <= 4:
+                if aliveFishList[0].getY() == aliveFishList[1].getY() and abs(aliveFishList[0].getX() - aliveFishList[1].getX()) == 1:
                     if (aliveFishList[0].getY() == 9 or aliveFishList[0].getY() == 0) and 5 > abs(aliveFishList[0].getY() - sharkY) > 2:
                         fishWin = True
                         gap = False
                                 
             elif aliveFishList[0].getY() == sharkY:
-                if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) <= 4:
+                if aliveFishList[0].getX() == aliveFishList[1].getX() and abs(aliveFishList[0].getY() - aliveFishList[1].getY()) == 1:
                     if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                         fishWin = True
                         gap = False
@@ -91,11 +97,8 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
         elif aliveFishList[0].getY() == sharkY:
             if (aliveFishList[0].getX() == 9 or aliveFishList[0].getX() == 0) and 5 > abs(aliveFishList[0].getX() - sharkX) > 2:
                 fishWin = True
-
-    #if 1 fish is dead, test which fish is on the same axis as the shark, and set that fish to index 0. Test if fish directions are the same, and then test distances to shark
                 
-    elif deadNumber == 1:
-
+    elif deadNumber == 1: #2 fish win situation
         fishWin,gap = fish2WinTest(aliveFishList,sharkX,sharkY)
         
     #no fish are dead
@@ -119,6 +122,9 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                 aliveFishList[0],aliveFishList[1],aliveFishList[2] = aliveFishList[2],aliveFishList[1],aliveFishList[2]
                 continueVar = True
 
+            #append statusList to a list because fish2WinTest does not always return true, even if in a stalemate. It only returns true when a fish is on the
+            #edge, getting chased by a shark from a distance of 1 or 2 blocks away.
+
             if continueVar == True:
 
                 fishWin1,gap1 = fish2WinTest([aliveFishList[0],aliveFishList[1]],sharkX,sharkY)
@@ -132,11 +138,14 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                     statusList.append(fishWin2)
                     statusList.append(gap2)
 
+                #test different combinations of 2 fish win situations
+
                 if len(statusList) >=4:
 
                     if statusList[0] == True and statusList[2] == True:
+                        fishWin = True
 
-                        #test if all three are on the same axis, on the same direction
+                        """#test if all three are on the same axis, on the same direction
                         
                         if statusList[1] == False and statusList[3] == False:
                             fishWin = True
@@ -150,11 +159,9 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                         #test if 1 fish is adjacent and there is a gap to both
 
                         elif statusList[1] == True and statusList[3] == True:
-                            fishWin = True
+                            fishWin = True"""
  
     return fishWin
-
-
 
 def directionRel(fish1,fish2):
 
@@ -186,36 +193,6 @@ def getFishList(fish1,fish2,fish3):
     #returns a list of fish data to be inputed into the GUI, which updates the graphic representations of fish
     return [fish1.getX(),fish1.getY(),fish1.getDirection(),fish1.getFlee(),fish1.getAlive(),fish2.getX(),fish2.getY(),fish2.getDirection(),fish2.getFlee(),fish2.getAlive(),fish3.getX(),fish3.getY(),fish3.getDirection(),fish3.getFlee(),fish3.getAlive()]
 
-def collideMove(fish):
-
-    #sequence of movements if fish has two movement options (on a diagonal with the shark) in case fish collides
-    
-    fish.directionReverse()
-    fish.move(1)
-    fish.collideSetDirection()
-    fish.move(1)
-
-def wallHitting(fishObject,sharkX,sharkY,string):
-
-    #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
-
-    #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
-
-    if fishObject.getWallHitting() ==  True and fishObject.getFlee() == False and string != "flipped":
-        fishObject.directionReverse()
-        fishObject.move(2)
-        return("notFlipped")
-
-    #if the fish hits the wall and is in flee mode, the fish will flip across the grid
-        
-    elif fishObject.getWallHitting() ==  True and fishObject.getFlee() == True:
-        fishObject.reversePos()
-        return("flipped")
-    
-    if string == "flipped" and fishObject.getWallHitting() == True:
-        fishObject.reversePos()
-        return("")
-
 def collisionScenario(fish1,fish2,fish3,roundFish):
 
     if roundFish.getAlive() == True:
@@ -241,7 +218,7 @@ def collisionScenario(fish1,fish2,fish3,roundFish):
             if roundFish.getX() == collideFish.getX() and roundFish.getY() == collideFish.getY():
 
                 if roundFish.getFlee() == True and roundFish.getAltDirection() == True and collisionRound != 0:
-                    collideMove(roundFish)
+                    roundFish.collideMove()
                     collisionRound += 1
                 else:
                     roundFish.move(-1)
@@ -252,11 +229,11 @@ def main():
         
     GUI = SharkGUI()
     GUIList = GUI.gatherUserInput()
-    statusList = [] #pass through fishWinTest in order to detect 3 win situation
 
     looping = True
     while looping == True:
-
+        
+        statusList = [] #pass through fishWinTest in order to detect 3 win situation
         fishWins = 0 # use this variable to delay fish win message, accumulator variable
 
         if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
@@ -265,9 +242,7 @@ def main():
 
         elif GUIList != []:
         
-            fish1 = Fish(GUIList[0],GUIList[1],"west",False,True,False,"DNE")
-            fish2 = Fish(GUIList[5],GUIList[6],"west",False,True,False,"DNE")
-            fish3 = Fish(GUIList[10],GUIList[11],"west",False,True,False,"DNE")
+            fish1,fish2,fish3 = Fish(GUIList[0],GUIList[1]),Fish(GUIList[5],GUIList[6]),Fish(GUIList[10],GUIList[11])
             fishListObjects = [fish1,fish2,fish3] #use this list to efficiently cycle through fish objects in repetitive sequences, order is 1, 2, 3
 
             #construct shark, gather coordinates to set flee status of each fish, then set direction as well
@@ -302,15 +277,12 @@ def main():
                         fishObject.setDirection(sharkX,sharkY)
                         fishObject.move(1)
                         #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
-                        inputString = wallHitting(fishObject,sharkX,sharkY,"")
+                        inputString = fishObject.wallHitting(sharkX,sharkY,"")
                         #collisions scenario, do after every round to ensure valid order
                         collisionScenario(fish1,fish2,fish3,fishObject)
 
-                        #ensure that fish is not collided when it flips across grid
-                        wallHitting(fishObject,sharkX,sharkY,inputString)
-
-                        fishObject.setFlee(sharkX,sharkY)
-                        fishObject.setDirection(sharkX,sharkY)
+                        #ensure that fish is not collided when it flips across grid, use inputString to reset position
+                        fishObject.wallHitting(sharkX,sharkY,inputString)
 
                     fishList = getFishList(fish1,fish2,fish3)
                     GUI.updateFish(fishList)
@@ -336,12 +308,11 @@ def main():
                     #eat fish
 
                     for fishObject in fishListObjects:
-                        if sharkX == fishObject.getX() and sharkY == fishObject.getY() and fishObject.getAlive() == True:
-                            fishObject.eat()
-                            fishObject.setCoords(11,11) #use to avoid collisions after fish death
+                        fishObject.eat(sharkX,sharkY)
 
                     #update GUI
-                            
+
+                    fishList = getFishList(fish1,fish2,fish3)
                     GUI.updateShark(sharkList)
                     GUI.updateFish(fishList)
                     GUI.nextTurn()
