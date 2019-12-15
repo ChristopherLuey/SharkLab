@@ -1,29 +1,29 @@
 #File: Fish.py
 #Written By: Andreas Petrou-Zeniou
 #Date: 12/12/19
-#Handles all individual fish movement (more complex interactions are handled
-#within SharkRunner, with the fish 
+#Handles all individual fish movement (collision interactions are handled
+#within SharkRunner.) Handles movement on a theoretical 10x10 plane.
 
 import math
 from random import randrange
 
 class Fish:
 
-    def __init__(self,x,y,direction,flee,alive,wallHitting,altDirection):
+    def __init__(self,x,y):
 
         #convert to self. form
 
         self.fishXCoord = x
         self.fishYCoord = y
-        self.fishDirection = direction
-        self.fishFleeStatus = flee
-        self.fishAliveStatus = alive
-        self.fishWallHittingStatus = wallHitting
-        self.fishAltDirection = altDirection
+        self.fishDirection = "DNE"
+        self.fishFleeStatus = False
+        self.fishAliveStatus = True
+        self.fishWallHittingStatus = False
+        self.fishAltDirection = "DNE"
 
         #use to randomly assign direction at beginning of game
 
-        self.directionInt = randrange(1,5)
+        self.directionInt = randrange(1,4)
 
         if self.directionInt == 1:
             self.fishDirection = "west"
@@ -94,16 +94,24 @@ class Fish:
 
     #mutators
         
-    def eat(self):
+    def eat(self,sharkX,sharkY):
 
-        #kills the fish
+        #kills the fish after detecting whether it shares its coordinates with a shark
+
+        self.sharkXCoord = sharkX
+        self.sharkYCoord = sharkY
+
+        if self.fishXCoord == self.sharkXCoord and self.fishYCoord == self.sharkYCoord:
         
-        self.fishAliveStatus = False
+            self.fishAliveStatus = False
+            self.setCoords(11,11)
 
     def reversePos(self):
 
-        #if the fish hits a barrier, reversePos
-        #flips the fish across the grid
+        #reversePos flips the fish across the grid.
+        #useful when the fish is in flee mode and
+        #has to flip across the grid in a wall
+        #hitting situation
 
 
         if self.fishXCoord < 0:
@@ -275,4 +283,42 @@ class Fish:
 
             self.fishDirection,self.fishAltDirection = self.fishAltDirection,self.fishDirection
 
+    def collideMove(self):
+
+        #sequence of movements if fish has two movement options (on a diagonal with the shark) in case fish collides
+
+        self.directionReverse()
+        self.move(1)
+        self.collideSetDirection()
+        self.move(1)
+
+    def wallHitting(self,sharkX,sharkY,string):
+
+        self.string = string
+
+        #wall hitting scenario. If in flee, fish flips across grid. Otherwise, initiates wall bump sequence.
+
+        #if the fish hits the wall and is not in flee mode, the fish will reverse direction and move one square in the GUI
+
+        if self.getWallHitting() ==  True and self.getFlee() == False and self.string != "flipped":
+            self.directionReverse()
+            self.move(2)
+            return("notFlipped")
+
+        #if the fish hits the wall and is in flee mode, the fish will flip across the grid
+            
+        elif self.getWallHitting() ==  True and self.getFlee() == True:
+            self.reversePos()
+            return("flipped")
+
+        #use these lines to flip fish back across the board if it is in a collision scenario
         
+        if self.string == "flipped" and self.getWallHitting() == True:
+            self.reversePos()
+            self.setFlee(sharkX,sharkY)
+            self.setDirection(sharkX,sharkY)
+            return("")
+
+
+
+  
