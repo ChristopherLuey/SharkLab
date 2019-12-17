@@ -48,11 +48,11 @@ class SharkGUI:
         gridList = []
 
         # Change of colors over time in order to create a gradient
-        mover, moveg, moveb = 100, 77, 108
+        mover, moveg, moveb = 90, 117, 8
         for i in range(102):
             l = Line(Point(0, i * 8), Point(1300, i * 8))
-            l.setFill(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
-            l.setOutline(color_rgb(int(26 + mover * i / 102), int(117 - moveg * i / 102), int(208 - moveb * i / 102)))
+            l.setFill(color_rgb(int(9 + mover * i / 102), int(130 - moveg * i / 102), int(230 - moveb * i / 102)))
+            l.setOutline(color_rgb(int(9 + mover * i / 102), int(130 - moveg * i / 102), int(230 - moveb * i / 102)))
             l.setWidth(10)
             gridList.append(l)
 
@@ -71,11 +71,11 @@ class SharkGUI:
         # r.setFill(color_rgb(41, 128, 185))
         # r.setOutline(color_rgb(41, 128, 185))
         # gridList.append(r)
-        mover, moveg, moveb = 40, 90, 108
+        mover, moveg, moveb = 40, 90, 9
         for i in range(143):
             l = Line(Point(800, i * 5 + 65), Point(1275, i * 5 + 65))
-            l.setFill(color_rgb(int(70 + mover * i / 143), int(90 - moveg * i / 143), int(255 - moveb * i / 143)))
-            l.setOutline(color_rgb(int(70 + mover * i / 143), int(90 - moveg * i / 143), int(255 - moveb * i / 143)))
+            l.setFill(color_rgb(int(9 + mover * i / 143), int(90 + moveg * i / 143), int(255 - moveb * i / 143)))
+            l.setOutline(color_rgb(int(9 + mover * i / 143), int(90 + moveg * i / 143), int(255 - moveb * i / 143)))
             l.setWidth(10)
             gridList.append(l)
 
@@ -101,7 +101,7 @@ class SharkGUI:
         # Draw all the attributes at once
         for line in gridList: line.draw(self.win)
 
-        self.fishNameList = ["Mr. Ladd", "Mr. Huntoon", "Mr. Fisher"]
+        self.fishNameList = ["Spiderman", "Captain America", "Iron Man"]
         self.createWin()
 
 
@@ -324,13 +324,13 @@ class SharkGUI:
             # Tell the GUI which fish is being chased
             # If the shark switches fish, tell the GUI
             if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
-                self.gameLogList.append("Dr. Mishkit smells " + self.fishNameList[sharkList[3]-1] + ";\n")
+                self.gameLogList.append("Thanos smells " + self.fishNameList[sharkList[3]-1] + ";\n")
                 self.gameLogList.append("he is close by!\n")
                 self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                 self.gameLogListMoves.append("\n")
 
             elif sharkList[3] == self.sharkChasingVal and self.moveCounter != 0:
-                self.gameLogList.append("Dr. Mishkit continues to pursue\n")
+                self.gameLogList.append("Thanos continues to pursue\n")
                 self.gameLogList.append(self.fishNameList[sharkList[3]-1] + "\n")
                 self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                 self.gameLogListMoves.append("\n")
