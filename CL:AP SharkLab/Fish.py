@@ -142,7 +142,6 @@ class Fish:
         self.sharkYCoord = sharkY
 
         if (0 <= abs(self.sharkXCoord - self.fishXCoord) <= 3) and (0 <= abs(self.sharkYCoord - self.fishYCoord) <= 3):
-            self.fishHeadOnStatus = False
             self.fishFleeStatus = True
 
         else:

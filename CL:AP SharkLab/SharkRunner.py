@@ -131,35 +131,19 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                 fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
 
                 if fishWin1 == True:
-                    statusList.append(fishWin1)
-                    statusList.append(gap1)
+                    statusList[0] = fishWin1
+                    statusList[1] = gap1
 
                 if fishWin2 == True:
-                    statusList.append(fishWin2)
-                    statusList.append(gap2)
+                    statusList[2] = fishWin2
+                    statusList[3] = gap2
 
-                #test different combinations of 2 fish win situations
+                #test different combinations of 2 fish win situations, if both pairs of fish are a win, fishWin is True
 
                 if len(statusList) >=4:
 
                     if statusList[0] == True and statusList[2] == True:
                         fishWin = True
-
-                        """#test if all three are on the same axis, on the same direction
-                        
-                        if statusList[1] == False and statusList[3] == False:
-                            fishWin = True
-
-                        #test if 2 fish are adjacent and there is a gap to ther third
-                        elif statusList[1] == False and statusList[3] == True:
-                            fishWin = True
-                        elif statusList[1] == True and statusList[3] == False:
-                            fishWin = True
-
-                        #test if 1 fish is adjacent and there is a gap to both
-
-                        elif statusList[1] == True and statusList[3] == True:
-                            fishWin = True"""
  
     return fishWin
 
@@ -233,7 +217,7 @@ def main():
     looping = True
     while looping == True:
         
-        statusList = [] #pass through fishWinTest in order to detect 3 win situation
+        statusList = ["","","",""] #pass through fishWinTest in order to detect 3 win situation
         fishWins = 0 # use this variable to delay fish win message, accumulator variable
 
         if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
@@ -267,7 +251,6 @@ def main():
                 
                 if buttonClicked == "fish":
 
-                    sharkList = shark.getSharkList()
                     sharkX,sharkY = shark.getPosition()
                     
                     #move procedure    
@@ -301,8 +284,7 @@ def main():
 
                     #move shark
 
-                    shark.sharkTurn(fishList)
-                    sharkList = shark.getSharkList()
+                    sharkList = shark.sharkTurn(fishList)
                     sharkX,sharkY = shark.getPosition()
 
                     #eat fish
