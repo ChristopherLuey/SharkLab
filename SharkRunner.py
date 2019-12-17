@@ -131,12 +131,12 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                 fishWin2,gap2 = fish2WinTest([aliveFishList[0],aliveFishList[2]],sharkX,sharkY)
 
                 if fishWin1 == True:
-                    statusList.append(fishWin1)
-                    statusList.append(gap1)
+                    statusList[0] = fishWin1
+                    statusList[1] = gap1
 
                 if fishWin2 == True:
-                    statusList.append(fishWin2)
-                    statusList.append(gap2)
+                    statusList[2] = fishWin2
+                    statusList[3] = gap2
 
                 #test different combinations of 2 fish win situations
 
@@ -217,7 +217,7 @@ def main():
     looping = True
     while looping == True:
         
-        statusList = [] #pass through fishWinTest in order to detect 3 win situation
+        statusList = ["","","",""] #pass through fishWinTest in order to detect 3 win situation
         fishWins = 0 # use this variable to delay fish win message, accumulator variable
 
         if GUIList == []: #use this if statement to ensure that quit does not lead to error if start is not clicked
