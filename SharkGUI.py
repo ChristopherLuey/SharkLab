@@ -101,7 +101,7 @@ class SharkGUI:
         # Draw all the attributes at once
         for line in gridList: line.draw(self.win)
 
-        self.fishNameList = ["Spiderman", "Captain America", "Iron Man"]
+        self.fishNameList = ["Spiderman", "Hawkeye", "Iron Man"]
         self.createWin()
 
 
@@ -113,9 +113,9 @@ class SharkGUI:
                       List if blank if inputted points are formatted incorrectly.
         """
         if not self.win.isClosed():
-            self.animText("", "Mr. Ladd Coordinate(x,y): ", self.enterFish1)
-            self.animText("", "Mr. Huntoon Coordinate(x,y): ", self.enterFish2)
-            self.animText("", "Mr. Fisher Coordinate(x,y): ", self.enterFish3)
+            self.animText("", "Spiderman Coordinate(x,y): ", self.enterFish1)
+            self.animText("", "Hawkeye Coordinate(x,y): ", self.enterFish2)
+            self.animText("", "Iron Man Coordinate(x,y): ", self.enterFish3)
             self.animText("", "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates", self.instructionsText)
             self.updateShark([7,2,'East',0])
             if not self.start.isActive():
