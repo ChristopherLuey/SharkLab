@@ -4,7 +4,6 @@
 # Manages all GUI events for SharkRunner.py
 
 from Button import *
-import time
 
 class SharkGUI:
     """This class uses John Zelle's Graphics library in order to create a GUI to display the fishes and
@@ -110,7 +109,7 @@ class SharkGUI:
 
         Returns:
             fishList: List of fish positions and states in format [fish1x, fish1y, fish1dir, fish1flee, fish1alive, fish2x ... ]
-                      List if blank if inputted points are formatted incorrectly.
+                      List if blank if user quits.
         """
         if not self.win.isClosed():
             self.animText("", "Fortnite Coordinate(x,y): ", self.enterFish1)
@@ -144,19 +143,19 @@ class SharkGUI:
                             self.entry1.setFill(color_rgb(192, 57, 43))
                             # Check the error type
                             if len(entry1) == 0:
-                                originalText+= i+"Your inputted point is blank.\n"
+                                originalText+= i+"Your point is blank.\n"
                             elif len(entry1) != 3:
-                                originalText+= i+"Your inputted point is not 3 characters long.\n"
+                                originalText+= i+"Your point is not 3 characters long.\n"
                             else:
                                 if len(entry1) >= 2 and entry1[1] != ",":
-                                    originalText+= i+"Your inputted points are not\nseparated by a comma at the second character.\n"
+                                    originalText+= i+"Your point is not separated\nby a comma at the second character.\n"
                                 else:
                                     if len(entry1) >= 1 and not(48<=ord(entry1[0])<=57):
                                         originalText+= i+"Your x-coordinate is not between 0-9.\n"
                                     if len(entry1) >= 3 and not(48<=ord(entry1[2])<=57):
                                         originalText+= i+"Your y-coordinate is not between 0-9.\n"
                                     if len(entry1) >= 3 and (48<=ord(entry1[0])<=57) and (48<=ord(entry1[2])<=57) and int(entry1[0]) == 7 and int(entry1[2]) == 2:
-                                        originalText+= i+"Your inputted fish point overlaps with the shark.\n"
+                                        originalText+= i+"Your point overlaps with the shark.\n"
 
                         # Swap values so every entry is checked
                         entry1, entry2, entry3, self.entry1, self.entry2, self.entry3 = entry2, entry3, entry1, self.entry2, self.entry3, self.entry1
@@ -168,14 +167,16 @@ class SharkGUI:
                         # Store all 3 fishes x,y
                         f1x, f2x, f3x = fishList[0], fishList[5], fishList[10]
                         f1y, f2y, f3y = fishList[1], fishList[6], fishList[11]
+
                         for i in range(3):
                             # Compare all fish coords to each other and shark
                             if (f1x == f2x and f1y == f2y) and not(f1x == f2x == f3x and f1y == f2y == f3y):
                                 self.entry1.setFill(color_rgb(192, 57, 43))
                                 self.entry2.setFill(color_rgb(192, 57, 43))
-                                originalText+= ["Input 1: ", "Input 2: ", "Input 3: ", "Input 1: "][i]+"Your inputted fish point overlaps with other fish\n"
-                                originalText+= ["Input 1: ", "Input 2: ", "Input 3: ", "Input 1: "][i+1]+"Your inputted fish point overlaps with other fish\n"
+                                originalText+= ["Input 1: ", "Input 2: ", "Input 3: ", "Input 1: "][i]+"Your inputted point overlaps with other fish\n"
+                                originalText+= ["Input 1: ", "Input 2: ", "Input 3: ", "Input 1: "][i+1]+"Your inputteda point overlaps with other fish\n"
                                 invalid = True
+
                             elif f1x == f2x == f3x and f1y == f2y == f3y:
                                 self.entry1.setFill(color_rgb(192, 57, 43))
                                 originalText+= ["Input 1: ", "Input 2: ", "Input 3: "][i]+"Your inputted fish point overlaps with other fish\n"
@@ -503,9 +504,9 @@ class SharkGUI:
 
         self.storedFish = []
         self.fish1, self.fish2, self.fish3, self.shark = Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win), Point(0, 0).draw(self.win)
-        self.updateShark([7, 2, 'East', 0])     # Draw the shark on the board
+        self.updateShark([7, 2, 'East', 0])
 
-        self.quitButton.toggleActivation()      # Activate the quit button
+        self.quitButton.toggleActivation()
 
 
     def anim(self, futureX, futureY, currentX, currentY, graphics, t):
@@ -523,7 +524,6 @@ class SharkGUI:
         if moveX != 0.0 or moveY != 0.0:
             for i in range(t):
                 graphics.move(moveX / t, moveY / t)
-                time.sleep(0.001)
 
 
     def resetWin(self):

@@ -71,7 +71,7 @@ class Shark:
             fishList: List of fish attributes in format [fish1x, fish1y, fish1dir, fish1flee, fish1IsAlive, fish2x, ...]
         """
         # Save the lowest fish distance, closest fish index, and how many fish need to be randomly chosen to pursue
-        lowestFishDist, closeFishIndex, randomFishChooser = 1000, self.chasing, []
+        lowestFishDist, randomFishChooser, closeFishIndex = 1000, self.chasing, []
 
         for i in range(3):
             # Gather fish data
@@ -85,12 +85,12 @@ class Shark:
 
             if fishDist < lowestFishDist and alive:
                 # Set this fish as the closest
-                lowestFishDist, closeFishIndex, randomFishChooser = fishDist, i+1, []
+                lowestFishDist, randomFishChooser = fishDist, []
+                randomFishChooser.append(i+1) # Add the index of the closest fish to the list
 
             elif fishDist == lowestFishDist and alive:
                 randomFishChooser.append(i+1)
 
-        randomFishChooser.append(closeFishIndex)
         for fish in randomFishChooser:
             # Check whether the fish the shark is currently chasing is in the list
             if fish == self.chasing:
