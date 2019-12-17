@@ -138,7 +138,7 @@ def fishWinTest(fish1,fish2,fish3,sharkX,sharkY,statusList):
                     statusList[2] = fishWin2
                     statusList[3] = gap2
 
-                #test different combinations of 2 fish win situations
+                #test different combinations of 2 fish win situations, if both pairs of fish are a win, fishWin is True
 
                 if len(statusList) >=4:
 
