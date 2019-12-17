@@ -101,7 +101,7 @@ class SharkGUI:
         # Draw all the attributes at once
         for line in gridList: line.draw(self.win)
 
-        self.fishNameList = ["Spiderman", "Hawkeye", "Iron Man"]
+        self.fishNameList = ["Fortnite", "Minecraft", "Roblox"]
         self.createWin()
 
 
@@ -113,9 +113,9 @@ class SharkGUI:
                       List if blank if inputted points are formatted incorrectly.
         """
         if not self.win.isClosed():
-            self.animText("", "Spiderman Coordinate(x,y): ", self.enterFish1)
-            self.animText("", "Hawkeye Coordinate(x,y): ", self.enterFish2)
-            self.animText("", "Iron Man Coordinate(x,y): ", self.enterFish3)
+            self.animText("", "Fortnite Coordinate(x,y): ", self.enterFish1)
+            self.animText("", "Minecraft Coordinate(x,y): ", self.enterFish2)
+            self.animText("", "Roblox Coordinate(x,y): ", self.enterFish3)
             self.animText("", "Enter the coordinates of the\nthree fish above.\nMake sure you don't enter the shark\nor any other fish coordinates", self.instructionsText)
             self.updateShark([7,2,'East',0])
             if not self.start.isActive():
@@ -143,8 +143,10 @@ class SharkGUI:
                         else:
                             self.entry1.setFill(color_rgb(192, 57, 43))
                             # Check the error type
-                            if len(entry1) != 3:
-                                originalText+= i+"Your inputted point is not 3 chars\n"
+                            if len(entry1) == 0:
+                                originalText+= i+"Your inputted point is blank.\n"
+                            elif len(entry1) != 3:
+                                originalText+= i+"Your inputted point is not 3 characters long.\n"
                             else:
                                 if len(entry1) >= 2 and entry1[1] != ",":
                                     originalText+= i+"Your inputted points are not\nseparated by a comma at the second character.\n"
@@ -242,14 +244,14 @@ class SharkGUI:
                     if fishf:
                         flee = 'Flee'
                         if not self.storedFish[i*5+3]:
-                            self.gameLogList.append(self.fishNameList[i] + " senses the shark;\n")
-                            self.gameLogList.append("he transforms into flee mode!\n")
+                            self.gameLogList.append(self.fishNameList[i] + " senses mom nearby;\n")
+                            self.gameLogList.append("it transforms into flee mode!\n")
                             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                             self.gameLogListMoves.append("\n")
 
                     else:
                         if self.storedFish[i * 5 + 3]:
-                            self.gameLogList.append(self.fishNameList[i] + " has escaped and\n")
+                            self.gameLogList.append(self.fishNameList[i] + " has escaped mom and\n")
                             self.gameLogList.append("returned to normal state.\n")
                             self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                             self.gameLogListMoves.append("\n")
@@ -324,13 +326,13 @@ class SharkGUI:
             # Tell the GUI which fish is being chased
             # If the shark switches fish, tell the GUI
             if sharkList[3] != 0 and sharkList[3] != self.sharkChasingVal:
-                self.gameLogList.append("Thanos smells " + self.fishNameList[sharkList[3]-1] + ";\n")
-                self.gameLogList.append("he is close by!\n")
+                self.gameLogList.append("Mom smells " + self.fishNameList[sharkList[3]-1] + ";\n")
+                self.gameLogList.append("it is close by!\n")
                 self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                 self.gameLogListMoves.append("\n")
 
             elif sharkList[3] == self.sharkChasingVal and self.moveCounter != 0:
-                self.gameLogList.append("Thanos continues to pursue\n")
+                self.gameLogList.append("Mom continues to pursue\n")
                 self.gameLogList.append(self.fishNameList[sharkList[3]-1] + "\n")
                 self.gameLogListMoves.append("[Move " + str(self.moveCounter) + "]: \n")
                 self.gameLogListMoves.append("\n")
@@ -425,7 +427,7 @@ class SharkGUI:
         self.instructionsTitle.setTextColor('white')
         drawList.append(self.instructionsTitle)
 
-        self.instructionsText.setSize(16)
+        self.instructionsText.setSize(19)
         self.instructionsText.setTextColor(color_rgb(236, 240, 241))
         drawList.append(self.instructionsText)
 
